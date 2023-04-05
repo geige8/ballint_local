@@ -1,0 +1,51 @@
+#comparativaEquipos {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #comparativaEquipos div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  #comparativaEquipos h1 {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*Ventana emergente*/
+.ventana-emergente {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    z-index: 101;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .ventana-emergente ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ventana-emergente li {
+    cursor: pointer;
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .ventana-emergente li:hover {
+    background-color: #eee;
+  }
+  
+  .ventana-emergente li:last-child {
+    margin-bottom: 0;
+  }
+  

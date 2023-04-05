@@ -1,0 +1,13 @@
+/*panel derecho*/
+aside#sidebarDer {
+	float: right;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+}
+aside {
+    width: 19.5%;
+    min-height: 80vh;
+    height: 100%;
+    display: block;
+}

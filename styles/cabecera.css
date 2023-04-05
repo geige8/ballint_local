@@ -1,0 +1,80 @@
+/* CABECERA */
+header{
+	min-height: 10vh;
+	background-color: #303030;
+	color: white;
+}
+
+header img{ /* Las imágenes que aparezcan dentro de la Cabecera */
+	max-width: 100%;
+	width: auto;
+	max-height: 100%;
+}
+
+header img:hover{ /* Las imágenes que aparezcan dentro de la Cabecera */
+	transform: translateY(-2px);
+}
+
+header div.cabeza{
+	padding: 2vh;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-flow: row wrap;
+
+	justify-content: center;
+	align-items: center;
+}
+
+header div.cabeza div.imagenCabecera{
+	height: 100%;
+    width: 8%;
+	justify-content: center;
+    float: left;
+}
+
+header div.cabeza div.tituloCabecera{
+	height: 100%;
+	justify-content: center;
+    float: left;
+}
+
+header div.cabeza div.infoCabecera{
+    margin-left: auto;
+    height: 100%;
+    align-items: center;
+	justify-content: center;
+
+    display: flex;
+    flex-flow:row wrap;
+}
+
+
+header div.cabeza div.infoCabecera div.elementoInformacionUsuario div.apartadoCabecera h1{
+    margin: 0;
+    font-size: 2em;
+}
+
+
+header div.cabeza div.infoCabecera div.logoutCabecera{
+    color: white;
+	font-size: 3vw;
+}
+
+
+header nav{
+
+	min-height: 2vh;
+	background-color:deepskyblue;
+	color:aliceblue;
+	height: auto;
+	position: sticky;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+header nav a{
+	padding-top: 0.5vh;
+	padding-bottom: 0.5vh;
+}
