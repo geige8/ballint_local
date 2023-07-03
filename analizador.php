@@ -10,21 +10,43 @@ $local = $_GET['idEquipo'];
 
 $nombreLocal = es\ucm\fdi\Equipo::getNombreEquipo($local);
 
+
+
 $visitante = $_GET['idEquipoVisit'];
 
 //Instancio y llamo a la funcion correspondiente
 //$form = new es\ucm\fdi\FormularioAccionPartido($_GET['idEquipo']);
 //$htmlaccionPartido = $form->gestiona();
 
+
+$jugadoresLocal = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($local)));
+$jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($visitante)));
+
+
+
+
 $contenidoPrincipal .= <<<EOS
+
+<body onload="seleccionQuintetoInicial(`$nombreLocal`,`$visitante`,$jugadoresLocal,$jugadoresVisitante)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
 
 <div class="container">
 
     <div class="cabecera-stats">
 
         <select id="durationSelect">
-            <option value="10">10 minutos</option>
-            <option value="5">5 minutos</option>
+            <option value="1">1 minuto</option>
+            <option value="2">2 minutos</option>
+            <option value="3">3 minutos</option>
+            <option value="4">4 minutos</option>                     
+            <option value="5">5 minutos</option>            
+            <option value="6">6 minutos</option>
+            <option value="7">7 minutos</option>
+            <option value="8">8 minutos</option>
+            <option value="9">9 minutos</option>
+            <option value="10">10 minutos</option>                     
+            <option value="11">11 minutos</option>            
             <option value="12">12 minutos</option>
         </select>
         
@@ -45,7 +67,11 @@ $contenidoPrincipal .= <<<EOS
         <div class="buttons">
             <button id="start-timer">Start</button>
             <button id="pause-timer">Pause</button>
-            <button id="reset-timer">Reset</button>
+            <button id="reset-timer">Poner Tiempo</button>
+        </div>
+
+        <div class="graficos-button">
+        <button id="graficos-button">Seleccionar Graficos</button>
         </div>
 
         <div class="localScore-display">
@@ -59,30 +85,34 @@ $contenidoPrincipal .= <<<EOS
         </div>
         <div class="buttons-coach-local">
             <h1>Locales</h1>
-            <p class="timeouts">0</p>
-            <button class="timeout">TimeOut</button>
-            <p class="faltasbanquillo">0</p>
-            <button class="faltabanquillo">Falta</button>
+            <p class="timeout">0</p>
+            <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$local`)">TIMEOUT</button>
+            <p class="faltabanquillo">0</p>
+            <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$local`)">FALTA</button>
         </div>
         <div class="buttons-coach-visit">
             <h1>Visitantes</h1>
-            <p class="timeouts">0</p>
-            <button class="timeout">TimeOut</button>
-            <p class="faltasbanquillo">0</p>
-            <button class="faltabanquillo">Falta</button>
+            <p class="timeout">0</p>
+            <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$visitante`)">TIMEOUT</button>
+            <p class="faltabanquillo">0</p>
+            <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$visitante`)">FALTA</button>
         </div>
 
     </div>
 
-    <h1> Historial acciones </h1>
-
-    <div class="info-display">
+    <h1> En pista: </h1>
+    <h1>{$nombreLocal}</h1>
+    <div class="localPlayers-display">
+    </div>
+    <h1>{$visitante}</h1>
+    <div class="visitPlayers-display">
+    </div>
     
     </div>
 
     <div id="accionesLocal">
-        <h1> Locales </h1>
-        <button class="sub" data-accion="SUB">SUB</button>
+        <h1> $local </h1>
+        <button class="sub" data-accion="SUB" onclick="mostrarVentanaSub(`$local`)">SUB</button>
 
         <button class="action" data-accion="T2A" onclick="mostrarVentanaEmergente('T2A',`$local`)">T2A</button>
         <button class="action" data-accion="T2F" onclick="mostrarVentanaEmergente('T2F',`$local`)">T2F</button>
@@ -90,7 +120,8 @@ $contenidoPrincipal .= <<<EOS
         <button class="action" data-accion="T3F" onclick="mostrarVentanaEmergente('T3F',`$local`)">T3F</button>
         <button class="action" data-accion="TLA" onclick="mostrarVentanaEmergente('TLA',`$local`)">TLA</button>
         <button class="action" data-accion="TLF" onclick="mostrarVentanaEmergente('TLF',`$local`)">TLF</button>
-        <button class="action" data-accion="FAL" onclick="mostrarVentanaEmergente('FAL',`$local`)">FAL</button>
+        <button class="action" data-accion="FLH" onclick="mostrarVentanaEmergente('FLH',`$local`)">FLH</button>
+        <button class="action" data-accion="FLR" onclick="mostrarVentanaEmergente('FLR',`$local`)">FLR</button>
         <button class="action" data-accion="TEC" onclick="mostrarVentanaEmergente('TEC',`$local`)">TEC</button>
         <button class="action" data-accion="RBO" onclick="mostrarVentanaEmergente('RBO',`$local`)">RBO</button>
         <button class="action" data-accion="RBD" onclick="mostrarVentanaEmergente('RBD',`$local`)">RBD</button>
@@ -101,8 +132,8 @@ $contenidoPrincipal .= <<<EOS
     </div>
 
     <div id="accionesVisitante">
-        <h1> Visitantes </h1>
-        <button class="sub" data-accion="SUB">SUB</button>
+        <h1> $visitante </h1>
+        <button class="sub" data-accion="SUB" onclick="mostrarVentanaSub(`$visitante`)">SUB</button>
 
         <button class="action" data-accion="T2A" onclick="mostrarVentanaEmergente('T2A',`$visitante`)">T2A</button>
         <button class="action" data-accion="T2F" onclick="mostrarVentanaEmergente('T2F',`$visitante`)">T2F</button>
@@ -110,7 +141,8 @@ $contenidoPrincipal .= <<<EOS
         <button class="action" data-accion="T3F" onclick="mostrarVentanaEmergente('T3F',`$visitante`)">T3F</button>
         <button class="action" data-accion="TLA" onclick="mostrarVentanaEmergente('TLA',`$visitante`)">TLA</button>
         <button class="action" data-accion="TLF" onclick="mostrarVentanaEmergente('TLF',`$visitante`)">TLF</button>
-        <button class="action" data-accion="FAL" onclick="mostrarVentanaEmergente('FAL',`$visitante`)">FAL</button>
+        <button class="action" data-accion="FLH" onclick="mostrarVentanaEmergente('FLH',`$visitante`)">FLH</button>
+        <button class="action" data-accion="FLR" onclick="mostrarVentanaEmergente('FLR',`$visitante`)">FLR</button>
         <button class="action" data-accion="TEC" onclick="mostrarVentanaEmergente('TEC',`$visitante`)">TEC</button>
         <button class="action" data-accion="RBO" onclick="mostrarVentanaEmergente('RBO',`$visitante`)">RBO</button>
         <button class="action" data-accion="RBD" onclick="mostrarVentanaEmergente('RBD',`$visitante`)">RBD</button>
@@ -122,66 +154,95 @@ $contenidoPrincipal .= <<<EOS
     
     <div id="comparativaEquipos">
         <div>
-            <p class="T2">0</p>
-                <h1>T2</h1>
-            <p class="T2">0</p>
+            <p class="T2A-Local">0</p>
+            <p>/</p>
+            <p class="T2F-Local" hidden>0</p>
+            <p class="T2T-Local">0</p>
+            <p class="T2P-Local">0</p>
+            <p>%</p>
+                <h1>T2A</h1>
+            <p class="T2A-Visitante">0</p>
+            <p>/</p>
+            <p class="T2F-Visitante" hidden>0</p>
+            <p class="T2T-Visitante">0</p>
+            <p class="T2P-Visitante">0</p>
+            <p>%</p>
         </div>
         <div>
-            <p class="T3">0</p>
-                <h1>T3</h1>
-            <p class="T3">0</p>
+            <p class="T3A-Local">0</p>
+            <p>/</p>
+            <p class="T3F-Local" hidden>0</p>
+            <p class="T3T-Local">0</p>
+            <p class="T3P-Local">0</p>
+            <p>%</p>
+                <h1>T3A</h1>
+            <p class="T3A-Visitante">0</p>
+            <p>/</p>
+            <p class="T3F-Visitante" hidden>0</p>
+            <p class="T3T-Visitante">0</p>
+            <p class="T3P-Visitante">0</p>
+            <p>%</p>
         </div>
         <div>
-            <p class="TL">0</p>
-                <h1>TL</h1>
-            <p class="TL">0</p>
+            <p class="TLA-Local">0</p>
+            <p>/</p>
+            <p class="TLF-Local" hidden>0</p>
+            <p class="TLT-Local">0</p>
+            <p class="TLP-Local">0</p>
+            <p>%</p>
+                <h1>TLA</h1>
+            <p class="TLA-Visitante">0</p>
+            <p>/</p>
+            <p class="TLF-Visitante" hidden>0</p>
+            <p class="TLT-Visitante">0</p>
+            <p class="TLP-Visitante">0</p>
+            <p>%</p>
         </div>
         <div>
-            <p class="FAL">0</p>
+            <p class="FLH-Local">0</p>
                 <h1>FALTAS</h1>
-            <p class="FAL">0</p>
+            <p class="FLH-Visitante">0</p>
         </div>
         <div>
-            <p class="RBO">0</p>
+            <p class="RBO-Local">0</p>
                 <h1>REBO</h1>
-            <p class="RBO">0</p>
+            <p class="RBO-Visitante">0</p>
         </div>
         <div>
-            <p class="RBD">0</p>
+            <p class="RBD-Local">0</p>
                 <h1>REBD</h1>
-            <p class="RBD">0</p>
+            <p class="RBD-Visitante">0</p>
         </div>
         <div>
-            <p class="RB">0</p>
+            <p class="RB-Local">0</p>
                 <h1>REB</h1>
-            <p class="RB">0</p>
+            <p class="RB-Visitante">0</p>
         </div>
         <div>
-            <p class="ROB">0</p>
+            <p class="ROB-Local">0</p>
                 <h1>ROB</h1>
-            <p class="ROB">0</p>
+            <p class="ROB-Visitante">0</p>
         </div>
         <div>
-            <p class="TAP">0</p>
+            <p class="TAP-Local">0</p>
                 <h1>TAP</h1>
-            <p class="TAP">0</p>
+            <p class="TAP-Visitante">0</p>
         </div>
         <div>
-            <p class="PRD">0</p>
+            <p class="PRD-Local">0</p>
                 <h1>PRD</h1>
-            <p class="PRD">0</p>
+            <p class="PRD-Visitante">0</p>
         </div>
         <div>
-            <p class="AST">0</p>
+            <p class="AST-Local">0</p>
                 <h1>AST</h1>
-            <p class="AST">0</p>
+            <p class="AST-Asistente">0</p>
         </div>
     </div>
 </div>
 
 <script src="js\marcador.js"></script>
 EOS;
-
 require __DIR__.'/includes/vistas/plantilla.php';
 
 

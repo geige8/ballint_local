@@ -7,7 +7,7 @@ $tituloPagina = 'BallInt';
 $rutaApp = RUTA_APP;
 
 $jugadores = es\ucm\fdi\Equipo::getJugadoresEquipo('sub22masc');
-print_r($jugadores);
+
 //1º PASO DIFERENCIAR LOGEADO O NO
 if (isset($_SESSION["login"])) {
 

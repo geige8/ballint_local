@@ -14,7 +14,7 @@ class FormularioAccionPartido extends Formulario{
         $html = "";
 
         // Obtenemos la lista de jugadores desde la clase Equipo
-        $jugadores = Equipo::getJugadoresPartido($this->idEquipo);
+        $jugadores = Equipo::getJugadoresJugando($this->idEquipo);
 
         // Generamos los botones para seleccionar los jugadores
         $html .= '<div>';
@@ -33,12 +33,6 @@ class FormularioAccionPartido extends Formulario{
         $resultado = array();
         $resultado['errores'] = array();
         $resultado['datos'] = array();
-
-
-
-        echo "TOMAAAA";
-
-        // Aquí podrías hacer algo con los datos recibidos, como actualizar la base de datos o mostrar un mensaje de éxito.
 
         return $resultado;
     }

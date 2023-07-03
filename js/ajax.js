@@ -12,3 +12,4 @@ function sendAjaxRequest(url, callback) {
     xhr.open("GET", url, true);
     xhr.send();
 }
+

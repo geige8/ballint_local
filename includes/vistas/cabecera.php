@@ -18,7 +18,7 @@
 		<a href="index.php">MIS EQUIPOS</a>
 		<a href="seleccion_equipo.php">MY LICEO</a>
 		<a href="index.php">CALENDARIO</a>
-		<a href="index.php">HERRAMIENTAS</a>
+		<a href="index.php">CONTACTO Y FAQS</a>
 	</nav>
 
 </header>

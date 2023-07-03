@@ -1,3 +1,9 @@
 <aside id="sidebarDer">
-<h2> EYYY </h2>
+        
+    <h1> Historial acciones </h1>
+
+    <div class="info-display">
+
+    </div>
+
 </aside>
