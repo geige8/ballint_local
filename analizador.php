@@ -28,8 +28,9 @@ $jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugador
 $contenidoPrincipal .= <<<EOS
 
 <body onload="seleccionQuintetoInicial(`$nombreLocal`,`$visitante`,$jugadoresLocal,$jugadoresVisitante)">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
 
 <div class="container">
 

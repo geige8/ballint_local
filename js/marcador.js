@@ -65,8 +65,6 @@ document.getElementById("durationSelect").addEventListener("change", () => {
 });
 */
 
-
-
 //BOTÓN DE START
 document.getElementById("start-timer").addEventListener("click", () => {
 
@@ -82,12 +80,18 @@ document.getElementById("start-timer").addEventListener("click", () => {
 });
 
 //BOTÓN DE PAUSA
-document.getElementById("pause-timer").addEventListener("click", () => {
+
+// Definir la función de pausa del temporizador
+function pausarTemporizador() {
     resettimer.disabled = false;
     periodselect.disabled = false;
     durationselect.disabled = false;
     clearInterval(int);
-});
+}
+
+// Asignar la función al evento click del botón
+document.getElementById("pause-timer").addEventListener("click", pausarTemporizador);
+
 
 //BOTÓN DE RESET/PONER TIEMPO
 document.getElementById("reset-timer").addEventListener("click", () => {
@@ -147,6 +151,7 @@ function displayTimer() {
 }
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 //BOTÓN DE GRÁFICOS
 document.getElementById("graficos-button").addEventListener("click", () => {
 
@@ -180,6 +185,7 @@ document.getElementById("graficos-button").addEventListener("click", () => {
         ventana.appendChild(mostrarstats);
         
         mostrarstats.addEventListener('click', function() {
+            generarPDF();
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
         });
@@ -209,7 +215,19 @@ document.getElementById("graficos-button").addEventListener("click", () => {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
-            getJugadores();
+            getJugadores(function(jugadores) {
+                if (jugadores) {
+                  // Acceder a los jugadores aquí
+                  console.log(jugadores);
+                  
+                  // Realizar acciones adicionales con los jugadores
+                  // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                  mostrarBoxScoreCompleto(jugadores);
+                } else {
+                  console.log("Error al obtener los jugadores");
+                }
+              });
+            
         });
 
     //Botón 4: Mostrar PDF Con todos los índices de Estatística Avanzada.
@@ -282,6 +300,56 @@ document.getElementById("graficos-button").addEventListener("click", () => {
 
 });
 
+//Botón 1: Mostrar PDF Completo
+function generarPDFcompleto() {
+
+
+    //Llamar a las funciones que devuelvan el html.
+
+    //1º Llamar a la función de estadisticas.
+
+
+    // Definir el contenido del documento PDF
+
+    var contenidoPDF = {
+        content: [
+        { text: 'Estadísitca Completa: ' +  getNombreEquipo(idlocal) + ' vs ' + getNombreEquipo(idvisitante), style: 'header' },
+        { text: playbyplay.innerHTML , style: 'body' },
+        { text: 'Resultado Final: ' +  getNombreEquipo(idlocal) + ' ' + parseInt(localpointsElement.textContent) + ' vs ' + parseInt(localpointsElement.textContent) + ' ' + getNombreEquipo(idvisitante), style: 'header' },
+        ],
+        styles: {
+        header: { fontSize: 18, bold: true },
+        body: { fontSize: 12 }
+        }
+    };
+    
+    // Generar el archivo PDF
+    var pdfDocGenerator = pdfMake.createPdf(contenidoPDF);
+    
+    // Descargar el archivo PDF
+    pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+}
+
+
+//1º
+function getplantillastats(){
+
+    var jugadores = null;
+    jugadores = getJugadores();+
+    jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
+
+}
+
+//2º 
+
+function getstatsavanzadas(){
+
+
+}
+
+//
+
+
 //Botón 2: Mostrar PDF Con todo el JUGADA A JUGADA
 function generarPDFplaybyplay() {
     // Definir el contenido del documento PDF
@@ -307,30 +375,34 @@ function generarPDFplaybyplay() {
     pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
 }
 
-//Función para obtener el string de los jugadores con en_juego activo.
-function getJugadores() {
-    
+function getJugadores(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-
+  
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-
-            if (this.responseText) {
-                console.log("La respuesta está completa.");                
-                // La respuesta ha sido recibida
-                mostrarBoxScoreCompleto(JSON.parse(this.responseText))
-            } else {
-                console.log("La respuesta está vacía o incompleta.");
-              }
-          }
-        };
-      
-        // Hacer la solicitud AJAX
-        xhttp.open("GET", "getJugadores.php", true);
-        xhttp.send();
-}
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var jugadores = JSON.parse(this.responseText);
+          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getJugadores.php", true);
+    xhttp.send();
+  }
+  
+  function guardarvariable() {
+    
+  }
+  
 
 function mostrarBoxScoreCompleto(jugadores) {
 
@@ -340,7 +412,7 @@ function mostrarBoxScoreCompleto(jugadores) {
     document.body.appendChild(overlay);
 
     // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement("div");
+    var ventana = document.createElement('div');
     ventana.classList.add("ventana-graficos");
     document.body.appendChild(ventana);
 
@@ -443,7 +515,61 @@ function mostrarBoxScoreCompleto(jugadores) {
 
     displaytablas.appendChild(localfullPlayersDisplay);
     displaytablas.appendChild(visitfullPlayersDisplay);
+
+    generarPDFStats(displaytablas);
 }
+
+function generarPDFStats(displaytablas) {
+    // Crear un nuevo documento jsPDF
+    var doc = new jsPDF();
+  
+    // Obtener el contenido HTML del elemento displaytablas
+    var htmlContent = displaytablas.innerHTML;
+  
+    // Definir las opciones de formato para el contenido HTML
+    var options = {
+      html2canvas: { scale: 2 },
+      margin: { top: 20, bottom: 20, left: 20, right: 20 },
+    };
+  
+    // Generar el PDF a partir del contenido HTML
+    doc.html(htmlContent, options).then(function () {
+      // Descargar el archivo PDF
+      doc.save(idlocal + '.' + idvisitante + '(Stats).pdf');
+    });
+  }
+  
+/*
+function htmlToPlainText(html) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  }
+  
+
+function generarPDFStats(displaytablas) {
+    // Convertir el contenido HTML a texto plano
+    var plainTextContent = htmlToPlainText(displaytablas.innerHTML);
+    
+    // Mostrar en la consola
+    console.log(displaytablas.innerHTML);
+    console.log(plainTextContent);
+    
+    // Definir el contenido del documento PDF
+    var contenido = {
+      content: [
+        plainTextContent
+      ]
+    };
+    
+    // Generar el archivo PDF
+    var pdfDocGenerator = pdfMake.createPdf(contenido);
+    
+    // Descargar el archivo PDF
+    pdfDocGenerator.download(idlocal + '.' + idvisitante + '(Stats).pdf');
+  }*/
+  
+  
 
 
 /////////////////////////////////////////////////////////////
@@ -609,12 +735,14 @@ function addTimeOut(equipo){
     if(isLocal(equipo)){
         // Actualizar el valor del marcador
         localtimeout.textContent = parseInt(localtimeout.textContent) + 1;
+        pausarTemporizador();
         timeout(equipo);
         
     }
     else{
         // Actualizar el valor del marcador
         visittimeout.textContent = parseInt(visittimeout.textContent) + 1;
+        pausarTemporizador();
         timeout(equipo);
     }
 
@@ -626,12 +754,14 @@ function addFaltaBanquillo(equipo){
     if(isLocal(equipo)){
         // Actualizar el valor del marcador
         localfaltabanquillo.textContent = parseInt(localfaltabanquillo.textContent) + 1;
+        pausarTemporizador();
         faltabanquillo(equipo);
         
     }
     else{
         // Actualizar el valor del marcador
         visitfaltabanquillo.textContent = parseInt(visitfaltabanquillo.textContent) + 1;
+        pausarTemporizador();
         faltabanquillo(equipo);
     }
 
@@ -1325,6 +1455,7 @@ function actualizarPantalla(jugador, accion, equipo){
         case 'FLH':
         // Lógica para actualizar la pantalla cuando se registra una FAL
         mostrarMensajeLogLine("Falta hecha por el Nº " + jugador + " de " + getNombreEquipo(equipo));
+        pausarTemporizador();
         actualizarComparativa(accion,equipo);
         break;
         case 'FLR':
@@ -1334,6 +1465,7 @@ function actualizarPantalla(jugador, accion, equipo){
         case 'TEC':
         // Lógica para actualizar la pantalla cuando se registra un TEC
         mostrarMensajeLogLine("Falta Técnica del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        pausarTemporizador();
         actualizarComparativa('FLH',equipo);
         break;
         case 'RBO':
