@@ -6,14 +6,10 @@ $tituloPagina = 'BallInt';
 
 $rutaApp = RUTA_APP;
 
-$jugadores = es\ucm\fdi\Equipo::getJugadoresEquipo('sub22masc');
-
 //1º PASO DIFERENCIAR LOGEADO O NO
 if (isset($_SESSION["login"])) {
 
-    $contenidoPrincipal = <<<EOS
-        
-    EOS;
+    header('Location: perfil.php');
 
 } else {
     header('Location: login.php');

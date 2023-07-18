@@ -8,14 +8,22 @@ class Usuario{
 
     protected $password;
 
-    public function __construct($nombreUsuario, $password){ //OK
+    protected $idUsuario;
+
+    public function __construct($nombreUsuario, $password, $id){ //OK
         $this->nombreUsuario = $nombreUsuario;
         $this->password = $password;
+        $this->idUsuario = $id;
     }
 
     public function getNombreUsuario(){
 
         return $this->nombreUsuario;
+    }
+
+    public function getIdUsuario(){
+
+        return $this->idUsuario;
     }
 
     public static function login($nombreUsuario, $password1){ //OK
@@ -56,7 +64,7 @@ class Usuario{
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['user'], $fila['password']);
+                $result = new Usuario($fila['user'], $fila['password'], $fila['id']);
             }
             $rs->free();
         } else {
@@ -81,27 +89,6 @@ class Usuario{
 
     //Métodos Static
     
-    public static function getnombreCompleto($nombreUsuario){ //OK
-
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("SELECT nombre,apellido1,apellido2 FROM usuarios WHERE user='%s'", $conn->real_escape_string($nombreUsuario));
-        $rs = $conn->query($query);
-        $result = false;
-
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = $fila['nombre'] . " " . $fila['apellido1'] . " " . $fila['apellido2'];
-            }
-            $rs->free();
-        } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-        return $result;
-    }
-
     public static function cambiarPassword($password1, $password2){
 
         $usuario = $_SESSION['nombre'];
@@ -130,16 +117,12 @@ class Usuario{
         return $result;
     }
 
-
-
-
-
-    public static function getDatosPerfil($nombreUsuario){
+    public static function getDatosPerfilJugador($nombreUsuario){
 
         //Obtengo la conexión realizada
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $query = sprintf("SELECT * FROM usuarios WHERE user='%s'", $conn->real_escape_string($nombreUsuario));
+        $query = sprintf("SELECT * FROM jugadores WHERE user='%s'", $conn->real_escape_string($nombreUsuario));
         $rs = $conn->query($query);
         $result = false;
 
@@ -154,6 +137,50 @@ class Usuario{
         }
         return $result;
     }
+
+    public static function getDatosPerfilEntrenador($nombreUsuario){
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("SELECT * FROM entrenadores WHERE user='%s'", $conn->real_escape_string($nombreUsuario));
+        $rs = $conn->query($query);
+        $result = false;
+
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = $fila;
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+
+
+
+
+    public static function getRoles($user){
+        // Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+    
+        $query = sprintf("SELECT DISTINCT rol FROM credenciales WHERE user='%s'", $conn->real_escape_string($user));
+        $rs = $conn->query($query);
+        $result = array();
+    
+        if ($rs) {
+            while ($fila = $rs->fetch_assoc()) {
+                $result[] = $fila['rol'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+    
 
 
     

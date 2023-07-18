@@ -10,7 +10,7 @@ class Partido{
     }
 
 
-    public static function crearTablaTemporal($idEquipoLocal, $nombreEquipoVisitante,$fecha,$hora) {
+    public static function crearTablaTemporal($idEquipoLocal, $nombreEquipoVisitante) {
 
         $result = true;
 
@@ -21,8 +21,6 @@ class Partido{
             $sql = "CREATE TABLE tmp_partidoE (
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 equipo VARCHAR(50) NOT NULL,
-                fecha DATE NOT NULL,
-                hora TIME NOT NULL,
                 timeouts INT DEFAULT 0,
                 faltasbanquillo INT DEFAULT 0,
                 puntos INT DEFAULT 0,
@@ -60,25 +58,138 @@ class Partido{
                     $result = false;
                     error_log("Error BD ({$conn->errno}): {$conn->error}");
                 }
-
-                // Insertar el equipo visitante en la tabla
-                $sqlinsertfecha = "UPDATE tmp_partidoE SET fecha = '$fecha'";
-                $resultsqlinsertfecha = $conn->query($sqlinsertfecha);
-                if (!$resultsqlinsertfecha) {
-                    $result = false;
-                    error_log("Error BD ({$conn->errno}): {$conn->error}");
-                }
-                // Insertar el equipo visitante en la tabla
-                $sqlinserthora = "UPDATE tmp_partidoE SET hora = '$hora'";
-                $resultsqlinserhora = $conn->query($sqlinserthora);
-                if (!$resultsqlinserhora) {
-                    $result = false;
-                    error_log("Error BD ({$conn->errno}): {$conn->error}");
-                }
             }
         
             return $result;
     }
+
+    public static function actualizarentrada($local, $visitante,$fecha,$hora){
+
+
+        $result = true;
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $sql = "INSERT INTO partidos (local, visitante, fecha, hora) VALUES ('$local', '$visitante', '$fecha', '$hora')";
+
+        $resultado = $conn->query($sql);
+
+        if (!$resultado) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+
+    }
+
+
+    public static function getIdPartido($local,$visitante){
+
+        $id = 0;
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $sql = "SELECT id FROM partidos WHERE local = '$local' AND visitante = '$visitante'";
+
+        $resultado = $conn->query($sql);
+
+        if ($resultado && $resultado->num_rows > 0) {
+            // Obtener el primer resultado (asumiendo que solo hay una fila coincidente)
+            $row = $resultado->fetch_assoc();
+            $id = $row['id'];
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $id;
+
+    }
+
+    public static function getpartidosfromEquipo($equipo){
+
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT * FROM partidos
+        WHERE partidos.local = '%s'", $conn->real_escape_string($equipo));
+  
+        $rs = $conn->query($query);
+        $result = false;
+        $partidos = array();
+  
+        if ($rs) {
+          while ($row = $rs->fetch_assoc()) {
+              $partidos[] = $row;
+          }
+          $result = $partidos;
+          $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+
+    public static function getstatsUsuario($partido,$usuario){
+        
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $tabla = "tmp_partido_21";
+
+
+    // Consulta SQL
+    $sql = "SELECT * FROM $tabla WHERE jugador = '$usuario'";
+
+        // Ejecutar la consulta
+        $result = $conn->query($sql);
+
+        // Verificar si se encontraron resultados
+        if ($result->num_rows > 0) {
+            // Almacenar los resultados en un arreglo
+            while ($row = $result->fetch_assoc()) {
+                $resultArray = $row;
+                echo "se encontraron resultados";
+            }
+        } else {
+            echo "No se encontraron resultados.";
+        }
+
+        return $resultArray;
+    }
+
+    public static function renombrartablas($id){
+
+        $result = true;
+
+        // Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        
+        // Renombrar la tabla tmp_partido
+        $renamedTablePartido = "tmp_partido_" . $id;
+
+        $sqlRenamedTablePartido = "RENAME TABLE `ballint_bbdd`.`tmp_partido` TO `ballint_bbdd`.`$renamedTablePartido`";
+
+        if ($conn->query($sqlRenamedTablePartido) === TRUE) {
+            echo "La tabla tmp_partido se ha renombrado correctamente a " . $renamedTablePartido . ".";
+        } else {
+            $result = false;
+            echo "Error al renombrar la tabla tmp_partido: " . $conn->error;
+        }
+        
+        // Renombrar la tabla tmp_partidoe
+        $renamedTablePartidoe = "tmp_partidoe." . $id;
+        $sqlRenamedTablePartidoe = "RENAME TABLE `ballint_bbdd`.`tmp_partidoe` TO `ballint_bbdd`.`$renamedTablePartidoe`";
+        if ($conn->query($sqlRenamedTablePartidoe) === TRUE) {
+            echo "La tabla tmp_partidoe se ha renombrado correctamente a " . $renamedTablePartidoe . ".";
+        } else {
+            $result = false;
+            echo "Error al renombrar la tabla tmp_partidoe: " . $conn->error;
+        }
+        
+        return $result;
+    }        
 
     public static function addtimeout($equipo){
         //Obtengo la conexión realizada

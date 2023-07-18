@@ -22,6 +22,8 @@ $visitante = $_GET['idEquipoVisit'];
 $jugadoresLocal = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($local)));
 $jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($visitante)));
 
+$idPartido = es\ucm\fdi\Partido::getIdPartido($local,$visitante);
+
 
 
 
@@ -73,6 +75,15 @@ $contenidoPrincipal .= <<<EOS
 
         <div class="graficos-button">
         <button id="graficos-button">Seleccionar Graficos</button>
+        </div>
+
+        <div class="endgame">
+        <button id="endgame-button">FINALIZAR PARTIDO</button>
+        </div>
+
+        <div class="idpartido-display">
+        <h1>ID = </h1>
+        <p class="id">{$idPartido}</p>
         </div>
 
         <div class="localScore-display">

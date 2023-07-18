@@ -152,6 +152,77 @@ function displayTimer() {
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
+let idpartidoDisplay = document.querySelector('.idpartido-display');
+let idpartidoElement = idpartidoDisplay.querySelector('.id');
+
+document.getElementById("endgame-button").addEventListener("click", () => {
+    // Mostrar ventana de confirmación
+    var confirmacion = confirm("¿Estás seguro de que deseas finalizar el partido?");
+
+    // Si se hace clic en "Aceptar", realizar las acciones
+    if (confirmacion) {
+        // Guardar los datos para cada jugador
+        saveplayers();
+
+    }
+});
+
+function saveplayers(){
+
+    //Guardar las tablas, renombrandolas
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        console.log("La respuesta está completa en save players.");
+        
+        // Guardar la información de las tablas para futuras consultas y redirigir al index
+        renametables();
+        // window.location.href = "index.php";
+
+    }
+    else{
+        console.log("La respuesta está  NO completa en save players.");
+
+    }
+    };
+
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "saveplayers.php?equipo=" + idlocal, true);
+    xhttp.send();
+}
+
+
+function renametables(){
+
+        //Guardar las tablas, renombrandolas
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("La respuesta está completa en mas menos.");
+
+        }
+        else{
+            console.log("La respuesta está  NO completa en mas menos.");
+
+        }
+    };
+
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "renombrartablas.php?id=" + parseInt(idpartidoElement.textContent), true);
+    xhttp.send();
+}
+
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 //BOTÓN DE GRÁFICOS
 document.getElementById("graficos-button").addEventListener("click", () => {
 

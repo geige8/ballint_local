@@ -97,6 +97,9 @@ class FormularioSeleccionJugadores extends Formulario{
         if (empty($hora)) {
             $errores['seleccion_hora'] = "Debes seleccionar una hora";
         }
+
+        // Obtenemos entrenador
+       // $entrenador = Equipo::getEntrenadorEquipo($this->idEquipo);
         
         // Comprobamos que se ha seleccionado un equipo
         $idEquipo = $datos['idEquipo'] ?? null;
@@ -143,9 +146,10 @@ class FormularioSeleccionJugadores extends Formulario{
         // Si todo está correcto, llamamos a la función para crear la tabla temporal
         //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
         $tablaTemporalCreada = Equipo::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
-        $tablaTemporalCreada2 = Partido::crearTablaTemporal($idEquipo, $nombreRival,$fecha,$hora);
+        $tablaTemporalCreada2 = Partido::crearTablaTemporal($idEquipo, $nombreRival);
+        $tablapartidosactualizada = Partido::actualizarentrada($idEquipo, $nombreRival,$fecha,$hora);
 
-        if ($tablaTemporalCreada &&  $tablaTemporalCreada2) {
+        if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {
 
            // Redirigimos al usuario a la página analizador.php con el idEquipo como parámetro GET
             $url = $this->urlRedireccion . '?idEquipo=' . $idEquipo .'&idEquipoVisit=' . $nombreRival;
