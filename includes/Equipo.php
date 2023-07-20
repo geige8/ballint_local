@@ -15,8 +15,6 @@ class Equipo{
         $this->seccion = $seccion;
     }
 
-
-
     public static function getDatosEquipo($equipo){
 
       //Obtengo la conexión realizada
@@ -197,11 +195,6 @@ class Equipo{
 
         return $resultado;
     }
-
-
-
-
-
 
     public static function getNombreEquipo($idEquipoLocal){
 
@@ -701,6 +694,31 @@ public static function getEntrenadorEquipo($equipo){
         return $jugadores;
     
     }
+
+    /////////////////////////////////////////////////
+
+    public static function statsfromEquipo($equipo){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("SELECT * FROM equipos WHERE id_equipo = '$equipo'");
+
+        $rs = $conn->query($query);
+
+        if ($rs) {
+            $row = $rs->fetch_assoc();
+            $result = $row;
+            $rs->free();
+        } 
+        else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+
+    
+    }
+
 }   
 
 /*
@@ -731,6 +749,8 @@ public static function getEntrenadorEquipo($equipo){
         echo json_encode(array_values($jugadores));
     }
 */
+
+
 
 
 ?>

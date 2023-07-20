@@ -15,7 +15,6 @@ $formulario = new es\ucm\fdi\FormularioSeleccionJugadores($idEquipoLocal);
 $FormularioSeleccionJugadores = $formulario->gestiona();
 
 $contenidoPrincipal .= <<<EOS
-
     $FormularioSeleccionJugadores
 EOS;
 

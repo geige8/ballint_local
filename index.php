@@ -9,7 +9,16 @@ $rutaApp = RUTA_APP;
 //1º PASO DIFERENCIAR LOGEADO O NO
 if (isset($_SESSION["login"])) {
 
-    header('Location: perfil.php');
+    $roles = es\ucm\fdi\Usuario::getRoles($_SESSION['nombre']);
+
+    // Verificar si el conjunto de roles contiene un rol específico
+    if (in_array('A', $roles)){ //Es administrador
+
+        header('Location: paneldeControl.php');
+
+    }else{
+        header('Location: perfil.php');
+    }
 
 } else {
     header('Location: login.php');

@@ -164,17 +164,93 @@ function mostrarStatsPartidoJugador($partido,$estadisticas){
     </tr>
 </table>";
     return $html;
-
-
 }
+
 function mostrarUltimosPartidosEntrenador(){
+
+    $html = "";
 
     //Obtener el usuario en cuestión
     $usuario = $_SESSION['nombre'];
 
-    //
+    //1ºEncontrar el equipo/equipos a los que pertenece, para cada uno mostrar los equipos.
+    $idUsuario = $_SESSION['id'];
+
+    $equiposdelUsuario = es\ucm\fdi\Equipo::getEquiposfromUserId($idUsuario);
+
+    foreach($equiposdelUsuario as $equipo){
+
+    //Para cada equipo al que pertenezca quiero mostrar los partidos.
+    //Tengo que obtener el id de cada partido de ese equipo
+    
+    $partidos = es\ucm\fdi\Partido::getpartidosfromEquipo($equipo);
+
+    //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+
+    foreach($partidos as $partido){
+
+    //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+    
+    $estadisticas = es\ucm\fdi\Partido::getstatsUsuarioEntrenador($partido['id']);
+ 
+    //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+    //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+    $html .= mostrarStatsPartidoEntrenador($partido,$estadisticas);
+    
+    }
+    
+
+    }
 
 
+    return $html;
+
+
+}
+
+function mostrarStatsPartidoEntrenador($partido,$estadisticas){
+
+    $html = "";
+    $html .= "
+    <table>
+        <tr>
+            <th>Rival</th>
+            <th>Fecha</th>
+            <th>Timeouts</th>
+            <th>Faltas Banquillo</th>
+            <th>Puntos</th>
+            <th>Líder</th>
+            <th>Empate</th>
+            <th>Alternancias</th>
+            <th>Veces Empatados</th>
+            <th>Veces Líder</th>
+            <th>Q1</th>
+            <th>Q2</th>
+            <th>Q3</th>
+            <th>Q4</th>
+            <th>Extra</th>
+        </tr>
+        <tr>
+            <td>{$partido['visitante']}</td>
+            <td>{$partido['fecha']}</td>
+            <td>{$estadisticas['timeouts']}</td>
+            <td>{$estadisticas['faltasbanquillo']}</td>
+            <td>{$estadisticas['puntos']}</td>
+            <td>{$estadisticas['lider']}</td>
+            <td>{$estadisticas['empate']}</td>
+            <td>{$estadisticas['alternancias']}</td>
+            <td>{$estadisticas['vecesempatados']}</td>
+            <td>{$estadisticas['veceslider']}</td>
+            <td>{$estadisticas['q1']}</td>
+            <td>{$estadisticas['q2']}</td>
+            <td>{$estadisticas['q3']}</td>
+            <td>{$estadisticas['q4']}</td>
+            <td>{$estadisticas['extra']}</td>
+        </tr>
+    </table>";
+    return $html;
 }
 
 function mostrarListadoEquipos($arrayEquipos){
@@ -228,9 +304,7 @@ if (in_array('J', $roles)) {
 
     $htmlfrommostrarStatsJugador = mostrarStatsJugador($jugador);
 
-    echo "Estamos antes de la funcion";
     $htmlUltimosPartidos = mostrarUltimosPartidosJugador();
-    echo "Estamos despues de la funcion";
 
     $contenidoPrincipal .= <<<EOS
     <div class="perfil">
@@ -269,7 +343,7 @@ EOS;
     //Si su rol es E o J
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($usuario['id']);
     $htmlEquiposfromUser = mostrarListadoEquipos($equipos);
-
+    $htmlUltimosPartidos = mostrarUltimosPartidosEntrenador();
     $contenidoPrincipal .= <<<EOS
     <div class="perfil">
         <div class="perfilCabecera">
@@ -288,7 +362,7 @@ EOS;
             </div>
             <div class="lastgames">
             <h2>Últimos Partidos</h2>
-                
+            $htmlUltimosPartidos
             </div>
 
         </div>

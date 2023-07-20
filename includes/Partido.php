@@ -136,8 +136,7 @@ class Partido{
         
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $tabla = "tmp_partido_21";
-
+        $tabla = "tmp_partido_" . $partido;
 
     // Consulta SQL
     $sql = "SELECT * FROM $tabla WHERE jugador = '$usuario'";
@@ -150,7 +149,31 @@ class Partido{
             // Almacenar los resultados en un arreglo
             while ($row = $result->fetch_assoc()) {
                 $resultArray = $row;
-                echo "se encontraron resultados";
+            }
+        } else {
+            echo "No se encontraron resultados.";
+        }
+
+        return $resultArray;
+    }
+
+    public static function getstatsUsuarioEntrenador($partido){
+        
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $tabla = "tmp_partidoe_" . $partido;
+
+    // Consulta SQL
+    $sql = "SELECT * FROM $tabla WHERE id = 1";
+
+        // Ejecutar la consulta
+        $result = $conn->query($sql);
+
+        // Verificar si se encontraron resultados
+        if ($result->num_rows > 0) {
+            // Almacenar los resultados en un arreglo
+            while ($row = $result->fetch_assoc()) {
+                $resultArray = $row;
             }
         } else {
             echo "No se encontraron resultados.";
