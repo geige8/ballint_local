@@ -15,12 +15,12 @@ $contenidoPrincipal .= <<<EOS
 </a>
 
 <!-- Botón para Registrar Equipos -->
-<a href="pagina_registrar_equipos.php">
+<a href="registrar_equipos.php">
   <button>Registrar Equipos</button>
 </a>
 
 <!-- Botón para Añadir Jugadores/Entrenadores a Equipos -->
-<a href="pagina_anadir_jugadores_entrenadores.php">
+<a href="addUsuarioTeam.php">
   <button>Añadir Jugadores/Entrenadores a Equipos</button>
 </a>
 

@@ -7,105 +7,109 @@ class FormularioRegistroUsuarios extends Formulario{
     
 
     public function __construct() {
-        parent::__construct('formRegister', ['urlRedireccion' => 'paneldeControl.php']);
+        parent::__construct('formRegisterUser', ['urlRedireccion' => 'paneldeControl.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
+
+            $opcionesEquipos = '';
+            $arrayEquiposExistentes = Equipo::obtenerlistadoEquipos();
+
+            for ($i = 1; $i <= sizeof($arrayEquiposExistentes); $i++) {
+                $opcionesEquipos .= '<option value="' . $arrayEquiposExistentes[$i-1] . '">' . $arrayEquiposExistentes[$i-1] . '</option>';
+
+            }
  
             // Se generan los mensajes de error si existen.
             $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
-            $erroresCampos = self::generaErroresCampos(['nombreUsuario', 'password'], $this->errores, 'span', array('class' => 'error'));
+            $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
             $htmlErroresGlobales
-                <fieldset>
-                    <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
-                    <select id="tipo_usuario" name="tipo_usuario">
-                        <option value="entrenador">Entrenador</option>
-                        <option value="jugador">Jugador</option>
-                        <option value="director_tecnico">Director Técnico</option>
-                    </select>
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
-                    <label for="nombre">Apellido 1:</label>
-                    <input type="text" id="apellido1" name="apellido1" required>
-                    <label for="nombre">Apellido 2:</label>
-                    <input type="text" id="apellido2" name="apellido2" required>
-                    <!-- Botón (+) para añadir nuevos campos -->
-                    <button type="button" id="agregarJugador">+</button>
-                </fieldset>
-                    <!-- Los nuevos campos de jugadores se añadirán aquí mediante JavaScript -->
                 <div id="camposJugadores">
-
-                </div>
-            
-            <script>
-                // Script para controlar la creación de nuevos campos de jugadores
-                const agregarJugadorBtn = document.getElementById('agregarJugador');
-                const camposJugadoresDiv = document.getElementById('camposJugadores');
-            
-                let contadorJugadores = 0;
-            
-                agregarJugadorBtn.addEventListener('click', () => {
-                    contadorJugadores++;
-            
-                    // Crear los nuevos campos para el jugador
-                    const nuevoCampo = '<fieldset>' +
-                        '<label for="tipo_usuario">Selecciona el tipo de usuario:</label>' +
-                        '<select id="tipo_usuario' + contadorJugadores + '" name="tipo_usuario' + contadorJugadores + '">' +
-                        '<option value="entrenador">Entrenador</option>' +
-                        '<option value="jugador">Jugador</option>' +
-                        '<option value="director_tecnico">Director Técnico</option>' +
-                        '</select>' +
-                        '<label for="nombre' + contadorJugadores + '">Nombre Jugador ' + contadorJugadores + ':</label>' +
-                        '<input type="text" id="nombre' + contadorJugadores + '" name="nombre' + contadorJugadores + '" required>' +
-                        '<label for="apellido1' + contadorJugadores + '">Apellido 1 Jugador ' + contadorJugadores + ':</label>' +
-                        '<input type="text" id="apellido1' + contadorJugadores + '" name="apellido1' + contadorJugadores + '" required>' +
-                        '<label for="apellido2' + contadorJugadores + '">Apellido 2 Jugador ' + contadorJugadores + ':</label>' +
-                        '<input type="text" id="apellido2' + contadorJugadores + '" name="apellido2' + contadorJugadores + '" required>' +
-                        '<button type="button" onclick="eliminarJugador(' + contadorJugadores + ')">-</button>' +
-                        '</fieldset>';
-            
-                        camposJugadoresDiv.insertAdjacentHTML('beforeend', nuevoCampo);
-                    });
-            </script>
-            
-            <input type="submit" value="Crear o añadir usuarios">
+                    <fieldset> 
+                        <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
+                        <select id="tipo_usuario" name="tipo_usuario">
+                            <option value="E">Entrenador</option>
+                            <option value="J">Jugador</option>
+                            <option value="DT">Director Técnico</option>
+                        </select>
+                        {$erroresCampos['tipo_usuario']}
+                        <label for="equipo_usuario">Selecciona el equipo del usuario:</label>
+                        <select id="equipo_usuario" name="equipo_usuario">
+                            $opcionesEquipos
+                        </select>
+                        {$erroresCampos['equipo_usuario']}
+                        <label for="nombre">Nombre Jugador:</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                            {$erroresCampos['nombre']}
+                        <label for="apellido1">1er Apellido</label>
+                            <input type="text" id="apellido1" name="apellido1" required>
+                            {$erroresCampos['apellido1']}
+                        <label for="apellido2">2do Apellido</label>
+                            <input type="text" id="apellido2" name="apellido2" required>
+                            {$erroresCampos['apellido2']}
+                        <button type="submit" name="registro">RegistrarUsuario</button>
+                    </fieldset>
+                </div>            
             EOF;
-            
-                return $html;
-            }            
-            
-               
+        return $html;
+    }            
+                 
     protected function procesaFormulario(&$datos){
 
         $this->errores = [];
-        $nombreUsuario = trim($datos['nombreUsuario'] ?? '');
-        $nombreUsuario = filter_var($nombreUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ( ! $nombreUsuario || empty($nombreUsuario) ) {
-            $this->errores['nombreUsuario'] = 'El nombre de usuario no puede estar vacío';
+
+        $nombreJugador = trim($datos['nombre'] ?? '');
+        $nombreJugador = filter_var($nombreJugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!$nombreJugador || empty($nombreJugador)) {
+            $this->errores['nombre'] = 'El nombre del jugador no puede estar vacío';
         }
-        
-        $password = trim($datos['password'] ?? '');
-        $password = filter_var($password, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ( ! $password || empty($password) ) {
-            $this->errores['password'] = 'El password no puede estar vacío.';
+
+        $apellido1Jugador = trim($datos['apellido1'] ?? '');
+        $apellido1Jugador = filter_var($apellido1Jugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!$apellido1Jugador || empty($apellido1Jugador)) {
+            $this->errores['apellido1'] = 'El apellido 1 del jugador no puede estar vacío';
         }
-        
+
+        $apellido2Jugador = trim($datos['apellido2'] ?? '');
+        $apellido2Jugador = filter_var($apellido2Jugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!$apellido2Jugador || empty($apellido2Jugador)) {
+            $this->errores['apellido2'] = 'El apellido 2 del jugador no puede estar vacío';
+        }
+
+        // Validar campo "tipo_usuario" para cada jugador
+        $tipoUsuario = trim($datos['tipo_usuario'] ?? '');
+        $tipoUsuario = filter_var($tipoUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!$tipoUsuario || empty($tipoUsuario)) {
+            $this->errores['tipo_usuario'] = 'Debes seleccionar el tipo de usuario para el jugador';
+        }
+        // Validar campo "tipo_usuario" para cada jugador
+        $equipoUsuario = trim($datos['equipo_usuario'] ?? '');
+        $equipoUsuario = filter_var($equipoUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!$equipoUsuario || empty($equipoUsuario)){
+            $this->errores['equipo_usuario'] = 'Debes seleccionar el equipo para el jugador';
+        }
+
         if (count($this->errores) === 0) {
-            
-            $usuario = Usuario::login($nombreUsuario, $password);
+
+            //Si no hay errores, quiero que añada todos los usuarios creados
+
+            // Obtener las dos primeras letras de apellido1Jugador
+            $primeras_letras_apellido1 = substr($apellido1Jugador, 0, 2);
+
+            // Obtener las dos últimas letras de apellido2Jugador
+            $ultimas_letras_apellido2 = substr($apellido2Jugador, -2);
+
+            // Combinar todas las partes para formar el nombre de usuario
+            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2;
+
+            $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario);
         
-            if (!$usuario) {
-                $this->errores[] = "El usuario o el password no coinciden";
+            if (!$usuarioregistrado) {
+                $this->errores[] = "El usuario no se ha creado correctamente";
             } else {
-                $_SESSION['login'] = true;
-                $_SESSION['nombre'] = $usuario->getNombreUsuario();
-                $_SESSION['id'] = $usuario->getIdUsuario();
-                $_SESSION['roles'] = implode($usuario->getRoles($usuario->getNombreUsuario()));
-                //$_SESSION['esAdmin'] = $usuario->tieneRol(Usuario::ADMIN_ROLE);
-            }
-           
+            }  
         }
     }
 }

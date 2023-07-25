@@ -15,6 +15,33 @@ class Equipo{
         $this->seccion = $seccion;
     }
 
+    public static function obtenerListadoEquipos(){
+        // Array donde se almacenarán los resultados
+        $equipos = array();
+
+        
+      //Obtengo la conexión realizada
+      $conn = Aplicacion::getInstance()->getConexionBd();
+
+
+        // Consulta SQL para obtener todos los registros de la columna id_equipo de la tabla equipos
+        $sql = "SELECT id_equipo FROM equipos";
+
+        // Ejecutar la consulta
+        if ($resultado = $conn->query($sql)) {
+            // Recorrer los resultados y guardarlos en el array $equipos
+            while ($fila = $resultado->fetch_assoc()) {
+                $equipos[] = $fila['id_equipo'];
+            }
+
+            // Liberar el resultado
+            $resultado->free();
+        }
+
+        return $equipos;
+
+    }
+
     public static function getDatosEquipo($equipo){
 
       //Obtengo la conexión realizada
@@ -719,8 +746,31 @@ public static function getEntrenadorEquipo($equipo){
     
     }
 
-}   
 
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+//Registro
+
+    public static function registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo){
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $idEquipo = $categoria_equipo .  $seccion_equipo;
+        $nombreEquipo = 'Liceo Frances ' . $categoria_equipo . ' ' . $seccion_equipo;
+
+        $query = "INSERT INTO equipos (id_equipo,categoria,nombre_equipo,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$nombreEquipo','$seccion_equipo','$letra_equipo')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+}
 /*
     function getJugadoresLocales(){
 

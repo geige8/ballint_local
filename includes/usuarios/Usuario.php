@@ -181,11 +181,145 @@ class Usuario{
         return $result;
     }
     
+///////////////////////////////////////////////////////////////
+//Registro
+
+    public static function registrarUsuario($usuarionombre,$nombre,$apellido1,$apellido2,$tipoUsuario,$equipoUsuario){
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = "INSERT INTO credenciales (user,password,rol)  VALUES ('$usuarionombre', '12345', '$tipoUsuario')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        else{
+             // Obtener el ID de la fila insertada
+            $insertedId = $conn->insert_id;
+            $result = self::insertarUsuarioEquipo($insertedId, $equipoUsuario);
+            //En función de su rol lo meto a jugadores o entrenadores
+
+            switch($tipoUsuario){
+
+                case 'E':
+                    $result = self::insertaEntrenadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
+                break;
+                case 'J':
+                    $result = self::insertarJugadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
+                break;
+                default:
+                break;
+            }
+
+        }
+
+        return $result;
+    }
+
+    public static function insertaEntrenadorEquipo($usuarionombre,$nombreent,$apellidoent1,$apellidoent2){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = "INSERT INTO entrenadores (user,nombre,apellido1,apellido2) VALUES ('$usuarionombre','$nombreent','$apellidoent1','$apellidoent2')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function insertarJugadorEquipo($usuarionombre,$nombrej,$apellido1j,$apellido2j){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = "INSERT INTO jugadores (user,nombre,apellido1,apellido2) VALUES ('$usuarionombre','$nombrej','$apellido1j','$apellido2j')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function insertarUsuarioEquipo($idUsuario, $equipoUsuario){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $idEquipoUsuario = Equipo::getidEquipo($equipoUsuario);
+
+        $query = "INSERT INTO usuarios_equipos (equipo_id,usuario_id)  VALUES ($idEquipoUsuario,$idUsuario)"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
 
 
-    
+    public static function addUsuarioaEquipo($usuarioaequipo,$equipoausuario){
 
+        
+        $result = true;
 
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $idUsuario = self::getidNombreUser($usuarioaequipo);
+
+        $idEquipoUsuario = Equipo::getidEquipo($equipoausuario);
+
+        $query = "INSERT INTO usuarios_equipos (equipo_id,usuario_id)  VALUES ($idEquipoUsuario,$idUsuario)"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function getidNombreUser($usuario){
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT id FROM credenciales WHERE user = '%s'", $conn->real_escape_string($usuario));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = $fila['id'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
 
 }
 
