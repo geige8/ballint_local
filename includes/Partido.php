@@ -133,6 +133,8 @@ class Partido{
     }
 
     public static function getstatsUsuario($partido,$usuario){
+
+        $resultArray = array();
         
         $conn = Aplicacion::getInstance()->getConexionBd();
 
@@ -150,14 +152,12 @@ class Partido{
             while ($row = $result->fetch_assoc()) {
                 $resultArray = $row;
             }
-        } else {
-            echo "No se encontraron resultados.";
         }
 
         return $resultArray;
     }
 
-    public static function getstatsUsuarioEntrenador($partido){
+    public static function getstatsPartido($partido){
         
         $conn = Aplicacion::getInstance()->getConexionBd();
 
@@ -202,7 +202,7 @@ class Partido{
         }
         
         // Renombrar la tabla tmp_partidoe
-        $renamedTablePartidoe = "tmp_partidoe." . $id;
+        $renamedTablePartidoe = "tmp_partidoe_" . $id;
         $sqlRenamedTablePartidoe = "RENAME TABLE `ballint_bbdd`.`tmp_partidoe` TO `ballint_bbdd`.`$renamedTablePartidoe`";
         if ($conn->query($sqlRenamedTablePartidoe) === TRUE) {
             echo "La tabla tmp_partidoe se ha renombrado correctamente a " . $renamedTablePartidoe . ".";

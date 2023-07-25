@@ -89,6 +89,7 @@ class Equipo{
       }
       return $result;
     }
+    
 
     public static function getEquipos(){
 
@@ -749,6 +750,196 @@ public static function getEntrenadorEquipo($equipo){
 
 ///////////////////////////////////////////////////////////////
 
+//MOSTRAR:
+
+public static function mostrarStatsEquipo($equipo){
+
+    $statsequipo = self::statsfromEquipo($equipo);
+
+
+    $html = "";
+    $html .= "
+    <table>
+        <tr>
+            <th>PJ</th>
+            <th>MT</th>
+            <th>MSMS</th>
+            <th>T2A</th>
+            <th>T2F</th>
+            <th>T3A</th>
+            <th>T3F</th>
+            <th>TLA</th>
+            <th>TLF</th>
+            <th>FLH</th>
+            <th>FLR</th>
+            <th>RBO</th>
+            <th>RBD</th>
+            <th>ROB</th>
+            <th>TAP</th>
+            <th>PRD</th>
+            <th>AST</th>
+        </tr>
+        <tr>
+            <td>{$statsequipo['PJ']}</td>
+            <td>{$statsequipo['MT']}</td>
+            <td>{$statsequipo['MSMS']}</td>
+            <td>{$statsequipo['T2A']}</td>
+            <td>{$statsequipo['T2F']}</td>
+            <td>{$statsequipo['T3A']}</td>
+            <td>{$statsequipo['T3F']}</td>
+            <td>{$statsequipo['TLA']}</td>
+            <td>{$statsequipo['TLF']}</td>
+            <td>{$statsequipo['FLH']}</td>
+            <td>{$statsequipo['FLR']}</td>
+            <td>{$statsequipo['RBO']}</td>
+            <td>{$statsequipo['RBD']}</td>
+            <td>{$statsequipo['ROB']}</td>
+            <td>{$statsequipo['TAP']}</td>
+            <td>{$statsequipo['PRD']}</td>
+            <td>{$statsequipo['AST']}</td>
+        </tr>
+    </table>";
+    return $html;
+}
+
+public static function mostrarlistajugadoresEquipo($equipo) {
+
+    $listaJugadores = self::getJugadoresEquipo($equipo);
+
+    $html = "";
+    $i = 1;
+    $html .= "
+        <table>
+            <tr>
+                <th> </th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Apellido 1</th>
+                <th>Apellido 2</th>
+            </tr>";
+
+    foreach ($listaJugadores as $jugador) {
+        $html .= "
+            <tr>
+                <td>{$i}</td>
+                <td>
+                    <a href='pagina_perfiljugador.php?jugador={$jugador['user']}'>
+                        {$jugador['user']}
+                    </a>
+                </td>
+                <td>{$jugador['nombre']}</td>
+                <td>{$jugador['apellido1']}</td>
+                <td>{$jugador['apellido2']}</td>
+            </tr>";
+        $i++;
+    }
+    
+    $html .= "</table>";
+    return $html;
+}
+
+public static function mostrarListadoEquipos($equipos){
+
+    
+    $html = '';
+    foreach ($equipos as $equipo) {
+        $html .= self::mostrarCajaEquipo($equipo);
+    }
+
+    return $html;
+}
+
+public static function mostrarCajaEquipo($equipo){
+
+    $datosEquipo = self::getDatosEquipo($equipo);
+    $html = '';
+    $html .= <<<EOS
+        <div class="equipo">
+            <a href="pagina_equipo.php?equipo={$equipo}">
+                <p>{$datosEquipo['nombre_equipo']}</p>
+            </a>
+        </div>
+    EOS;
+
+    return $html;
+}
+
+public static function mostrarStatsPartidoEquipo($partido, $estadisticas) {
+    $html = "";
+    $html .= "
+    <table>
+        <tr>
+            <th>Rival</th>
+            <th>Fecha</th>
+            <th>Timeouts</th>
+            <th>Faltas Banquillo</th>
+            <th>Puntos</th>
+            <th>Líder</th>
+            <th>Empate</th>
+            <th>Alternancias</th>
+            <th>Veces Empatados</th>
+            <th>Veces Líder</th>
+            <th>Q1</th>
+            <th>Q2</th>
+            <th>Q3</th>
+            <th>Q4</th>
+            <th>Extra</th>
+        </tr>
+        <tr>
+            <td>
+                <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}'>
+                    {$partido['visitante']}
+                </a>
+            </td>
+            <td>{$partido['fecha']}</td>
+            <td>{$estadisticas['timeouts']}</td>
+            <td>{$estadisticas['faltasbanquillo']}</td>
+            <td>{$estadisticas['puntos']}</td>
+            <td>{$estadisticas['lider']}</td>
+            <td>{$estadisticas['empate']}</td>
+            <td>{$estadisticas['alternancias']}</td>
+            <td>{$estadisticas['vecesempatados']}</td>
+            <td>{$estadisticas['veceslider']}</td>
+            <td>{$estadisticas['q1']}</td>
+            <td>{$estadisticas['q2']}</td>
+            <td>{$estadisticas['q3']}</td>
+            <td>{$estadisticas['q4']}</td>
+            <td>{$estadisticas['extra']}</td>
+        </tr>
+    </table>";
+    return $html;
+}
+
+//Obtener las estadisticas de dichos partidos:
+public static function mostrarUltimosPartidosEquipo($equipo){
+
+    $html = "";
+
+    //Para cada equipo al que pertenezca quiero mostrar los partidos.
+    //Tengo que obtener el id de cada partido de ese equipo
+    
+    $partidos = Partido::getpartidosfromEquipo($equipo);
+
+    //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+
+    foreach($partidos as $partido){
+
+        //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+        
+        $estadisticas = Partido::getstatsPartido($partido['id']);
+    
+        //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+        //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+        $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas);
+    
+    }
+        
+    return $html;
+}
+
+
 ///////////////////////////////////////////////////////////////
 //Registro
 
@@ -799,6 +990,7 @@ public static function getEntrenadorEquipo($equipo){
         echo json_encode(array_values($jugadores));
     }
 */
+
 
 
 
