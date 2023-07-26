@@ -9,7 +9,91 @@ class Jugador{
         $this->id = $id;
     }
 
+    //Obtener el numero de un jugador
+    public static function getNumJugador($jugador){
 
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = "SELECT numero FROM jugadores WHERE user = '$jugador'";
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = $fila['numero'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+
+
+    }
+
+    public static function getnombreJugador($jugador){
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = "SELECT nombre,apellido1,apellido2 FROM jugadores WHERE user = '$jugador'";
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = $fila['nombre'] . ' ' . $fila['apellido1'] . ' ' . $fila['apellido2'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+
+
+    }
+
+    public static function guardaDatosJugador($jugador){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $sql = "UPDATE jugadores
+        SET 
+        PJ = PJ + 1,
+        MT = MT + {$jugador['segundosjugados']},
+        TIT = TIT + ({$jugador['titular']} = 1),
+        SUP = SUP + ({$jugador['titular']} = 0),
+        MSMS = MSMS + {$jugador['masmenos']},
+        T2A = T2A + {$jugador['T2A']},
+        T2F = T2F + {$jugador['T2F']},
+        T3A = T3A + {$jugador['T3A']},
+        T3F = T3F + {$jugador['T3F']},
+        TLA = TLA + {$jugador['TLA']},
+        TLF = TLF + {$jugador['TLF']},
+        FLH = FLH + {$jugador['FLH']} + {$jugador['TEC']},
+        FLR = FLR + {$jugador['FLR']},
+        RBO = RBO + {$jugador['RBO']},
+        RBD = RBD + {$jugador['RBD']},
+        ROB = ROB + {$jugador['ROB']},
+        TAP = TAP + {$jugador['TAP']},
+        PRD = PRD + {$jugador['PRD']},
+        AST = AST + {$jugador['AST']}
+        WHERE user = '{$jugador['jugador']}'";
+
+        // Ejecutar la consulta
+        $resultado = $conn->query($sql);
+
+        if (!$resultado) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        } else {
+            echo "La actualización se ha realizado correctamente.";
+        }
+
+        return $resultado;
+    }
 
     public static function statsfromJugador($usuario){
 
@@ -198,16 +282,46 @@ class Jugador{
         return $jugador;
     }
     
+    public static function statsAvanzadasfromJugador($jugador){
 
+        $jugadorAvanzado = array();
+
+        //PORCENTAJES DE USO DE TIRO
+        $jugadorAvanzado['T2P'] = number_format((($jugador['T2A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
+        $jugadorAvanzado['T3P'] = number_format((($jugador['T3A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
+        $jugadorAvanzado['T1P'] = number_format((($jugador['TLA']*0.44)/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
+
+        //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
+        $jugadorAvanzado['eFGP'] = ((($jugador['T2A']+$jugador['T3A'])+0.5*$jugador['T3A'])/($jugador['TCA']+$jugador['TCF']));
+
+        //TRUE SHOOTING (TS%). 
+        //Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44. 
+        //TS% = PTS / 2(FGA + 0.44 * FTA)
+        $jugadorAvanzado['TSP'] = ($jugador['PTS'])/(2*(($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))));
+
+        //PORCENTAJE DE ASISTENCIAS (AS%). 
+        //Porcentaje de asistencias respecto a los tiros de campo anotados. 
+        //La fórmula es: AS% = AS / (2PM + 3PM)
+        $jugadorAvanzado['ASP'] = ($jugador['AST'])/(($jugador['T2A'])+($jugador['T3A']));
+
+        //El indicador de uso del jugador (USG%) se calcula con la siguiente expresión, lo usaremos solo en los partidos
+
+        // GmSc - Game Score; the formula is PTS + 0.4 * FG - 0.7 * FGA - 0.4*(FTA - FT) + 0.7 * ORB + 0.3 * DRB + STL + 0.7 * AST + 0.7 * BLK - 0.4 * PF - TOV. 
+        // Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. 
+        // The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.).
+
+        return $jugadorAvanzado;
+    }
+    
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Mostrar:
-public static function mostrarStatsJugador($jugador){
+    //Mostrar:
+    public static function mostrarStatsJugador($jugador){
 
-    $html = "";
+        $html = "";
 
-    $html .= "
-        </div>
+        $html .= "
+        <div class='stats'>
             <p>Partidos Jugados: {$jugador['PJ']}</p>
             <p>Minutos Totales: {$jugador['MT']}</p>
             <p>Minutos Promedio: {$jugador['MTP']}</p>
@@ -263,108 +377,123 @@ public static function mostrarStatsJugador($jugador){
 
             <p>Asistencias: {$jugador['AST']}</p>
             <p>Asistencias PP: {$jugador['ASTP']}</p>
-        </div>
-    ";
-    return $html;
-}
 
-//Función para mostrar los datos de los últimos partidos.
-
-public static function mostrarUltimosPartidosJugador($jugador){
-
-    $html = "";
-
-    $idUser = Usuario::getidNombreUser($jugador);
-
-    $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
-
-    foreach($equiposdelUsuario as $equipo){
-
-        //Para cada equipo al que pertenezca quiero mostrar los partidos.
-        //Tengo que obtener el id de cada partido de ese equipo
-        
-        $partidos = Partido::getpartidosfromEquipo($equipo);
-
-        //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
-
-        foreach($partidos as $partido){
-
-            //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-            
-            $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
-        
-            //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
-
-            //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
-
-            if($estadisticas){
-                $html .= self::mostrarStatsPartidoJugador($partido,$estadisticas);
-            }
-        
-        }
+            <p>Asistencias: {$jugador['AST']}</p>
+        </div>    
+        ";
+        return $html;
     }
-    
-    return $html;
-}
 
+    public static function mostrarStatsAvanzadasJugador($jugadorAvanzado){
 
+        $html = "";
 
-public static function mostrarStatsPartidoJugador($partido,$estadisticas){
+        $html .= "
+            <p>PORCENTAJES DE USO DE TIRO de 2: {$jugadorAvanzado['T2P']}%</p>
+            <p>PORCENTAJES DE USO DE TIRO de 3: {$jugadorAvanzado['T3P']}%</p>
+            <p>PORCENTAJES DE USO DE TIRO de 1: {$jugadorAvanzado['T1P']}%</p>
+            <p>PORCENTAJE DE TIRO EFECTIVO: {$jugadorAvanzado['eFGP']}%</p>
+            <p>TRUE SHOOTING: {$jugadorAvanzado['TSP']}%</p>
+            <p>PORCENTAJE DE ASISTENCIAS: {$jugadorAvanzado['ASP']}%</p>
+        ";
+        return $html;
+    }
 
-    $html = "";
+    //Función para mostrar los datos de los últimos partidos.
 
-    $html .= "
-<table>
-    <tr>
-        <th>Rival</th>
-        <th>Fecha</th>
-        <th>Titular</th>
-        <th>Minutos</th>
-        <th>+/-</th>
-        <th>T2A</th>
-        <th>T2F</th>
-        <th>T3A</th>
-        <th>T3F</th>
-        <th>TLA</th>
-        <th>TLF</th>
-        <th>FLH</th>
-        <th>FLR</th>
-        <th>TEC</th>
-        <th>RBO</th>
-        <th>RBD</th>
-        <th>ROB</th>
-        <th>TAP</th>
-        <th>PRD</th>
-        <th>AST</th>
-    </tr>
-    <tr>
-        <td>
-            <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}'>
-                {$partido['visitante']}
-            </a>
-        </td>
-        <td>{$partido['fecha']}</td>
-        <td>{$estadisticas['titular']}</td>
-        <td>{$estadisticas['segundosjugados']}</td>
-        <td>{$estadisticas['masmenos']}</td>
-        <td>{$estadisticas['T2A']}</td>
-        <td>{$estadisticas['T2F']}</td>
-        <td>{$estadisticas['T3A']}</td>
-        <td>{$estadisticas['T3F']}</td>
-        <td>{$estadisticas['TLA']}</td>
-        <td>{$estadisticas['TLF']}</td>
-        <td>{$estadisticas['FLH']}</td>
-        <td>{$estadisticas['FLR']}</td>
-        <td>{$estadisticas['TEC']}</td>
-        <td>{$estadisticas['RBO']}</td>
-        <td>{$estadisticas['RBD']}</td>
-        <td>{$estadisticas['ROB']}</td>
-        <td>{$estadisticas['TAP']}</td>
-        <td>{$estadisticas['PRD']}</td>
-        <td>{$estadisticas['AST']}</td>
-    </tr>
-</table>";
-    return $html;
-}
+    public static function mostrarUltimosPartidosJugador($jugador){
+
+        $html = "";
+
+        $idUser = Usuario::getidNombreUser($jugador);
+
+        $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
+
+        foreach($equiposdelUsuario as $equipo){
+
+            //Para cada equipo al que pertenezca quiero mostrar los partidos.
+            //Tengo que obtener el id de cada partido de ese equipo
+            
+            $partidos = Partido::getpartidosfromEquipo($equipo);
+
+            //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+
+            foreach($partidos as $partido){
+
+                //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+                
+                $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
+            
+                //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+                //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+                if($estadisticas){
+                    $html .= self::mostrarStatsPartidoJugador($partido,$estadisticas,$partido['id']);
+                }
+            
+            }
+        }
+        
+        return $html;
+    }
+
+    public static function mostrarStatsPartidoJugador($partido,$estadisticas,$partidoId){
+
+        $html = "";
+
+        $html .= "
+    <table>
+        <tr>
+            <th>Rival</th>
+            <th>Fecha</th>
+            <th>Titular</th>
+            <th>Minutos</th>
+            <th>+/-</th>
+            <th>T2A</th>
+            <th>T2F</th>
+            <th>T3A</th>
+            <th>T3F</th>
+            <th>TLA</th>
+            <th>TLF</th>
+            <th>FLH</th>
+            <th>FLR</th>
+            <th>TEC</th>
+            <th>RBO</th>
+            <th>RBD</th>
+            <th>ROB</th>
+            <th>TAP</th>
+            <th>PRD</th>
+            <th>AST</th>
+        </tr>
+        <tr>
+            <td>
+            <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
+            {$partido['visitante']}
+        </a>
+            </td>
+            <td>{$partido['fecha']}</td>
+            <td>{$estadisticas['titular']}</td>
+            <td>{$estadisticas['segundosjugados']}</td>
+            <td>{$estadisticas['masmenos']}</td>
+            <td>{$estadisticas['T2A']}</td>
+            <td>{$estadisticas['T2F']}</td>
+            <td>{$estadisticas['T3A']}</td>
+            <td>{$estadisticas['T3F']}</td>
+            <td>{$estadisticas['TLA']}</td>
+            <td>{$estadisticas['TLF']}</td>
+            <td>{$estadisticas['FLH']}</td>
+            <td>{$estadisticas['FLR']}</td>
+            <td>{$estadisticas['TEC']}</td>
+            <td>{$estadisticas['RBO']}</td>
+            <td>{$estadisticas['RBD']}</td>
+            <td>{$estadisticas['ROB']}</td>
+            <td>{$estadisticas['TAP']}</td>
+            <td>{$estadisticas['PRD']}</td>
+            <td>{$estadisticas['AST']}</td>
+        </tr>
+    </table>";
+        return $html;
+    }
 
 }

@@ -155,6 +155,18 @@ function displayTimer() {
 let idpartidoDisplay = document.querySelector('.idpartido-display');
 let idpartidoElement = idpartidoDisplay.querySelector('.id');
 
+function saberganador(){
+
+    if((parseInt(localpointsElement.textContent)) > (parseInt(localpointsElement.textContent))){
+
+        return true;
+
+    }
+    else{
+        return false;
+    }
+}
+
 document.getElementById("endgame-button").addEventListener("click", () => {
     // Mostrar ventana de confirmación
     var confirmacion = confirm("¿Estás seguro de que deseas finalizar el partido?");
@@ -162,12 +174,13 @@ document.getElementById("endgame-button").addEventListener("click", () => {
     // Si se hace clic en "Aceptar", realizar las acciones
     if (confirmacion) {
         // Guardar los datos para cada jugador
-        saveplayers();
+        $ganador = saberganador();
+        saveplayers($ganador,idpartidoElement.textContent);
 
     }
 });
 
-function saveplayers(){
+function saveplayers($ganador,$id){
 
     //Guardar las tablas, renombrandolas
     // Crear una solicitud AJAX
@@ -190,7 +203,7 @@ function saveplayers(){
     };
 
     // Hacer la solicitud AJAX
-    xhttp.open("GET", "saveplayers.php?equipo=" + idlocal, true);
+    xhttp.open("GET", "saveplayers.php?equipo=" + idlocal,"&ganador=" + $ganador,"&idPartido=" + $id, true);
     xhttp.send();
 }
 

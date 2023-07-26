@@ -15,6 +15,8 @@
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/cabecera.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/estilosjs.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/analizadorstyles.css" />
+        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/perfil.css" />
+        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/misequipos.css" />
         <script src="<?= RUTA_JS ?>/functions.js"> </script>
         <script src="<?= RUTA_JS ?>/ajax.js"> </script>
     </head>

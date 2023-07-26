@@ -4,7 +4,10 @@ require_once __DIR__.'/includes/config.php';
 
 $equipo = $_GET['equipo'];
 
+$ganador = $_GET['ganador'];
 
-$result = es\ucm\fdi\Equipo::saveplayers($equipo);
+$idPartido = $_GET['idPartido'];
+
+$result = es\ucm\fdi\Partido::saveplayers($equipo,$ganador,$idPartido);
 
 ?>

@@ -1,0 +1,28 @@
+/* Estilos para el contenedor principal */
+/* Estilos para el contenedor principal */
+.equipos {
+    /* Asegúrate de que los divs se muestren uno debajo del otro */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para cada uno de los divs internos */
+.equipos div{
+    /* Asegúrate de que cada div ocupe toda la anchura del contenedor */
+    width: 100%;
+}
+
+
+/* Estilos para disminuir el tamaño del texto en todos los elementos dentro del div "perfil" */
+.equipos {
+    font-size: 14px; /* Ajusta el valor según el tamaño deseado */
+}
+
+/* Estilos para cada uno de los divs internos */
+.equipos > div {
+    /* Añade un borde sólido de 1px alrededor de cada div */
+    border: 1px solid #000; /* Puedes ajustar el color y el grosor del borde según tus preferencias */
+    /* Asegúrate de que cada div ocupe toda la anchura del contenedor */
+    width: 100%;
+
+  }

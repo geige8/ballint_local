@@ -11,14 +11,12 @@ class FormularioSeleccionEquipos extends Formulario{
     protected function generaCamposFormulario(&$datos){
         
         $html = "";
+        $opcionesEquipos = '';
+        $arrayEquiposExistentes = Equipo::getListadoEquipos();
 
-        // Obtenemos la lista de equipos desde la clase Equipo
-        $equipos = Equipo::getEquipos();
+        for ($i = 1; $i <= sizeof($arrayEquiposExistentes); $i++) {
+            $opcionesEquipos .= '<option value="' . $arrayEquiposExistentes[$i-1] . '">' . $arrayEquiposExistentes[$i-1] . '</option>';
 
-        // Generamos la lista de options con los nombres de los equipos
-        $options = "";
-        foreach ($equipos as $clave => $valor) {
-            $options .= "<option value=\"$clave\">$valor</option>";
         }
 
         // Generamos el HTML para los campos del formulario
@@ -27,7 +25,7 @@ class FormularioSeleccionEquipos extends Formulario{
             <label for="idEquipo">Selecciona un equipo:</label>
             <select id="idEquipo" name="idEquipo">
                 <option value="">Selecciona un equipo</option>
-                $options
+                $opcionesEquipos
             </select>
         </div>
         EOF;

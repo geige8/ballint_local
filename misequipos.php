@@ -11,7 +11,6 @@ $rutaImgs=RUTA_IMGS;
 //Variables
 $contenidoPrincipal = '';
 $htmlfrommostrarStatsEquipo = '';
-$htmlfromjugadoresdelequipo = '';
 $htmlpartidos = '';
 
 /////////////////////////////////
@@ -39,12 +38,7 @@ $contenidoPrincipal .= <<<EOS
             <h2>Estadisticas de los equipos: </h2>
             $htmlfrommostrarStatsEquipo
         </div>
-        <!-- <div class="jugadoresEquipo">
-            <h2>Jugadores del Equipo: </h2>
-            $htmlfromjugadoresdelequipo
-        </div> -->
-        </div>
-            <div class="lastgames">
+        <div class="lastgames">
             <h2>Últimos Partidos</h2>
             $htmlpartidos
         </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-07-2023 a las 13:10:20
+-- Tiempo de generación: 26-07-2023 a las 13:25:41
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -93,6 +93,8 @@ CREATE TABLE `equipos` (
   `seccion` enum('Masculino','Femenino') NOT NULL,
   `letra` varchar(1) DEFAULT NULL,
   `PJ` int(11) NOT NULL,
+  `W` int(11) NOT NULL,
+  `L` int(11) NOT NULL,
   `MT` int(11) NOT NULL,
   `MSMS` int(11) NOT NULL,
   `T2A` int(11) NOT NULL,
@@ -115,8 +117,8 @@ CREATE TABLE `equipos` (
 -- Volcado de datos para la tabla `equipos`
 --
 
-INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`) VALUES
-(1, 'NacionalMasculino', 'Nacional', 'Liceo Frances Nacional Masculino', 'Masculino', NULL, 1, 90, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `W`, `L`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`) VALUES
+(1, 'NacionalMasculino', 'Nacional', 'Liceo Frances Nacional Masculino', 'Masculino', NULL, 1, 0, 0, 90, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -185,16 +187,16 @@ CREATE TABLE `partidos` (
   `local` varchar(50) NOT NULL,
   `visitante` varchar(50) NOT NULL,
   `fecha` date NOT NULL,
-  `hora` time NOT NULL
+  `hora` time NOT NULL,
+  `WL` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `partidos`
 --
 
-INSERT INTO `partidos` (`id`, `local`, `visitante`, `fecha`, `hora`) VALUES
-(20, 'NacMasc', 'TresCantosNacional', '2023-07-06', '18:42:00'),
-(21, 'NacionalMasculino', 'TresCantosNacional', '2023-07-25', '11:05:00');
+INSERT INTO `partidos` (`id`, `local`, `visitante`, `fecha`, `hora`, `WL`) VALUES
+(21, 'NacionalMasculino', 'TresCantosNacional', '2023-07-25', '11:05:00', NULL);
 
 -- --------------------------------------------------------
 

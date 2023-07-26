@@ -11,7 +11,7 @@ class FormularioUsuarioaEquipo extends Formulario{
     protected function generaCamposFormulario(&$datos){
 
         $opcionesEquipos = '';
-        $arrayEquiposExistentes = Equipo::obtenerlistadoEquipos();
+        $arrayEquiposExistentes = Equipo::getListadoEquipos();
 
         for ($i = 1; $i <= sizeof($arrayEquiposExistentes); $i++) {
             $opcionesEquipos .= '<option value="' . $arrayEquiposExistentes[$i-1] . '">' . $arrayEquiposExistentes[$i-1] . '</option>';

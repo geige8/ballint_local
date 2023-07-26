@@ -3,7 +3,7 @@ namespace es\ucm\fdi;
 
 class Equipo{
 
-    
+
     protected $id;
     protected $nombre;
     protected $seccion;
@@ -15,11 +15,37 @@ class Equipo{
         $this->seccion = $seccion;
     }
 
-    public static function obtenerListadoEquipos(){
+///////////////////////////////////////////////////////////////
+    //Registro
+
+    public static function registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo){
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $idEquipo = $categoria_equipo .  $seccion_equipo;
+        $nombreEquipo = 'Liceo Frances ' . $categoria_equipo . ' ' . $seccion_equipo;
+
+        $query = "INSERT INTO equipos (id_equipo,categoria,nombre_equipo,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$nombreEquipo','$seccion_equipo','$letra_equipo')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+    }
+    
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Obtener Información
+
+    //Obtener los id_equipo(NacionalMasculino) de todos los equipos
+    public static function getListadoEquipos(){
         // Array donde se almacenarán los resultados
         $equipos = array();
 
-        
       //Obtengo la conexión realizada
       $conn = Aplicacion::getInstance()->getConexionBd();
 
@@ -42,6 +68,7 @@ class Equipo{
 
     }
 
+    //Obtener todos los datos de un equipo
     public static function getDatosEquipo($equipo){
 
       //Obtengo la conexión realizada
@@ -62,9 +89,56 @@ class Equipo{
       }
       return $result;
     }
+
+    //Obtener el nombre completo de un equipo basado en su id_equipo(NacionalMasculino)
+    public static function getNombreEquipo($idEquipoLocal){
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT nombre_equipo FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($idEquipoLocal));
+
+        $rs = $conn->query($query);
+        $result = false;
+        $equipos = array();
+            if ($rs) {
+                while ($row = $rs->fetch_assoc()) {
+                    $equipos = $row['nombre_equipo'];
+                }
+                $result = $equipos;
+                $rs->free();
+            } else {
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+        return $result;
+
+
+    }
+
+    //Obtener el id (1,2,3) de un equipo basado en su id_equipo(NacionalMasculino)
+    public static function getidEquipo($equipo_id){
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf("SELECT id FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($equipo_id));
+
+        $rs = $conn->query($query);
+        $result = false;
+
+        if ($rs) {
+            $fila = $rs->fetch_assoc();
+            if ($fila) {
+                $result = $fila['id'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        return $result;
+
+
+    }   
     
-
-
+    //Obtener los equipos para un Id de Usuario (1,2,3)
     public static function getEquiposfromUserId($idUser){
 
         //Obtengo la conexión realizada
@@ -89,87 +163,53 @@ class Equipo{
       }
       return $result;
     }
-    
 
-    public static function getEquipos(){
+    public static function statsfromEquipo($equipo){
 
-        //Obtengo la conexión realizada
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT id_equipo, nombre_equipo FROM equipos";
+
+        $query = sprintf("SELECT * FROM equipos WHERE id_equipo = '$equipo'");
 
         $rs = $conn->query($query);
-        $result = false;
-        $equipos = array();
-            if ($rs) {
-                while ($row = $rs->fetch_assoc()) {
-                    $equipos[$row['id_equipo']] = $row['nombre_equipo'];
-                }
-                $result = $equipos;
-                $rs->free();
-            } else {
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-        return $result;
-    }
 
-
-    public static function saveplayers($equipo) {
-        // Obtener todos los jugadores
-        $listajugadores = self::getJugadores();
-        $resultado = self::addpartidojugado($equipo);
-        // Iterar sobre cada jugador
-        foreach ($listajugadores as $jugador) {
-            // Llamar a la función guardaDatosJugador y almacenar el resultado en una variable
-            $resultado = self::guardaDatosJugador($jugador);
-            $resultado = self::guardaDatosJugadorenEquipo($jugador);
-            // Controlar el resultado
-            if ($resultado) {
-                echo "El jugador {$jugador['id']} se ha guardado correctamente.";
-            } else {
-                echo "Error al guardar el jugador.";
-            }
+        if ($rs) {
+            $row = $rs->fetch_assoc();
+            $result = $row;
+            $rs->free();
+        } 
+        else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
+
+        return $result;
+
+    
     }
 
-    public static function guardaDatosJugador($jugador){
+    //OBTENER EL ENTRENADOR DE UN EQUIPO
+    public static function getEntrenadorEquipo($equipo){
 
+        //Obtengo la conexión realizada
+        
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $sql = "UPDATE jugadores
-        SET 
-        PJ = PJ + 1,
-        MT = MT + {$jugador['segundosjugados']},
-        TIT = TIT + ({$jugador['titular']} = 1),
-        SUP = SUP + ({$jugador['titular']} = 0),
-        MSMS = MSMS + {$jugador['masmenos']},
-        T2A = T2A + {$jugador['T2A']},
-        T2F = T2F + {$jugador['T2F']},
-        T3A = T3A + {$jugador['T3A']},
-        T3F = T3F + {$jugador['T3F']},
-        TLA = TLA + {$jugador['TLA']},
-        TLF = TLF + {$jugador['TLF']},
-        FLH = FLH + {$jugador['FLH']} + {$jugador['TEC']},
-        FLR = FLR + {$jugador['FLR']},
-        RBO = RBO + {$jugador['RBO']},
-        RBD = RBD + {$jugador['RBD']},
-        ROB = ROB + {$jugador['ROB']},
-        TAP = TAP + {$jugador['TAP']},
-        PRD = PRD + {$jugador['PRD']},
-        AST = AST + {$jugador['AST']}
-        WHERE user = '{$jugador['jugador']}'";
+        $query = sprintf("SELECT entrenador FROM equipos WHERE id_equipo = '$equipo'");
 
-        // Ejecutar la consulta
-        $resultado = $conn->query($sql);
+        $rs = $conn->query($query);
 
-        if (!$resultado) {
+        if ($rs) {
+            $row = $rs->fetch_assoc();
+            $entrenador = $row['entrenador'];
+            $rs->free();
+        } 
+        else {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
-        } else {
-            echo "La actualización se ha realizado correctamente.";
         }
 
-        return $resultado;
+        return $entrenador;
     }
-    
+
+//////////////////////////////////////////////////////////////////////////////////
 
     public static function guardaDatosJugadorenEquipo($jugador){
 
@@ -224,97 +264,59 @@ class Equipo{
         return $resultado;
     }
 
-    public static function getNombreEquipo($idEquipoLocal){
+    public static function addpartidoganado($equipo,$idPartido){
 
-        //Obtengo la conexión realizada
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT nombre_equipo FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($idEquipoLocal));
 
-        $rs = $conn->query($query);
-        $result = false;
-        $equipos = array();
-            if ($rs) {
-                while ($row = $rs->fetch_assoc()) {
-                    $equipos = $row['nombre_equipo'];
-                }
-                $result = $equipos;
-                $rs->free();
-            } else {
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-        return $result;
+        $query = sprintf("UPDATE equipos SET W = W + 1 WHERE id_equipo = '%s'", $conn->real_escape_string($equipo));
+        // Ejecutar la consulta
+        $resultado = $conn->query($query);
 
-
-    }
-
-    public static function getidEquipo($equipo_id){
-
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT id FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($equipo_id));
-
-        $rs = $conn->query($query);
-        $result = false;
-
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = $fila['id'];
-            }
-            $rs->free();
-        } else {
+        if (!$resultado) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-        return $result;
-
-
-    }
-    public static function getNumJugador($jugador){
-
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT numero FROM jugadores WHERE user = '$jugador'";
-
-        $rs = $conn->query($query);
-        $result = false;
-
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = $fila['numero'];
-            }
-            $rs->free();
         } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            echo "La actualización se ha realizado correctamente.";
         }
-        return $result;
 
+        $query = sprintf("UPDATE partidos SET WL = 1 WHERE id = '%s'", $conn->real_escape_string($idPartido));
+        // Ejecutar la consulta
+        $resultado = $conn->query($query);
 
-    }
-    
-    public static function getnombreJugador($jugador){
-
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = "SELECT nombre,apellido1,apellido2 FROM jugadores WHERE user = '$jugador'";
-
-        $rs = $conn->query($query);
-        $result = false;
-
-        if ($rs) {
-            $fila = $rs->fetch_assoc();
-            if ($fila) {
-                $result = $fila['nombre'] . ' ' . $fila['apellido1'] . ' ' . $fila['apellido2'];
-            }
-            $rs->free();
+        if (!$resultado) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            echo "La actualización se ha realizado correctamente.";
         }
-        return $result;
 
-
+        return $resultado;
     }
-    
+
+    public static function addpartidoperdido($equipo,$idPartido){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE equipos SET L = L + 1 WHERE id_equipo = '%s'", $conn->real_escape_string($equipo));
+        // Ejecutar la consulta
+        $resultado = $conn->query($query);
+
+        if (!$resultado) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        } else {
+            echo "La actualización se ha realizado correctamente.";
+        }
+
+        $query = sprintf("UPDATE partidos SET WL = 1 WHERE id = '%s'", $conn->real_escape_string($idPartido));
+        // Ejecutar la consulta
+        $resultado = $conn->query($query);
+
+        if (!$resultado) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        } else {
+            echo "La actualización se ha realizado correctamente.";
+        }
+
+        return $resultado;
+    }
 
 
     public static function getJugadoresEquipo($equipo_id){
@@ -398,8 +400,8 @@ class Equipo{
         
             // Insertamos los jugadores locales seleccionados
             foreach ($jugadoresSeleccionadosLocal as $jugador) {
-                $numero = self::getNumJugador($jugador);
-                $nombrejugador = self::getnombreJugador($jugador);
+                $numero = Jugador::getNumJugador($jugador);
+                $nombrejugador = Jugador::getnombreJugador($jugador);
                 $sql = "INSERT INTO tmp_partido (equipo, jugador, nombrejugador, numero) VALUES ('$idEquipoLocal', '$jugador','$nombrejugador','$numero')";
                 $result = $conn->query($sql);
         
@@ -446,24 +448,6 @@ class Equipo{
         }
     }
     
-
-
-
-
-
-    public static function actualizarTablaPartido($equipo,$jugador,$accion){
-
-        //Obtengo la conexión realizada
-           
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("UPDATE tmp_partido SET $accion = $accion + 1 WHERE equipo = '$equipo' AND numero = '$jugador'");
-
-        if ($conn->query($query) === false) {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-    }
-
     public static function actualizarmasmenos($puntos,$equipo){
 
         //Obtengo la conexión realizada
@@ -482,8 +466,6 @@ class Equipo{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
     }
-
-
 
 
     public static function actualizarTitulares($listaJugadores){
@@ -656,30 +638,6 @@ class Equipo{
 
         return $jugadores;
     }
-///////////////////////////////////////////////////////////////////////////////
-//OBTENER EL ENTRENADOR DE UN EQUIPO
-public static function getEntrenadorEquipo($equipo){
-
-        //Obtengo la conexión realizada
-           
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("SELECT entrenador FROM equipos WHERE id_equipo = '$equipo'");
-
-        $rs = $conn->query($query);
-
-        if ($rs) {
-            $row = $rs->fetch_assoc();
-            $entrenador = $row['entrenador'];
-            $rs->free();
-        } 
-        else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-
-        return $entrenador;
-}
-///////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -722,31 +680,6 @@ public static function getEntrenadorEquipo($equipo){
         return $jugadores;
     
     }
-
-    /////////////////////////////////////////////////
-
-    public static function statsfromEquipo($equipo){
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("SELECT * FROM equipos WHERE id_equipo = '$equipo'");
-
-        $rs = $conn->query($query);
-
-        if ($rs) {
-            $row = $rs->fetch_assoc();
-            $result = $row;
-            $rs->free();
-        } 
-        else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-
-        return $result;
-
-    
-    }
-
 
 ///////////////////////////////////////////////////////////////
 
@@ -864,30 +797,13 @@ public static function mostrarCajaEquipo($equipo){
     return $html;
 }
 
-public static function mostrarStatsPartidoEquipo($partido, $estadisticas) {
+public static function mostrarStatsPartidoEquipo($partido, $estadisticas,$partidoId) {
+
     $html = "";
     $html .= "
-    <table>
-        <tr>
-            <th>Rival</th>
-            <th>Fecha</th>
-            <th>Timeouts</th>
-            <th>Faltas Banquillo</th>
-            <th>Puntos</th>
-            <th>Líder</th>
-            <th>Empate</th>
-            <th>Alternancias</th>
-            <th>Veces Empatados</th>
-            <th>Veces Líder</th>
-            <th>Q1</th>
-            <th>Q2</th>
-            <th>Q3</th>
-            <th>Q4</th>
-            <th>Extra</th>
-        </tr>
         <tr>
             <td>
-                <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}'>
+                <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
                     {$partido['visitante']}
                 </a>
             </td>
@@ -905,10 +821,117 @@ public static function mostrarStatsPartidoEquipo($partido, $estadisticas) {
             <td>{$estadisticas['q3']}</td>
             <td>{$estadisticas['q4']}</td>
             <td>{$estadisticas['extra']}</td>
-        </tr>
-    </table>";
+        </tr>";
     return $html;
 }
+public static function mostrarStatsPartidoporEquipos($estadisticas) {
+
+    $html = "";
+    $html .= "
+    <table>
+        <tr>
+            <th>Equipo</th>
+            <th>Puntos</th>
+            <th>Timeouts</th>
+            <th>Faltas Banquillo</th>
+            <th>Puntos</th>
+            <th>Líder</th>
+            <th>Empate</th>
+            <th>Alternancias</th>
+            <th>Veces Empatados</th>
+            <th>Veces Líder</th>
+            <th>Q1</th>
+            <th>Q2</th>
+            <th>Q3</th>
+            <th>Q4</th>
+            <th>Extra</th>
+        </tr>";
+
+    foreach ($estadisticas as $equipoStats) {
+        $puntos = $equipoStats['q1'] + $equipoStats['q2'] + $equipoStats['q3'] + $equipoStats['q4'] + $equipoStats['extra'];
+        $html .= "
+        <tr>
+            <td>{$equipoStats['equipo']}</td>
+            <td>{$puntos}</td>
+            <td>{$equipoStats['timeouts']}</td>
+            <td>{$equipoStats['faltasbanquillo']}</td>
+            <td>{$equipoStats['puntos']}</td>
+            <td>{$equipoStats['lider']}</td>
+            <td>{$equipoStats['empate']}</td>
+            <td>{$equipoStats['alternancias']}</td>
+            <td>{$equipoStats['vecesempatados']}</td>
+            <td>{$equipoStats['veceslider']}</td>
+            <td>{$equipoStats['q1']}</td>
+            <td>{$equipoStats['q2']}</td>
+            <td>{$equipoStats['q3']}</td>
+            <td>{$equipoStats['q4']}</td>
+            <td>{$equipoStats['extra']}</td>
+        </tr>";
+    }
+
+    $html .= "</table>";
+    return $html;
+}
+
+public static function mostrarStatsPartidoporJugadores($estadisticas) {
+    $html = "";
+    $html .= "
+    <table>
+        <tr>
+        <th>EQUIPO</th>
+        <th>USER</th>
+        <th>NOMBRE</th>
+        <th>NUMERO</th>
+        <th>TITULAR</th>
+        <th>MT</th>
+        <th>MSMS</th>
+        <th>T2A</th>
+        <th>T2F</th>
+        <th>T3A</th>
+        <th>T3F</th>
+        <th>TLA</th>
+        <th>TLF</th>
+        <th>FLH</th>
+        <th>FLR</th>
+        <th>RBO</th>
+        <th>RBD</th>
+        <th>ROB</th>
+        <th>TAP</th>
+        <th>PRD</th>
+        <th>AST</th>
+        </tr>";
+
+    foreach ($estadisticas as $equipoStats) {
+        $html .= "
+        <tr>
+            <td>{$equipoStats['equipo']}</td>
+            <td>{$equipoStats['jugador']}</td>
+            <td>{$equipoStats['nombrejugador']}</td>
+            <td>{$equipoStats['numero']}</td>
+            <td>{$equipoStats['titular']}</td>
+            <td>{$equipoStats['segundosjugados']}</td>
+            <td>{$equipoStats['masmenos']}</td>
+            <td>{$equipoStats['T2A']}</td>
+            <td>{$equipoStats['T2F']}</td>
+            <td>{$equipoStats['T3A']}</td>
+            <td>{$equipoStats['T3F']}</td>
+            <td>{$equipoStats['TLA']}</td>
+            <td>{$equipoStats['TLF']}</td>
+            <td>{$equipoStats['FLH']}</td>
+            <td>{$equipoStats['FLR']}</td>
+            <td>{$equipoStats['RBO']}</td>
+            <td>{$equipoStats['RBD']}</td>
+            <td>{$equipoStats['ROB']}</td>
+            <td>{$equipoStats['TAP']}</td>
+            <td>{$equipoStats['PRD']}</td>
+            <td>{$equipoStats['AST']}</td>
+        </tr>";
+    }
+
+    $html .= "</table>";
+    return $html;
+}
+
 
 //Obtener las estadisticas de dichos partidos:
 public static function mostrarUltimosPartidosEquipo($equipo){
@@ -920,7 +943,31 @@ public static function mostrarUltimosPartidosEquipo($equipo){
     
     $partidos = Partido::getpartidosfromEquipo($equipo);
 
+        // Ordenar los partidos por fecha en orden descendente (los más recientes primero)
+        usort($partidos, function($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
     //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+    $html .="
+    <table>
+    <tr>
+        <th>Rival</th>
+        <th>Fecha</th>
+        <th>Timeouts</th>
+        <th>Faltas Banquillo</th>
+        <th>Puntos</th>
+        <th>Líder</th>
+        <th>Empate</th>
+        <th>Alternancias</th>
+        <th>Veces Empatados</th>
+        <th>Veces Líder</th>
+        <th>Q1</th>
+        <th>Q2</th>
+        <th>Q3</th>
+        <th>Q4</th>
+        <th>Extra</th>
+    </tr>";
 
     foreach($partidos as $partido){
 
@@ -932,68 +979,16 @@ public static function mostrarUltimosPartidosEquipo($equipo){
 
         //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
 
-        $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas);
+        $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas,$partido['id']);
     
     }
-        
+    $html .="</table>";
+
     return $html;
 }
 
 
-///////////////////////////////////////////////////////////////
-//Registro
 
-    public static function registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo){
-        $result = true;
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $idEquipo = $categoria_equipo .  $seccion_equipo;
-        $nombreEquipo = 'Liceo Frances ' . $categoria_equipo . ' ' . $seccion_equipo;
-
-        $query = "INSERT INTO equipos (id_equipo,categoria,nombre_equipo,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$nombreEquipo','$seccion_equipo','$letra_equipo')"; 
-
-        $rs = $conn->query($query);
-
-        if (!$rs) {
-            $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-        return $result;
-    }
 }
-/*
-    function getJugadoresLocales(){
-
-        //Obtengo la conexión realizada
-           
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("SELECT jugador FROM tmp_partido WHERE equipo = 'Local'");
-
-        $rs = $conn->query($query);
-
-        $jugadores = array();
-        if ($rs) {
-            $i = 0;
-            while ($row = $rs->fetch_assoc()) {
-                $jugadores[$i] = $row['jugador'];
-                $i++;
-            }
-            print_r($jugadores) ;
-            $rs->free();
-        } else {
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-
-        header('Content-Type: application/json');
-        echo json_encode(array_values($jugadores));
-    }
-*/
-
-
-
-
-
 ?>
 

@@ -12,8 +12,13 @@ $rutaImgs=RUTA_IMGS;
 
 
     $usuario = es\ucm\fdi\Usuario::getDatosPerfilJugador($jugador);
+
     $player = es\ucm\fdi\Jugador::statsfromJugador($usuario);
+    $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($player);
+    
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($player);
+    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
+
     $idUser = es\ucm\fdi\Usuario::getidNombreUser($jugador);
     
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($idUser);
@@ -27,6 +32,7 @@ $rutaImgs=RUTA_IMGS;
     <h1>Stats de '$jugador'</h1>
     $htmlfrommostrarStatsJugador
     <h1>Stats Avanzadas de '$jugador'</h1>
+    $htmlfrommostrarStatsAvanzadasJugador
     <h1>Equipos de '$jugador'</h1>
     $htmlEquiposfromUser
     <h1>Ultimos partidos de '$jugador'</h1>

@@ -1,0 +1,50 @@
+/* Estilos para el contenedor principal */
+/* Estilos para el contenedor principal */
+.perfil {
+    /* Asegúrate de que los divs se muestren uno debajo del otro */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para cada uno de los divs internos */
+.perfil .perfilCabecera,
+.perfil .cuadrostats,
+.perfil .cuadrostatsAvanzadas,
+.perfil .perfilEquipos,
+.perfil .lastgames {
+    /* Asegúrate de que cada div ocupe toda la anchura del contenedor */
+    width: 100%;
+}
+
+/* Estilos para el div que contiene los últimos partidos */
+.perfil .lastgames {
+    /* Controla el desbordamiento del contenido */
+    overflow: auto;
+}
+
+/* Estilos para disminuir el tamaño del texto en todos los elementos dentro del div "perfil" */
+.perfil {
+    font-size: 14px; /* Ajusta el valor según el tamaño deseado */
+}
+/* Estilos para el contenedor de las estadísticas del jugador */
+.perfil .cuadrostats .stats{
+    /* Crea tres columnas con un espacio entre ellas */
+    column-count: 2;
+    column-gap: 20px; /* Ajusta el valor según el espacio deseado */
+}
+
+/* Estilos para cada párrafo dentro del contenedor */
+.perfil .cuadrostats p {
+    /* Asegúrate de que los párrafos no se expandan horizontalmente */
+    display: inline-block;
+    /* Opcionalmente, puedes agregar un ancho máximo para cada párrafo */
+    max-width: 100%;
+}
+/* Estilos para cada uno de los divs internos */
+.perfil > div {
+    /* Añade un borde sólido de 1px alrededor de cada div */
+    border: 1px solid #000; /* Puedes ajustar el color y el grosor del borde según tus preferencias */
+    /* Asegúrate de que cada div ocupe toda la anchura del contenedor */
+    width: 100%;
+
+  }

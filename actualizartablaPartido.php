@@ -8,6 +8,6 @@ $accion = $_GET['accion'];
 
 $equipo = $_GET['equipo'];
 
-$result = es\ucm\fdi\Equipo::actualizarTablaPartido($equipo,$jugador,$accion);
+$result = es\ucm\fdi\Partido::actualizarTablaPartido($equipo,$jugador,$accion);
 
 ?>

@@ -16,7 +16,7 @@
 					<a href="perfil.php">MI PERFIL</a>
 					<a href="misequipos.php">MIS EQUIPOS</a>
 					<a href="seleccion_equipo.php">MY LICEO</a>
-					<a href="index.php">CONTACTO Y FAQS</a>
+					<a href="pagina_glosario.php">GLOSARIO</a>
 				</nav>
 		<?php } ?>
 	

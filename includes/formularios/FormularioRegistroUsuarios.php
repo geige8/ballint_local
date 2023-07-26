@@ -13,7 +13,7 @@ class FormularioRegistroUsuarios extends Formulario{
     protected function generaCamposFormulario(&$datos){
 
             $opcionesEquipos = '';
-            $arrayEquiposExistentes = Equipo::obtenerlistadoEquipos();
+            $arrayEquiposExistentes = Equipo::getListadoEquipos();
 
             for ($i = 1; $i <= sizeof($arrayEquiposExistentes); $i++) {
                 $opcionesEquipos .= '<option value="' . $arrayEquiposExistentes[$i-1] . '">' . $arrayEquiposExistentes[$i-1] . '</option>';
@@ -102,7 +102,7 @@ class FormularioRegistroUsuarios extends Formulario{
             $ultimas_letras_apellido2 = substr($apellido2Jugador, -2);
 
             // Combinar todas las partes para formar el nombre de usuario
-            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2;
+            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario;
 
             $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario);
         

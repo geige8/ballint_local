@@ -9,6 +9,38 @@ class Partido{
         $this->id = $id;
     }
 
+    public static function saveplayers($equipo,$ganador,$idPartido) {
+
+        // Obtener todos los jugadores
+        $listajugadores = Equipo::getJugadores();
+
+        //
+        $resultado = Equipo::addpartidojugado($equipo);
+
+        if($ganador){
+            $resultado = Equipo::addpartidoganado($equipo,$idPartido);
+        }
+        else{
+            $resultado = Equipo::addpartidoperdido($equipo,$idPartido);
+        }
+
+
+        // Iterar sobre cada jugador
+        foreach ($listajugadores as $jugador) {
+
+            // Llamar a la función guardaDatosJugador y almacenar el resultado en una variable
+            $resultado = Jugador::guardaDatosJugador($jugador);
+            $resultado = Equipo::guardaDatosJugadorenEquipo($jugador);
+
+            // Controlar el resultado
+            if ($resultado) {
+                echo "El jugador {$jugador['id']} se ha guardado correctamente.";
+            } else {
+                echo "Error al guardar el jugador.";
+            }
+        }
+    }
+
 
     public static function crearTablaTemporal($idEquipoLocal, $nombreEquipoVisitante) {
 
@@ -157,29 +189,93 @@ class Partido{
         return $resultArray;
     }
 
-    public static function getstatsPartido($partido){
-        
+    public static function getstatsPartido($partidoId){
+
         $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $tabla = "tmp_partidoe_" . $partido;
-
-    // Consulta SQL
-    $sql = "SELECT * FROM $tabla WHERE id = 1";
-
+        $tabla = "tmp_partidoe_" . $partidoId;
+    
+        // Consulta SQL
+        $sql = "SELECT * FROM $tabla";
+    
         // Ejecutar la consulta
         $result = $conn->query($sql);
-
+    
         // Verificar si se encontraron resultados
         if ($result->num_rows > 0) {
-            // Almacenar los resultados en un arreglo
+            // Almacenar los resultados en un arreglo multidimensional
+            $resultArray = array();
             while ($row = $result->fetch_assoc()) {
                 $resultArray = $row;
             }
         } else {
             echo "No se encontraron resultados.";
         }
-
+    
         return $resultArray;
+    }
+
+    public static function getstatsPartidoEquipos($partidoId){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $tabla = "tmp_partidoe_" . $partidoId;
+    
+        // Consulta SQL
+        $sql = "SELECT * FROM $tabla";
+    
+        // Ejecutar la consulta
+        $result = $conn->query($sql);
+    
+        // Verificar si se encontraron resultados
+        if ($result->num_rows > 0) {
+            // Almacenar los resultados en un arreglo multidimensional
+            $resultArray = array();
+            while ($row = $result->fetch_assoc()) {
+                $resultArray[] = $row;
+            }
+        } else {
+            echo "No se encontraron resultados.";
+        }
+    
+        return $resultArray;
+    }
+    
+
+    public static function getstatsPartidoJugadores($partidoId){
+        
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $tabla = "tmp_partido_" . $partidoId;
+    
+        // Consulta SQL
+        $sql = "SELECT * FROM $tabla";
+    
+        // Ejecutar la consulta
+        $result = $conn->query($sql);
+    
+        // Verificar si se encontraron resultados
+        if ($result->num_rows > 0) {
+            // Almacenar los resultados en un arreglo multidimensional
+            $resultArray = array();
+            while ($row = $result->fetch_assoc()) {
+                $resultArray[] = $row;
+            }
+        } else {
+            echo "No se encontraron resultados.";
+        }
+    
+        return $resultArray;
+    }
+
+    public static function actualizarTablaPartido($equipo,$jugador,$accion){
+
+        //Obtengo la conexión realizada
+           
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partido SET $accion = $accion + 1 WHERE equipo = '$equipo' AND numero = '$jugador'");
+
+        if ($conn->query($query) === false) {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
     }
 
     public static function renombrartablas($id){

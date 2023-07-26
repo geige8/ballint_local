@@ -27,7 +27,10 @@ if (in_array('J', $roles)) {
 
     //Rol J
     $jugador = es\ucm\fdi\Jugador::statsfromJugador($usuario);
+    $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($jugador);
+    
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($jugador);
+    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
 
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);
     $htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
@@ -46,24 +49,27 @@ if (in_array('J', $roles)) {
                 </div>
                 <div class="cambiarPassword">
                     <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
-                </div>  
-                <div class="cuadrostats">
-                    <h1>Estadisticas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
-                    $htmlfrommostrarStatsJugador
                 </div>
-                <div class="cuadrostats">
-                    <h1>Estadisticas Avanzadas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
-                
-                </div>
-                <div class="perfilEquipos">
-                    <h2>Equipos a los que pertenece</h2>
-                    $htmlEquiposfromUser
-                </div>
-                <div class="lastgames">
-                <h2>Últimos Partidos</h2>
-                    $htmlUltimosPartidos
-                </div>
+            </div>
 
+            <div class="cuadrostats">
+                <h1>Estadisticas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                $htmlfrommostrarStatsJugador
+            </div>
+
+            <div class="cuadrostatsAvanzadas">
+                <h1>Estadisticas Avanzadas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                $htmlfrommostrarStatsAvanzadasJugador
+            </div>
+
+            <div class="perfilEquipos">
+                <h2>Equipos a los que pertenece</h2>
+                $htmlEquiposfromUser
+            </div>
+
+            <div class="lastgames">
+            <h2>Últimos Partidos</h2>
+                $htmlUltimosPartidos
             </div>
         </div>
     EOS;
@@ -89,15 +95,15 @@ if (in_array('J', $roles)) {
             </div>
             <div class="cambiarPassword">
                 <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
-            </div>  
-            <div class="perfilEquipos">
-                <h2>Equipos a los que pertenece</h2>
-                $htmlEquiposfromUser
             </div>
-            <div class="lastgames">
-                <h2>Últimos Partidos</h2>
-                $htmlUltimosPartidos
-            </div>
+        </div>
+        <div class="perfilEquipos">
+            <h2>Equipos a los que pertenece</h2>
+            $htmlEquiposfromUser
+        </div>
+        <div class="lastgames">
+            <h2>Últimos Partidos</h2>
+            $htmlUltimosPartidos
         </div>
     </div>
     EOS;

@@ -19,7 +19,7 @@ class FormularioCambiarPassword extends Formulario
          $erroresCampos = self::generaErroresCampos(['password', 'password2'], $this->errores, 'span', array('class' => 'error'));
  
          $html = <<<EOF
-         <div class="datos">
+            <div class="datos">
                 <div class="columna">
                     <div class="columna-centrada">
                         $htmlErroresGlobales   
@@ -33,8 +33,8 @@ class FormularioCambiarPassword extends Formulario
                             <button type="submit" name="actualizar">Cambiar Password</button>
                         </div>
                     </div>
-             </div>
-         </div>
+                </div>
+            </div>
          EOF;
          return $html;
      }
