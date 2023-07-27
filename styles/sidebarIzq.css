@@ -1,0 +1,53 @@
+/* Estilos para el aside */
+aside#sidebarIzq {
+    width: 20%;
+    height: 100%;
+    display: block;
+    flex-direction: column;
+    float: left;
+    font-weight: bold;
+    transition: width 0.3s ease 0.3s;
+  }
+
+  aside#sidebarIzq div.infoCabecera {
+    /* Elimina el float y flex-direction, no son necesarios aquí */
+    display: block;
+    font-weight: bold;
+    padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
+    margin: 0;
+    overflow: hidden; /* Oculta todo el contenido que exceda el ancho máximo */
+    max-width: 100%; /* Ajusta el ancho máximo inicial (mostrando todos los elementos) */
+  }
+  
+  aside#sidebarIzq div.infoCabecera h1,
+  aside#sidebarIzq div.infoCabecera a,
+  aside#sidebarIzq div.infoCabecera i {
+    /* Aplica los mismos estilos a todos los elementos dentro de div.infoCabecera */
+    display: block;
+    font-weight: bold;
+    padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
+    margin: 0;
+  }
+ 
+  
+  aside#sidebarIzq ul.menu_box {
+    /* Elimina el float y flex-direction, no son necesarios aquí */
+    display: block;
+    font-weight: bold;
+    padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
+}
+
+aside#sidebarIzq ul.menu_box li {
+    list-style: none;
+    border-radius: 20px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+aside#sidebarIzq ul.menu_box li a {
+    display: block; /* Cambiamos a display block para asegurar que cada enlace ocupe su propio espacio vertical */
+}
+
+aside#sidebarIzq ul.menu_box li:hover {
+    background-color: #e4ecf0;
+}

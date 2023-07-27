@@ -1,9 +1,19 @@
 /* CABECERA */
-header{
+
+header {
+	position: relative; /* Asegura que los pseudo-elementos se posicionen correctamente */
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
 	min-height: 10vh;
 	background-color: #303030;
 	color: white;
-}
+	overflow: hidden; /* Para ocultar las franjas que excedan el ancho */
+	border-bottom: 10px solid #ffffff;
+  }
+  
 
 header img{ /* Las imágenes que aparezcan dentro de la Cabecera */
 	max-width: 100%;
@@ -27,17 +37,13 @@ header div.cabeza{
 	align-items: center;
 }
 
-header div.cabeza div.imagenCabecera{
-	height: 100%;
-    width: 8%;
-	justify-content: center;
-    float: left;
-}
-
 header div.cabeza div.tituloCabecera{
 	height: 100%;
+    display: flex;
+    flex-flow: row wrap;
 	justify-content: center;
-    float: left;
+	align-items: center;
+
 }
 
 header div.cabeza div.infoCabecera{
@@ -45,36 +51,23 @@ header div.cabeza div.infoCabecera{
     height: 100%;
     align-items: center;
 	justify-content: center;
-
     display: flex;
     flex-flow:row wrap;
 }
 
 
-header div.cabeza div.infoCabecera div.elementoInformacionUsuario div.apartadoCabecera h1{
-    margin: 0;
-    font-size: 2em;
-}
-
-
-header div.cabeza div.infoCabecera div.logoutCabecera{
-    color: white;
-	font-size: 3vw;
-}
-
-
-header nav{
-
-	min-height: 2vh;
-	background-color:deepskyblue;
-	color:aliceblue;
-	height: auto;
-	position: sticky;
-	display: flex;
-	justify-content: space-evenly;
-}
-
-header nav a{
-	padding-top: 0.5vh;
-	padding-bottom: 0.5vh;
-}
+#toggleSidebar {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 24px;
+	color: #000;
+	display: flex; /* Usa flexbox para ajustar el orden y alineación */
+	align-items: center; /* Alinea verticalmente el contenido en el centro */
+	color: aliceblue;
+  }
+  
+  #toggleSidebar i {
+	margin-left: 20px; /* Agrega un margen a la derecha para separar el icono del texto */
+  }
+  

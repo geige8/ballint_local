@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
 
-$jugador = $_GET['jugador'];
+    $jugador = $_GET['jugador'];
 
 
-$tituloPagina = 'Perfil';
-$rutaApp = RUTA_APP;
-$contenidoPrincipal = '';
-$rutaImgs=RUTA_IMGS;
+    $tituloPagina = 'Perfil';
+    $rutaApp = RUTA_APP;
+    $contenidoPrincipal = '';
+    $rutaImgs=RUTA_IMGS;
 
 
     $usuario = es\ucm\fdi\Usuario::getDatosPerfilJugador($jugador);
@@ -26,19 +26,27 @@ $rutaImgs=RUTA_IMGS;
 
     $htmlUltimosPartidos =es\ucm\fdi\Jugador::mostrarUltimosPartidosJugador($jugador);
 
-
     $contenidoPrincipal .= <<<EOS
-    <h1>Detalles del Perfil de '$jugador'</h1>
-    <h1>Stats de '$jugador'</h1>
-    $htmlfrommostrarStatsJugador
-    <h1>Stats Avanzadas de '$jugador'</h1>
-    $htmlfrommostrarStatsAvanzadasJugador
-    <h1>Equipos de '$jugador'</h1>
-    $htmlEquiposfromUser
-    <h1>Ultimos partidos de '$jugador'</h1>
-    $htmlUltimosPartidos
+        <div class="paginaDetalle">
+            <h1>Detalles del Perfil de '$jugador'</h1>
+            <div>
+                <h1>Stats de '$jugador'</h1>
+                $htmlfrommostrarStatsJugador
+            </div>
+            <div>
+                <h1>Stats Avanzadas de '$jugador'</h1>
+                $htmlfrommostrarStatsAvanzadasJugador
+            </div>
+            <div>
+                <h1>Equipos de '$jugador'</h1>
+                $htmlEquiposfromUser
+            </div>
+            <div>
+                <h1>Ultimos partidos de '$jugador'</h1>
+                $htmlUltimosPartidos
+            </div>
+        </div>
     EOS;
 
-
-
-require __DIR__.'/includes/vistas/plantilla.php';
+    require __DIR__.'/includes/vistas/plantilla.php';
+?>

@@ -1,13 +1,11 @@
-/*panel derecho*/
 aside#sidebarDer {
-	float: right;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-}
-aside {
-    width: 19.5%;
-    min-height: 80vh;
-    height: 100%;
-    display: block;
+    width: 0%;
+    height: 1242px;
+    display: flex;
+    flex-direction: column;
+    right: 0; /* Alinea el sidebar a la derecha */
+    background-color: #f0f0f0; /* Cambia el color de fondo a tu preferencia */
+    font-weight: bold;
+    transition: width 0.3s ease 0.3s;
+    overflow-y: auto; /* Añadir la barra de desplazamiento vertical */
 }

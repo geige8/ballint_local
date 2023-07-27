@@ -937,50 +937,6 @@ let localPlayersDisplay = document.querySelector('.localPlayers-display');
 // Obtener el elemento con la clase "visitScore-display"
 let visitPlayersDisplay = document.querySelector('.visitPlayers-display');
 
-/*function mostrarJugadoresPista(jugadores){
-
-    var playersLocalHTML = '';
-
-    var playersVisitHTML = '';
-
-    var puntosPlayer = '';
-
-    var faltasPlayer = '';
-
-    var minutosPlayer = '';
-
-        for (var i = 0; i < jugadores.length; i++) {
-            var jugador = jugadores[i];
-        
-            //Calculo sus puntos faltas y minutos
-
-            puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
-
-            faltasPlayer = jugador.FLH;
-
-            var minutosjugador = Math.floor(jugador.segundosjugados / 60); // Calcula los minutos (parte entera)
-            var segundosjugador = jugador.segundosjugados % 60; // Calcula los segundos restantes
-
-           // Formatea la cadena en el formato mm:ss sin utilizar sprintf()
-            minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
-
-            if(isLocal(jugador.equipo)){
-
-                playersLocalHTML += '<div>#' + jugador.numero + ' Nombre: ' + jugador.nombrejugador + ' Puntos: ' + puntosPlayer + ' Faltas: ' + faltasPlayer + ' Minutos: ' + minutosPlayer + '</div>';
-
-
-
-            }
-            else{
-                playersVisitHTML += '<div>Número: ' + jugador.numero + ', Nombre: ' + jugador.nombrejugador + '</div>';
-            }
-        
-        }
-
-        localPlayersDisplay.innerHTML = playersLocalHTML;
-        visitPlayersDisplay.innerHTML = playersVisitHTML;
-}*/
-
 function mostrarJugadoresPista(jugadores) {
     var playersLocalHTML = '';
     var playersVisitHTML = '';
@@ -1004,7 +960,7 @@ function mostrarJugadoresPista(jugadores) {
     var localHeaderRow = localTable.insertRow();
     var visitHeaderRow = visitTable.insertRow();
 
-    var headers = ['Nº', 'Nombre', 'Ptos.', 'Faltas', 'Time'];
+    var headers = ['Nº','Ptos.', 'Faltas', 'Time'];
 
     for (var i = 0; i < headers.length; i++) {
         var localHeaderCell = localHeaderRow.insertCell();
@@ -1030,9 +986,6 @@ function mostrarJugadoresPista(jugadores) {
         // Crear las celdas para los datos del jugador
         var numberCell = playerRow.insertCell();
         numberCell.innerHTML = jugador.numero;
-
-        var nameCell = playerRow.insertCell();
-        nameCell.innerHTML = jugador.nombrejugador;
 
         var pointsCell = playerRow.insertCell();
         pointsCell.innerHTML = puntosPlayer;

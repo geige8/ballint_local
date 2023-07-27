@@ -19,16 +19,21 @@ $htmlpartidos = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
 
 
     $contenidoPrincipal .= <<<EOS
-    <h1>Detalles del Equipo '$equipo'</h1>
-    
-    <h1>Estadisticas del  '$equipo'</h1>
-    $htmlStatsEquipo
-
-    <h1>Jugadores del  '$equipo'</h1>
-    $htmllistajugadoresEquipo
-
-    <h1>Ultimos Partidos del  '$equipo'</h1>
-    $htmlpartidos
+        <div class="paginaDetalle">
+            <h1>Detalles del Equipo '$equipo'</h1>
+            <div>
+                <h1>Estadisticas del  '$equipo'</h1>
+                $htmlStatsEquipo
+            </div>
+            <div>
+                <h1>Jugadores del  '$equipo'</h1>
+                $htmllistajugadoresEquipo
+            </div>
+            <div>
+                <h1>Ultimos Partidos del  '$equipo'</h1>
+                $htmlpartidos
+            </div>
+        </div>
     EOS;
 
 

@@ -27,15 +27,4 @@ $contenidoPrincipal = <<<EOS
 </div>
 EOS;
 
-require __DIR__.'/includes/vistas/plantilla.php';
-
-
-/*<div class="botonInicio">
-        <a class="boton" href='{$rutaApp}/login.php'>
-            <span>Inicia Sesión</span>
-            <span class="fa">
-                <i class="fas fa-users" aria-hidden="true"></i>     
-            </span>		
-        </a> 
-    </div>
-    */
+require __DIR__.'/includes/vistas/plantillalog.php';

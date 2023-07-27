@@ -35,8 +35,10 @@
     <?php
             require('./includes/vistas/sidebarIzq.php');
             require('./includes/vistas/main.php');
+            require('./includes/vistas/sidebarDer.php');
             require('./includes/vistas/pie.php');
 
     ?>
 </body>
+       
        

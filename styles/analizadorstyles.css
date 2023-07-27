@@ -1,19 +1,100 @@
-#comparativaEquipos {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  #comparativaEquipos div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  #comparativaEquipos h1 {
-    margin-left: 10px;
-    margin-right: 10px;
+/* Estilos para div.container */
+div.container {
+  display: flex; /* Establecer el contenedor como flexbox */
+  flex-direction: column; /* Alinear los elementos en una columna */
+  font-size: 14px; 
+
 }
+
+/* Estilos para div.cabecera-stats */
+div.cabecera-stats {
+  display: flex; /* Establecer el contenedor como flexbox */
+  justify-content: space-between; /* Distribuir los elementos de manera equitativa en el eje principal */
+  align-items: center; /* Centrar los elementos verticalmente en el eje transversal */
+  padding: 10px; /* Espaciado interno */
+  background-color: #f0f0f0; /* Color de fondo */
+}
+
+/* Estilos para los elementos dentro de div.cabecera-stats */
+div.cabecera-stats > div {
+  flex: 1; /* Hacer que todos los divs ocupen el mismo ancho */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde con color gris */
+  background-color: #fff; /* Color de fondo */
+  text-align: center; /* Alinear el contenido al centro */
+}
+
+/* Estilos para los botones dentro de div.cabecera-stats */
+div.cabecera-stats button {
+  display: block; /* Hacer que los botones ocupen todo el ancho disponible */
+  width: 100%;
+  margin-bottom: 5px; /* Espaciado entre botones */
+}
+
+/* Estilos para div.cuerpoAnalizador */
+div.cuerpoAnalizador {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* Ajustar la altura de los divs al mismo tamaño */
+  padding: 10px;
+  background-color: #f0f0f0;
+  height: 1000px;
+  font-size: 14px; 
+
+}
+
+/* Estilos para los divs de dentro de div.cuerpoAnalizador */
+div.cuerpoAnalizador > div {
+  flex: 1; /* Hacer que todos los divs ocupen la misma cantidad de espacio horizontal */
+  display: flex; /* Utilizar flexbox para el contenido dentro de cada div */
+  flex-direction: column; /* Alinear el contenido verticalmente */
+  justify-content: space-between; /* Espacio entre los elementos dentro de cada div */
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+/* Estilos para los elementos dentro de los divs de div.cuerpoAnalizador */
+div.cuerpoAnalizador > div > * {
+  display: block; /* Alinear el contenido en vertical */
+  margin-bottom: 10px; /* Espacio entre los elementos en vertical */
+  text-align: center; /* Alinear el contenido al centro */
+}
+
+#comparativaEquipos {
+  display: flex;
+  flex-direction: column;
+}
+
+#comparativaEquipos div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#comparativaEquipos h1 {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 14px; 
+
+}
+
+/* Estilos para div.accionesLocal */
+.acciones .botones{
+  display: flex;
+  flex:1;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en múltiples líneas */
+  justify-content: space-between; /* Espacio entre las columnas */
+  gap: 5px; /* Espacio mínimo entre los botones */
+}
+
+/* Estilos para los botones dentro de accionesLocal */
+.acciones button {
+  flex-basis: 48%; /* Ancho de los botones (cada columna ocupará el 48% del espacio disponible) */
+  margin: 0; /* Eliminamos los márgenes predeterminados para evitar espacios adicionales */
+}
+
+/*-----------------------------------------*/
 
 /*Ventana emergente*/
 .ventana-emergente {

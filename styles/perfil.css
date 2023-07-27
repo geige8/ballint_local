@@ -43,7 +43,7 @@
 /* Estilos para cada uno de los divs internos */
 .perfil > div {
     /* Añade un borde sólido de 1px alrededor de cada div */
-    border: 1px solid #000; /* Puedes ajustar el color y el grosor del borde según tus preferencias */
+    border-bottom: 1px solid #000; /* Puedes ajustar el color y el grosor del borde según tus preferencias */
     /* Asegúrate de que cada div ocupe toda la anchura del contenedor */
     width: 100%;
 
