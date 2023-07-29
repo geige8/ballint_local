@@ -521,10 +521,29 @@ class Equipo{
 
         // Devolver una respuesta
         if ($result) {
+            $result = self::parcialCambio();
             echo "Puntuación actualizada con éxito";
         } else {
             echo "Error al actualizar la puntuación";
         }
+    }
+
+
+    public static function parcialCambio(){
+        //Obtengo la conexión realizada
+           
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $result = true;
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = 0");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+      
+        return $result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////

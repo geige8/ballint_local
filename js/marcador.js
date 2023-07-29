@@ -152,6 +152,8 @@ function displayTimer() {
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
+//APARTADO MARCADORES DE LOS EQUIPOS
+
 let idpartidoDisplay = document.querySelector('.idpartido-display');
 let idpartidoElement = idpartidoDisplay.querySelector('.id');
 
@@ -423,41 +425,90 @@ function getplantillastats(){
     jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
 
 }
-
-//2º 
-
 function getstatsavanzadas(){
 
 
 }
 
-//
 
-
-//Botón 2: Mostrar PDF Con todo el JUGADA A JUGADA
 function generarPDFplaybyplay() {
-    // Definir el contenido del documento PDF
+    // Obtener el contenido del div
+    const divContent = document.querySelector('.info-display');
+  
+    // Crear una nueva instancia de jsPDF
+    const doc = new jsPDF();
+  
 
-    let playbyplay = document.querySelector(".info-display");
+    // Obtener el contenido dividido por líneas
+    const lines = divContent.innerHTML.split('\n');
+  
+    // Definir las posiciones iniciales para el contenido
+    let xPosition = 15;
+    let yPosition = 15;
+  
+    // Calcular la altura total del contenido para ajustar la posición en "y"
+    const lineHeight = 10; // Altura de una línea (ajústala según tu preferencia)
+    const totalHeight = lines.length * lineHeight;
+  
+    // Verificar si el contenido se ajusta en una sola página o requiere varias páginas
 
-    var contenidoPDF = {
-        content: [
-        { text: 'Historial del Partido: ' +  getNombreEquipo(idlocal) + ' vs ' + getNombreEquipo(idvisitante), style: 'header' },
-        { text: 'Resultado Final: ' +  getNombreEquipo(idlocal) + ' ' + parseInt(localpointsElement.textContent) + ' vs ' + parseInt(localpointsElement.textContent) + ' ' + getNombreEquipo(idvisitante), style: 'header' },
-        { text: playbyplay.innerHTML , style: 'body' }
-        ],
-        styles: {
-        header: { fontSize: 18, bold: true },
-        body: { fontSize: 12 }
-        }
-    };
+    // Configurar el tamaño de página (A4 en este caso)
+    const pageWidth = 210; // Ancho de la página A4 en mm
+    const pageHeight = 297; // Altura de la página A4 en mm
+
+    // Configurar los márgenes
+    const pageMargin = 20; // Margen superior, inferior y derecho de la página en mm
+    const availableWidth = pageWidth - pageMargin * 2;
+    const availableHeight = pageHeight - pageMargin * 2;
+
+    const requireMultiplePages = totalHeight > availableHeight;
+  
+    // Función para agregar una página nueva al PDF y restablecer las coordenadas
+
+    function newPage() {
+        doc.addPage();
     
-    // Generar el archivo PDF
-    var pdfDocGenerator = pdfMake.createPdf(contenidoPDF);
+        doc.setFontSize(18); // Restaurar el tamaño de fuente para el título en nuevas páginas
+        doc.setFontStyle('bold'); // Restaurar el estilo de fuente para el título en nuevas páginas
     
-    // Descargar el archivo PDF
-    pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+        doc.text(15, 15, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la nueva página
+    
+        yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
+    }
+    
+  
+    // Añadir el título al PDF
+    doc.setFontSize(18); // Tamaño de fuente para el título
+    doc.setFontStyle('bold'); // Estilo de fuente para el título (negrita)
+    doc.text(xPosition, yPosition, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la posición (15, 15)
+    
+    yPosition = 15 + lineHeight; // Restablecer la posición en "y" para el contenido
+
+    // Restaurar el estilo de fuente por defecto (opcional)
+    doc.setFontSize(12); // Tamaño de fuente por defecto
+    doc.setFontStyle('normal'); // Estilo de fuente por defecto
+
+    // Agregar cada línea al PDF con un salto de línea
+    lines.forEach((line, index) => {
+      if (requireMultiplePages && yPosition + lineHeight > pageHeight - pageMargin) {
+        // Si el contenido no cabe en la página actual, agregar una nueva página
+        newPage();
+      }
+
+        doc.text(15, yPosition, line);
+        yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
+
+    });
+
+  
+    // Guardar o mostrar el PDF
+    doc.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+    
 }
+
+
+  
+
 
 function getJugadores(callback) {
     // Crear una solicitud AJAX
@@ -724,6 +775,7 @@ function actualizarDatosPuntos(puntos,equipo){
     //4º Checkear si hay empate y 5º Checkear alternancia en marcador
     checkmarcador();
     // 6º Parciales??
+    parciales(puntos,equipo);
 }
 
 //ACTUALIZAR MAS/MENOS
@@ -789,6 +841,28 @@ function checkmarcador(){
 
     // Hacer la solicitud AJAX
     xhttp.open("GET", "checkmarcador.php", true);
+    xhttp.send();
+}
+
+//PARCIALES
+function parciales(){
+
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("La respuesta está completa en parciales.");
+        }
+        else{
+            console.log("La respuesta está  NO completa en parciales.");
+
+        }
+    };
+
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "parciales.php?puntos=" + puntos + "&equipo=" + equipo, true);
     xhttp.send();
 }
 
@@ -887,26 +961,6 @@ function faltabanquillo(equipo){
     xhttp.send();
 
 }
-
-/*
-addTimeoutButtons.forEach(button => {
-    button.addEventListener("click", () => {
-
-        let timeout = parseInt(button.dataset.timeout);
-        let timeoutContainer = button.parentNode.querySelector(".timeout");
-        console.log(button.parentNode);
-
-        timeoutContainer.textContent = parseInt(timeoutContainer.textContent) + timeout;
-
-        if(button.parentNode == document.querySelector(".timeout-local")){
-            mostrarlogline("Tiempo Muerto de locales");
-        }
-        else{
-            mostrarlogline("Tiempo Muerto de visitantes");
-        }
-    });
-});
-*/
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1038,7 +1092,6 @@ function getJugadoresPista() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
 //SUSTITUCIONES
 
 function mostrarVentanaSub(equipo){
@@ -1350,8 +1403,9 @@ function mostrarMensajeLogLine(mensaje){
     let infoRef = document.querySelector(".info-display");
     let logline = '';
     period = document.getElementById("periodSelect").value;
-    logline = `¡${mensaje}! [${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})]\n`;
-    infoRef.innerHTML += logline ;
+    logline = `[${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})] - ¡${mensaje}!\n`;
+    infoRef.innerHTML += logline;
+    
 }
 
 function actualizarComparativa(campo,equipo){

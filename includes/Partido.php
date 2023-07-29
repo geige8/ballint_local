@@ -320,6 +320,24 @@ class Partido{
         $query = sprintf("UPDATE tmp_partidoE SET timeouts = timeouts + 1 WHERE equipo = '$equipo'");
 
         if ($conn->query($query) === false) {
+            $result = self::parcialTimeout();
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+      
+        return $result;
+    }
+
+    public static function parcialTimeout(){
+        //Obtengo la conexión realizada
+           
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $result = true;
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = 0");
+
+        if ($conn->query($query) === false) {
             $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
@@ -344,6 +362,79 @@ class Partido{
 
         
     }
+
+
+
+    public static function parciales($puntos,$equipo){
+
+
+        //1º PARCIAL: EL GENERAL
+
+        $result = self::addPuntosParcialGeneral($puntos,$equipo);
+        //$result = self::checkParcial($puntos,$equipo);
+
+
+        //2º PARCIAL: TRAS EL ULTIMO CAMBIO
+
+        $result = self::addPuntosParcialCambio($puntos,$equipo);
+
+        //3º PARCIAL: TRAS EL ULTIMO TIME-OUT
+
+        $result = self::addPuntosParcialTimeOut($puntos,$equipo);
+
+
+        return $result;
+    }
+
+    public static function addPuntosParcialGeneral($puntos,$equipo){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $result = true;
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial = parcial + $puntos WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function addPuntosParcialCambio($puntos,$equipo){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $result = true;
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastchange = parcial_lastchange + $puntos WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function addPuntosParcialTimeOut($puntos,$equipo){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $result = true;
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = parcial_lastto + $puntos WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+
 
     public static function guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante){
 

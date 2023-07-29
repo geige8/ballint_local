@@ -33,7 +33,6 @@ $contenidoPrincipal .= <<<EOS
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 
-
 <div class="container">
         <div class="cabecera-stats">
             <div class="buttons-coach-local">
@@ -255,7 +254,6 @@ $contenidoPrincipal .= <<<EOS
         </div>
     </div>
 </div>
-
 <script src="js\marcador.js"></script>
 EOS;
 require __DIR__.'/includes/vistas/plantillaAnalizador.php';
