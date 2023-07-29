@@ -30,6 +30,7 @@ if (in_array('J', $roles)) {
     $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($jugador);
     
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($jugador);
+    $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejora($jugador);
     $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
 
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);
@@ -55,6 +56,11 @@ if (in_array('J', $roles)) {
             <div class="cuadrostats">
                 <h1>Estadisticas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
                 $htmlfrommostrarStatsJugador
+            </div>
+
+            <div class="cuadrostatsMejora">
+            <h1>Areas de Mejora de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                $htmlfrommostrarAreasdeMejora
             </div>
 
             <div class="cuadrostatsAvanzadas">

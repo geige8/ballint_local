@@ -378,10 +378,69 @@ class Jugador{
             <p>Asistencias: {$jugador['AST']}</p>
             <p>Asistencias PP: {$jugador['ASTP']}</p>
 
-            <p>Asistencias: {$jugador['AST']}</p>
         </div>    
         ";
         return $html;
+    }
+
+    public static function mostrarStatsAreasdeMejora($jugador){
+
+        $html = "<div class='stats'>";
+
+
+            // Verificar y agregar el mensaje para T2P
+            if ($jugador['T2P'] <= 30) {
+                $html .= "<p>%T2A: {$jugador['T2P']}% - Tiene que mejorar</p>";
+            }
+            if ($jugador['T3P'] <= 30) {
+                $html .= "<p>%T3A: {$jugador['T3P']}% - Tiene que mejorar</p>";
+            }
+            if ($jugador['TLP'] <= 30) {
+                $html .= "<p>%TLA: {$jugador['TLP']}% - Tiene que mejorar</p>";
+            }
+            if ($jugador['TCP'] <= 30) {
+                $html .= "<p>%TCA: {$jugador['TCP']}% - Tiene que mejorar</p>";
+            }
+
+            /////
+
+            if ($jugador['FLHP'] >= 3) {
+                $html .= "<p>FLHP: {$jugador['FLHP']} - Tiene que mejorar</p>";
+            }
+            if ($jugador['FLRP'] <= 1) {
+                $html .= "<p>%FLRP: {$jugador['FLRP']}% - Tiene que mejorar</p>";
+            }
+
+            ///////
+
+            if ($jugador['RBOP'] < 1 ) {
+                $html .= "<p>RBOP: {$jugador['RBOP']} - Tiene que mejorar</p>";
+            }
+            if ($jugador['RBDP'] < 3) {
+                $html .= "<p>%RBDP: {$jugador['RBDP']}% - Tiene que mejorar</p>";
+            } 
+            if ($jugador['REBP'] < 3) {
+                $html .= "<p>REBP: {$jugador['REBP']} - Tiene que mejorar</p>";
+            }
+
+            ////////
+
+            if ($jugador['ROBP'] <= 1) {
+                $html .= "<p>ROBP: {$jugador['ROBP']} - Tiene que mejorar</p>";
+            } 
+            if ($jugador['TAPP'] <= 0.2) {
+                $html .= "<p>%TAPP: {$jugador['TAPP']} - Tiene que mejorar</p>";
+            } 
+            if ($jugador['PRDP'] >= 2) {
+                $html .= "<p>%PRDP: {$jugador['PRDP']} - Tiene que mejorar</p>";
+            } 
+            if ($jugador['ASTP'] <= 1) {
+                $html .= "<p>ASTP: {$jugador['ASTP']} - Tiene que mejorar</p>";
+            } 
+
+
+        $html .= "</div>";
+    return $html;
     }
 
     public static function mostrarStatsAvanzadasJugador($jugadorAvanzado){

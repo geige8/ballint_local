@@ -17,6 +17,7 @@
     $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($player);
     
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($player);
+    $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejora($player);
     $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
 
     $idUser = es\ucm\fdi\Usuario::getidNombreUser($jugador);
@@ -32,6 +33,10 @@
             <div>
                 <h1>Stats de '$jugador'</h1>
                 $htmlfrommostrarStatsJugador
+            </div>
+            <div>
+                <h1>Areas de Mejora de '$jugador'</h1>
+                    $htmlfrommostrarAreasdeMejora
             </div>
             <div>
                 <h1>Stats Avanzadas de '$jugador'</h1>
