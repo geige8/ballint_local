@@ -9,94 +9,12 @@ class Partido{
         $this->id = $id;
     }
 
-    public static function saveplayers($equipo,$ganador,$idPartido) {
 
-        // Obtener todos los jugadores
-        $listajugadores = Equipo::getJugadores();
-
-        //
-        $resultado = Equipo::addpartidojugado($equipo);
-
-        if($ganador){
-            $resultado = Equipo::addpartidoganado($equipo,$idPartido);
-        }
-        else{
-            $resultado = Equipo::addpartidoperdido($equipo,$idPartido);
-        }
-
-
-        // Iterar sobre cada jugador
-        foreach ($listajugadores as $jugador) {
-
-            // Llamar a la función guardaDatosJugador y almacenar el resultado en una variable
-            $resultado = Jugador::guardaDatosJugador($jugador);
-            $resultado = Equipo::guardaDatosJugadorenEquipo($jugador);
-
-            // Controlar el resultado
-            if ($resultado) {
-                echo "El jugador {$jugador['id']} se ha guardado correctamente.";
-            } else {
-                echo "Error al guardar el jugador.";
-            }
-        }
-    }
-
-
-    public static function crearTablaTemporal($idEquipoLocal, $nombreEquipoVisitante) {
-
-        $result = true;
-
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-            // Creamos la tabla temporal
-            $sql = "CREATE TABLE tmp_partidoE (
-                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                equipo VARCHAR(50) NOT NULL,
-                timeouts INT DEFAULT 0,
-                faltasbanquillo INT DEFAULT 0,
-                puntos INT DEFAULT 0,
-                lider TINYINT(1) NOT NULL,
-                empate TINYINT(1) NOT NULL DEFAULT 1,
-                alternancias INT DEFAULT 0,
-                vecesempatados INT DEFAULT 0,
-                veceslider INT DEFAULT 0,
-                q1 INT DEFAULT 0,
-                q2 INT DEFAULT 0,
-                q3 INT DEFAULT 0,
-                q4 INT DEFAULT 0,
-                extra INT DEFAULT 0
-            );";
-            
-            $result = $conn->query($sql);
-        
-            if (!$result) {
-                $result = false;
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-
-            } else {
-                // Insertar el equipo local en la tabla
-                $sqlInsertLocal = "INSERT INTO tmp_partidoE (equipo) VALUES ('$idEquipoLocal')";
-                $resultInsertLocal = $conn->query($sqlInsertLocal);
-                if (!$resultInsertLocal) {
-                    $result = false;
-                    error_log("Error BD ({$conn->errno}): {$conn->error}");
-                }
-        
-                // Insertar el equipo visitante en la tabla
-                $sqlInsertVisitante = "INSERT INTO tmp_partidoE (equipo) VALUES ('$nombreEquipoVisitante')";
-                $resultInsertVisitante = $conn->query($sqlInsertVisitante);
-                if (!$resultInsertVisitante) {
-                    $result = false;
-                    error_log("Error BD ({$conn->errno}): {$conn->error}");
-                }
-            }
-        
-            return $result;
-    }
-
-    public static function actualizarentrada($local, $visitante,$fecha,$hora){
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //TABLA PARTIDOS Y ELEMENTO PARTIDO:
+    
+    //Insertar un partido en la tabla PARTIDOS
+    public static function insertarPartido($local, $visitante,$fecha,$hora){
 
         $result = true;
 
@@ -116,7 +34,7 @@ class Partido{
 
     }
 
-
+    //Obtener un partido en función del local y visitante
     public static function getIdPartido($local,$visitante){
 
         $id = 0;
@@ -129,7 +47,6 @@ class Partido{
         $resultado = $conn->query($sql);
 
         if ($resultado && $resultado->num_rows > 0) {
-            // Obtener el primer resultado (asumiendo que solo hay una fila coincidente)
             $row = $resultado->fetch_assoc();
             $id = $row['id'];
         } else {
@@ -140,15 +57,16 @@ class Partido{
 
     }
 
+    //Obtener los partidos de un equipo del club
     public static function getpartidosfromEquipo($equipo){
-
 
         //Obtengo la conexión realizada
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT * FROM partidos
-        WHERE partidos.local = '%s'", $conn->real_escape_string($equipo));
+
+        $query = sprintf("SELECT * FROM partidos WHERE partidos.local = '%s'", $conn->real_escape_string($equipo));
   
         $rs = $conn->query($query);
+        
         $result = false;
         $partidos = array();
   
@@ -163,7 +81,14 @@ class Partido{
         }
         return $result;
     }
+    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //TABLAS TEMPORALES DE PARTIDOS
+
+    //*******************************  GETTERS DE LAS TABLAS   ******************************************************** */
+
+    //Obtener Stats de un jugador de un partido
     public static function getstatsUsuario($partido,$usuario){
 
         $resultArray = array();
@@ -172,100 +97,135 @@ class Partido{
 
         $tabla = "tmp_partido_" . $partido;
 
-    // Consulta SQL
-    $sql = "SELECT * FROM $tabla WHERE jugador = '$usuario'";
+        $sql = "SELECT * FROM $tabla WHERE jugador = '$usuario'";
 
-        // Ejecutar la consulta
         $result = $conn->query($sql);
 
-        // Verificar si se encontraron resultados
         if ($result->num_rows > 0) {
-            // Almacenar los resultados en un arreglo
-            while ($row = $result->fetch_assoc()) {
-                $resultArray = $row;
-            }
-        }
-
-        return $resultArray;
-    }
-
-    public static function getstatsPartido($partidoId){
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
-        $tabla = "tmp_partidoe_" . $partidoId;
-    
-        // Consulta SQL
-        $sql = "SELECT * FROM $tabla";
-    
-        // Ejecutar la consulta
-        $result = $conn->query($sql);
-    
-        // Verificar si se encontraron resultados
-        if ($result->num_rows > 0) {
-            // Almacenar los resultados en un arreglo multidimensional
-            $resultArray = array();
             while ($row = $result->fetch_assoc()) {
                 $resultArray = $row;
             }
         } else {
-            echo "No se encontraron resultados.";
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
-    
+
         return $resultArray;
     }
 
+    //Obtener Stats de un partido de los equipos
     public static function getstatsPartidoEquipos($partidoId){
 
+        $resultArray = array();
+
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $tabla = "tmp_partidoe_" . $partidoId;
     
-        // Consulta SQL
         $sql = "SELECT * FROM $tabla";
     
-        // Ejecutar la consulta
         $result = $conn->query($sql);
     
-        // Verificar si se encontraron resultados
         if ($result->num_rows > 0) {
-            // Almacenar los resultados en un arreglo multidimensional
-            $resultArray = array();
             while ($row = $result->fetch_assoc()) {
                 $resultArray[] = $row;
             }
         } else {
-            echo "No se encontraron resultados.";
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
     
         return $resultArray;
     }
-    
 
+    //Obtener Stats de un partido de los jugadores
     public static function getstatsPartidoJugadores($partidoId){
+
+        $resultArray = array();
         
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $tabla = "tmp_partido_" . $partidoId;
     
-        // Consulta SQL
         $sql = "SELECT * FROM $tabla";
     
-        // Ejecutar la consulta
         $result = $conn->query($sql);
     
-        // Verificar si se encontraron resultados
         if ($result->num_rows > 0) {
-            // Almacenar los resultados en un arreglo multidimensional
-            $resultArray = array();
             while ($row = $result->fetch_assoc()) {
                 $resultArray[] = $row;
             }
         } else {
-            echo "No se encontraron resultados.";
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
     
         return $resultArray;
     }
 
+    //*******************************  MANEJO DE LAS TABLAS   ******************************************************** */
+
+    //Creación Tabla tmp_partidoe
+    public static function crearTablaTemporal($idEquipoLocal, $nombreEquipoVisitante) {
+
+        $result = true;
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        // Creamos la tabla temporal
+        $sql = "CREATE TABLE tmp_partidoE (
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            equipo VARCHAR(50) NOT NULL,
+            timeouts INT DEFAULT 0,
+            faltasbanquillo INT DEFAULT 0,
+            puntos INT DEFAULT 0,
+            lider TINYINT(1) NOT NULL,
+            empate TINYINT(1) NOT NULL DEFAULT 1,
+            alternancias INT DEFAULT 0,
+            vecesempatados INT DEFAULT 0,
+            veceslider INT DEFAULT 0,
+            q1 INT DEFAULT 0,
+            q2 INT DEFAULT 0,
+            q3 INT DEFAULT 0,
+            q4 INT DEFAULT 0,
+            extra INT DEFAULT 0, 
+            parcial_lastto INT DEFAULT 0,
+            parcial_lastchange INT DEFAULT 0,
+            parcial INT DEFAULT 0,
+            mayorventaja INT DEFAULT 0,
+            tiempolider INT DEFAULT 0
+
+        );";
+        
+        $result = $conn->query($sql);
+    
+        if (!$result) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+
+        } else {
+            // Insertar el equipo local en la tabla
+            $sqlInsertLocal = "INSERT INTO tmp_partidoE (equipo) VALUES ('$idEquipoLocal')";
+            $resultInsertLocal = $conn->query($sqlInsertLocal);
+            if (!$resultInsertLocal) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            // Insertar el equipo visitante en la tabla
+            $sqlInsertVisitante = "INSERT INTO tmp_partidoE (equipo) VALUES ('$nombreEquipoVisitante')";
+            $resultInsertVisitante = $conn->query($sqlInsertVisitante);
+            if (!$resultInsertVisitante) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+        }
+        
+        return $result;
+    }
+
+    //ACTUALIZAR Tabla tmp_partido CON LA ACCION
     public static function actualizarTablaPartido($equipo,$jugador,$accion){
+
+        $result = true;
 
         //Obtengo la conexión realizada
            
@@ -274,10 +234,14 @@ class Partido{
         $query = sprintf("UPDATE tmp_partido SET $accion = $accion + 1 WHERE equipo = '$equipo' AND numero = '$jugador'");
 
         if ($conn->query($query) === false) {
+            $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
+
+        return $result;
     }
 
+    //Renombrar las 2 tablas cuando finaliza el partido
     public static function renombrartablas($id){
 
         $result = true;
@@ -299,7 +263,9 @@ class Partido{
         
         // Renombrar la tabla tmp_partidoe
         $renamedTablePartidoe = "tmp_partidoe_" . $id;
+
         $sqlRenamedTablePartidoe = "RENAME TABLE `ballint_bbdd`.`tmp_partidoe` TO `ballint_bbdd`.`$renamedTablePartidoe`";
+
         if ($conn->query($sqlRenamedTablePartidoe) === TRUE) {
             echo "La tabla tmp_partidoe se ha renombrado correctamente a " . $renamedTablePartidoe . ".";
         } else {
@@ -308,48 +274,36 @@ class Partido{
         }
         
         return $result;
-    }        
+    }  
 
+    //*******************************  FUNCIONALIDAD TIEMPOS MUERTOS Y FALTAS BANQUILLOS ******************************************************** */
+
+    //Añadir un TIMEOUT
     public static function addtimeout($equipo){
-        //Obtengo la conexión realizada
-           
-        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $result = true;
+
+        //Obtengo la conexión realizada
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $query = sprintf("UPDATE tmp_partidoE SET timeouts = timeouts + 1 WHERE equipo = '$equipo'");
 
         if ($conn->query($query) === false) {
-            $result = self::parcialTimeout();
             $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }else{
+            //Settear el parcial a 0 ya que ha habido un tiempo muerto
+            $result = self::resetparcialTimeout();
         }
-      
-        return $result;
-    }
 
-    public static function parcialTimeout(){
-        //Obtengo la conexión realizada
-           
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $result = true;
-
-        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = 0");
-
-        if ($conn->query($query) === false) {
-            $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-      
         return $result;
     }
 
     public static function addfaltabanquillo($equipo){
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
         $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $query = sprintf("UPDATE tmp_partidoE SET faltasbanquillo = faltasbanquillo + 1 WHERE equipo = '$equipo'");
 
@@ -358,21 +312,20 @@ class Partido{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
       
-        return $result;
-
-        
+        return $result;  
     }
 
+    //*******************************  FUNCIONALIDAD PARCIALES  ******************************************************** */
 
-
+    //FUNCION GENERAL
     public static function parciales($puntos,$equipo){
-
 
         //1º PARCIAL: EL GENERAL
 
         $result = self::addPuntosParcialGeneral($puntos,$equipo);
-        //$result = self::checkParcial($puntos,$equipo);
 
+        //Para chekear la mayor ventaja
+        $result = self::checkParcial($equipo);
 
         //2º PARCIAL: TRAS EL ULTIMO CAMBIO
 
@@ -382,17 +335,24 @@ class Partido{
 
         $result = self::addPuntosParcialTimeOut($puntos,$equipo);
 
-
         return $result;
     }
 
+    //AÑADIR/RESTAR PUNTOS DE LAS DIFERENCIAS DE CADA UNO
     public static function addPuntosParcialGeneral($puntos,$equipo){
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $result = true;
 
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
         $query = sprintf("UPDATE tmp_partidoE SET parcial = parcial + $puntos WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial = parcial - $puntos WHERE equipo != '$equipo'");
 
         if ($conn->query($query) === false) {
             $result = false;
@@ -402,11 +362,58 @@ class Partido{
         return $result;
     }
 
-    public static function addPuntosParcialCambio($puntos,$equipo){
+    //COMPARAR EL PARCIAL Y LA VENTAJA PARA VER SI SE SUSTITUYE
+    public static function checkParcial($equipo) {
+
+        $result = true;
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
+        //1º OBTENER EL PARCIAL
+            $query = "SELECT parcial FROM tmp_partidoE WHERE equipo = '$equipo'";
+
+            $rs = $conn->query($query);
+
+            if ($rs && $rs->num_rows > 0) {
+                $row = $rs->fetch_assoc();
+                $parcial = $row['parcial'];
+
+                //2º OBTENER LA MAYOR VENTAJA
+                $query = "SELECT mayorventaja FROM tmp_partidoE WHERE equipo = '$equipo'";
+
+                $rs = $conn->query($query);
+
+                if ($rs && $rs->num_rows > 0) {
+                    $row = $rs->fetch_assoc();
+                    $mayorventaja = $row['mayorventaja'];
+
+                    //3º COMPARAR AMBAS
+                    if($parcial > $mayorventaja){
+
+                        $query = "UPDATE tmp_partidoE SET mayorventaja = parcial WHERE equipo = '$equipo'";
+
+                        if ($conn->query($query) === false) {
+                            $result = false;
+                            error_log("Error BD ({$conn->errno}): {$conn->error}");
+                        }
+                    }
+                } else {
+                    $result = false;
+                    error_log("Error BD ({$conn->errno}): {$conn->error}");
+                }
+            } else {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+        return $result;
+    }
+
+    //AÑADIR PUNTOS A LOS PARCIALES DE CAMBIO
+    public static function addPuntosParcialCambio($puntos,$equipo){
+
         $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $query = sprintf("UPDATE tmp_partidoE SET parcial_lastchange = parcial_lastchange + $puntos WHERE equipo = '$equipo'");
 
@@ -418,11 +425,12 @@ class Partido{
         return $result;
     }
 
+    //AÑADIR PUNTOS A LOS PARCIALES DE TIMEOUT
     public static function addPuntosParcialTimeOut($puntos,$equipo){
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
         $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = parcial_lastto + $puntos WHERE equipo = '$equipo'");
 
@@ -434,13 +442,99 @@ class Partido{
         return $result;
     }
 
-
-
-    public static function guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante){
+    //GET PUNTOS DE PARCIAL DE CAMBIO
+    public static function getParcialCambio(){
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
+        $query = sprintf("SELECT parcial_lastchange FROM tmp_partidoE");
+
+        $rs = $conn->query($query);
+
+        $result = array();
+
+        if ($rs) {
+            $i = 0;
+            while ($row = $rs->fetch_assoc()) {
+                $result[$i] = $row['parcial_lastchange'];
+                $i++;
+            }
+            $rs->free();
+        } 
+        else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    //GET PUNTOS DE PARCIAL DE TIMEOUT
+    public static function getParcialTO(){
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("SELECT parcial_lastto FROM tmp_partidoE");
+
+        $rs = $conn->query($query);
+
+        $result = array();
+
+        if ($rs) {
+            $i = 0;
+            while ($row = $rs->fetch_assoc()) {
+                $result[$i] = $row['parcial_lastto'];
+                $i++;
+            }
+            $rs->free();
+        } 
+        else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+    
+    //Reset del parcial CAMBIO a 0
+    public static function resetparcialCambio(){
+
         $result = true;
+           
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastchange = 0");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+      
+        return $result;
+    }
+
+    //Reset del parcial TIMEOUT a 0
+    public static function resetparcialTimeout(){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partidoE SET parcial_lastto = 0");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+        
+        return $result;
+    }
+    //*******************************  FUNCIONALIDAD GUARDAR PUNTOS TOTALES Y DE CUARTO  ******************************************************** */
+
+    //GUARDAR PUNTOS TOTALES DE AMBOS EQUIPOS
+    public static function guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         $query = sprintf("UPDATE tmp_partidoE SET puntos = $puntoslocal WHERE equipo = '$local'");
 
@@ -459,6 +553,24 @@ class Partido{
         return $result;
     }
 
+    //GUARDAR PUNTOS CUARTOS DE UN JUGADOR
+    public static function guardarpuntoscuartoJugador($cuarto,$jugador,$puntos){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partido SET $cuarto =  $cuarto + $puntos WHERE jugador = '$jugador'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    //GUARDAR PUNTOS CUARTO DE LOS EQUIPOS
     public static function guardarpuntoscuarto($local,$visitante,$puntoslocal,$puntosvisitante,$periodo){
 
         $cuarto = "";
@@ -486,8 +598,9 @@ class Partido{
             break;
         }
 
-        $conn = Aplicacion::getInstance()->getConexionBd();
         $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
         if($periodo === '1'){
 
@@ -528,8 +641,11 @@ class Partido{
 
         return $result;
     }
+    
+    
+    //*******************************  FUNCIONALIDAD MARCADOR Y MÉTRICAS  ******************************************************** */
 
-
+    //FUNCION GENERAL DE CHECKEAR EL MARCADOR
     public static function checkmarcador(){
 
         //1º Mirar si había empate, quiere decir que líder esta a 0
@@ -699,12 +815,9 @@ class Partido{
         return $result;
     }
 
-
-
-
+    //QUIERO SABER QUIEN ES EL LIDER
     public static function saberlider(){
 
-        //Obtengo la conexión realizada
         $conn = Aplicacion::getInstance()->getConexionBd();
     
         $query = "SELECT CASE
@@ -738,48 +851,45 @@ class Partido{
         } else {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
-        
-  
+    
         return $lidernuevo;
     }
 
+    //Se añade 1 a la columna que cuenta los cambios de líder
     public static function alternancias(){
 
-      //Obtengo la conexión realizada
-      $conn = Aplicacion::getInstance()->getConexionBd();
+        $result = true;
 
-      $result = true;
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
-      $query = "UPDATE tmp_partidoe SET alternancias = alternancias + 1";
+        $query = "UPDATE tmp_partidoe SET alternancias = alternancias + 1";
 
-      if ($conn->query($query) === true) {
-          echo "Se ha incrementado en 1 el valor de la columna alternancias para ambas filas";
-      } else {
-          $result = false;
-          error_log("Error BD ({$conn->errno}): {$conn->error}");
-      }
+        if ($conn->query($query) === true) {
+            echo "Se ha incrementado en 1 el valor de la columna alternancias para ambas filas";
+        } else {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
 
-      return $result;
+        return $result;
     }
 
-    
-
+    //HAY UN CAMBIO DE LIDER
     public static function cambiolider(){
 
-      //Obtengo la conexión realizada
-      $conn = Aplicacion::getInstance()->getConexionBd();
+        $result = true;
 
-      $result = true;
+        $conn = Aplicacion::getInstance()->getConexionBd();
 
-      $query = "UPDATE tmp_partidoe
-      SET lider = CASE
-          WHEN id = 1 AND lider = 1 THEN 0
-          WHEN id = 1 AND lider = 0 THEN 1
-          WHEN id = 2 AND lider = 1 THEN 0
-          WHEN id = 2 AND lider = 0 THEN 1
-          ELSE lider
-          END,
-          veceslider = CASE
+        $query = "UPDATE tmp_partidoe
+        SET lider = CASE
+            WHEN id = 1 AND lider = 1 THEN 0
+            WHEN id = 1 AND lider = 0 THEN 1
+            WHEN id = 2 AND lider = 1 THEN 0
+            WHEN id = 2 AND lider = 0 THEN 1
+            ELSE lider
+            END,
+            veceslider = CASE
             WHEN id = 1 AND lider = 1 THEN veceslider + 1
             WHEN id = 2 AND lider = 1 THEN veceslider + 1
             ELSE veceslider
@@ -796,63 +906,99 @@ class Partido{
 
     }
 
-
+    //Cambiar el valor de la columna EMPATE a 1 --> EMPATADOS
     public static function empatar(){
 
-      //Obtengo la conexión realizada
-      $conn = Aplicacion::getInstance()->getConexionBd();
+        $result = true;
 
-      $result = true;
+        $conn = Aplicacion::getInstance()->getConexionBd();
+  
         $query = "UPDATE tmp_partidoe SET empate = 1 WHERE empate = 0";
-
-        if ($conn->query($query) === true) {
+  
+        if($conn->query($query) === true) {
             echo "Se han actualizado los empates de 0 a 1 en la columna empate";
+
+            //Añadir un empate a veces empatados
             $result = self::vecesempatados();
         } else {
             $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
-
+  
         return $result;
     }
 
+    //Añadir 1 a la columna veces empatados
     public static function vecesempatados(){
 
-        //Obtengo la conexión realizada
-        $conn = Aplicacion::getInstance()->getConexionBd();
-  
         $result = true;
-          $query = "UPDATE tmp_partidoe SET vecesempatados = vecesempatados + 1";
-  
-          if ($conn->query($query) === true) {
-              echo "Se han sumado 1 empate";
-          } else {
-              $result = false;
-              error_log("Error BD ({$conn->errno}): {$conn->error}");
-          }
-  
-          return $result;
-      }
 
+        $conn = Aplicacion::getInstance()->getConexionBd();
+    
+        $query = "UPDATE tmp_partidoe SET vecesempatados = vecesempatados + 1";
+    
+        if ($conn->query($query) === true) {
+            echo "Se han sumado 1 empate";
+        } else {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+    
+        return $result;
+    }
+
+    //Cambiar el valor de la columna EMPATE a 0 --> NO EMPATADOS
     public static function desempatar(){
 
-        //Obtengo la conexión realizada
+        $result = true;
+
         $conn = Aplicacion::getInstance()->getConexionBd();
   
-        $result = true;
-          $query = "UPDATE tmp_partidoe SET empate = 0 WHERE empate = 1";
-  
-          if ($conn->query($query) === true) {
-              echo "Se han actualizado los empates de 1 a 0 en la columna empate";
-          } else {
-              $result = false;
-              error_log("Error BD ({$conn->errno}): {$conn->error}");
-          }
-  
-          return $result;
-      }
-        
-    
+        $query = "UPDATE tmp_partidoe SET empate = 0 WHERE empate = 1";
 
+        if ($conn->query($query) === true) {
+            echo "Se han actualizado los empates de 1 a 0 en la columna empate";
+        } else {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+  
+        return $result;
+    }
+        
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//SIN CLASIFICAR
+
+    public static function saveplayers($equipo,$ganador,$idPartido) {
+
+        $listajugadores = Equipo::getJugadores();
+
+        $resultado = Equipo::addpartidojugado($equipo);
+
+        if($ganador){
+            $resultado = Equipo::addpartidoganado($equipo,$idPartido);
+        }
+        else{
+            $resultado = Equipo::addpartidoperdido($equipo,$idPartido);
+        }
+
+        // Iterar sobre cada jugador
+        foreach ($listajugadores as $jugador) {
+
+            // Llamar a la función guardaDatosJugador y almacenar el resultado en una variable
+            $resultado = Jugador::guardaDatosJugador($jugador);
+            $resultado = Equipo::guardaDatosJugadorenEquipo($jugador);
+
+            // Controlar el resultado
+            if ($resultado) {
+                echo "El jugador {$jugador['id']} se ha guardado correctamente.";
+            } else {
+                echo "Error al guardar el jugador.";
+            }
+        }
+    }
 
 }

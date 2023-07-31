@@ -130,7 +130,7 @@ $contenidoPrincipal .= <<<EOS
     
         <div id="comparativaEquipos">
             <div class="idpartido-display">
-                <h1>ID ={$idPartido}</h1>
+                <p class="id">{$idPartido}</p>
             </div>
             <div class="graficos-button">
                 <button id="graficos-button">Seleccionar Graficos</button>

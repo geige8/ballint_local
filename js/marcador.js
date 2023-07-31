@@ -53,18 +53,6 @@ let [seconds, minutes] = [0, 10];
 let timeRef = document.querySelector(".timer-display");
 let int = null;
 
-/*
-document.getElementById("durationSelect").addEventListener("change", () => {
-    if(gettime){
-        // Obtener el valor seleccionado del select
-        duration = document.getElementById("durationSelect").value;
-        // Actualizar los minutos del cronómetro
-        minutes = parseInt(0);
-        seconds = 5;
-    }
-});
-*/
-
 //BOTÓN DE START
 document.getElementById("start-timer").addEventListener("click", () => {
 
@@ -131,8 +119,11 @@ function displayTimer() {
     seconds -= 1;
 
     //Actualizar Tiempos jugadores
+    let ganador = saberganador();
+
     addsecondplayed();
     getJugadoresPista();
+    addtiempoLider(ganador);
 
     let m = minutes < 10 ? "0" + minutes : minutes;
     let s = seconds < 10 ? "0" + seconds : seconds;
@@ -159,7 +150,7 @@ let idpartidoElement = idpartidoDisplay.querySelector('.id');
 
 function saberganador(){
 
-    if((parseInt(localpointsElement.textContent)) > (parseInt(localpointsElement.textContent))){
+    if((parseInt(localpointsElement.textContent)) > (parseInt(visitpointsElement.textContent))){
 
         return true;
 
@@ -176,8 +167,10 @@ document.getElementById("endgame-button").addEventListener("click", () => {
     // Si se hace clic en "Aceptar", realizar las acciones
     if (confirmacion) {
         // Guardar los datos para cada jugador
-        $ganador = saberganador();
-        saveplayers($ganador,idpartidoElement.textContent);
+        ganador = saberganador();
+        var idMatch = idpartidoElement.textContent;
+        saveplayers(ganador,idMatch);
+        header('Location: index.php');
 
     }
 });
@@ -195,7 +188,7 @@ function saveplayers($ganador,$id){
         
         // Guardar la información de las tablas para futuras consultas y redirigir al index
         renametables();
-        // window.location.href = "index.php";
+        window.location.href = "index.php";
 
     }
     else{
@@ -303,17 +296,12 @@ document.getElementById("graficos-button").addEventListener("click", () => {
             overlay.parentNode.removeChild(overlay);
             getJugadores(function(jugadores) {
                 if (jugadores) {
-                  // Acceder a los jugadores aquí
-                  console.log(jugadores);
-                  
-                  // Realizar acciones adicionales con los jugadores
                   // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
                   mostrarBoxScoreCompleto(jugadores);
                 } else {
                   console.log("Error al obtener los jugadores");
                 }
-              });
-            
+            });
         });
 
     //Botón 4: Mostrar PDF Con todos los índices de Estatística Avanzada.
@@ -329,7 +317,7 @@ document.getElementById("graficos-button").addEventListener("click", () => {
             overlay.parentNode.removeChild(overlay);
         });
 
-    //Botón 5: Mostrar PDF con Impacto TimeOuts.
+    //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTA)
 
         var impactoTimeOut = document.createElement('button');
         impactoTimeOut.classList.add('impactoTimeOut');
@@ -340,19 +328,35 @@ document.getElementById("graficos-button").addEventListener("click", () => {
         // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
+            getParcialTO(function(parcial) {
+                if (parcial) {
+                  // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                  mostrarImpactoLastTimeOut(parcial);
+                } else {
+                  console.log("Error al obtener el parcial");
+                }
+            });
         });
 
-    //Botón 6: Mostrar PDF con Impacto Cambios.
 
+    //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTA)
         var impactoCambio = document.createElement('button');
         impactoCambio.classList.add('impactoCambio');
         impactoCambio.innerHTML = 'Impacto Cambios';
         ventana.appendChild(impactoCambio);
 
         impactoCambio.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
+            getParcialCambio(function(parcial) {
+                if (parcial) {
+                // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                mostrarImpactoLastChange(parcial);
+                } else {
+                console.log("Error al obtener el parcial");
+                }
+            });
         });
 
     //Botón 7: Mostrar PDF con Evaluación X Jugador.
@@ -533,10 +537,133 @@ function getJugadores(callback) {
     xhttp.open("GET", "getJugadores.php", true);
     xhttp.send();
   }
+
+  function getParcialTO(callback) {
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+  
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var parcial = JSON.parse(this.responseText);
+          callback(parcial); // Llamar a la devolución de llamada con el parcial
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getParcialTO.php", true);
+    xhttp.send();
+  }
+
+  function getParcialCambio(callback) {
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+  
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var parcial = JSON.parse(this.responseText);
+          callback(parcial); // Llamar a la devolución de llamada con el parcial
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getParcialCambio.php", true);
+    xhttp.send();
+  }
   
   function guardarvariable() {
     
   }
+  
+  function mostrarImpactoLastTimeOut(parcial) {
+    // Crear la capa de fondo oscuro y agregarla al DOM
+    var overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+    document.body.appendChild(overlay);
+  
+    // Crear la ventana emergente y agregarla al cuerpo del documento
+    var ventana = document.createElement('div');
+    ventana.classList.add("ventana-graficos");
+    document.body.appendChild(ventana);
+  
+    // Crear el contenido que deseas mostrar en la ventana emergente
+    var contenido = document.createElement('div');
+    contenido.classList.add('contenido');
+  
+    // Aquí utilizo las comillas inversas para poder interpolación de variables
+    var mensaje = document.createElement('p');
+    mensaje.textContent = `El parcial desde el último Tiempo Muerto es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
+    contenido.appendChild(mensaje);
+  
+    // Agregar el contenido a la ventana emergente
+    ventana.appendChild(contenido);
+  
+    // Crear el botón de cerrar y agregar el controlador de eventos
+    var cerrar = document.createElement('button');
+    cerrar.classList.add('cerrar');
+    cerrar.innerHTML = 'X';
+    ventana.appendChild(cerrar);
+  
+    cerrar.addEventListener('click', function() {
+      // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+      ventana.parentNode.removeChild(ventana);
+      overlay.parentNode.removeChild(overlay);
+    });
+  }
+
+  function mostrarImpactoLastChange(parcial) {
+    // Crear la capa de fondo oscuro y agregarla al DOM
+    var overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+    document.body.appendChild(overlay);
+  
+    // Crear la ventana emergente y agregarla al cuerpo del documento
+    var ventana = document.createElement('div');
+    ventana.classList.add("ventana-graficos");
+    document.body.appendChild(ventana);
+  
+    // Crear el contenido que deseas mostrar en la ventana emergente
+    var contenido = document.createElement('div');
+    contenido.classList.add('contenido');
+  
+    // Aquí utilizo las comillas inversas para poder interpolación de variables
+    var mensaje = document.createElement('p');
+    mensaje.textContent = `El parcial desde el último Cambio es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
+    contenido.appendChild(mensaje);
+  
+    // Agregar el contenido a la ventana emergente
+    ventana.appendChild(contenido);
+  
+    // Crear el botón de cerrar y agregar el controlador de eventos
+    var cerrar = document.createElement('button');
+    cerrar.classList.add('cerrar');
+    cerrar.innerHTML = 'X';
+    ventana.appendChild(cerrar);
+  
+    cerrar.addEventListener('click', function() {
+      // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+      ventana.parentNode.removeChild(ventana);
+      overlay.parentNode.removeChild(overlay);
+    });
+  }
+
+
+  
   
 
 function mostrarBoxScoreCompleto(jugadores) {
@@ -672,39 +799,7 @@ function generarPDFStats(displaytablas) {
       // Descargar el archivo PDF
       doc.save(idlocal + '.' + idvisitante + '(Stats).pdf');
     });
-  }
-  
-/*
-function htmlToPlainText(html) {
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(html, 'text/html');
-    return doc.body.textContent || '';
-  }
-  
-
-function generarPDFStats(displaytablas) {
-    // Convertir el contenido HTML a texto plano
-    var plainTextContent = htmlToPlainText(displaytablas.innerHTML);
-    
-    // Mostrar en la consola
-    console.log(displaytablas.innerHTML);
-    console.log(plainTextContent);
-    
-    // Definir el contenido del documento PDF
-    var contenido = {
-      content: [
-        plainTextContent
-      ]
-    };
-    
-    // Generar el archivo PDF
-    var pdfDocGenerator = pdfMake.createPdf(contenido);
-    
-    // Descargar el archivo PDF
-    pdfDocGenerator.download(idlocal + '.' + idvisitante + '(Stats).pdf');
-  }*/
-  
-  
+  } 
 
 
 /////////////////////////////////////////////////////////////
@@ -724,19 +819,29 @@ function addPoints(equipo,jugador,puntos){
     if(isLocal(equipo)){
         // Actualizar el valor del marcador
         localpointsElement.textContent = parseInt(localpointsElement.textContent) + puntos;
-        actualizarDatosPuntos(puntos,equipo);
-        
     }
     else{
         // Actualizar el valor del marcador
         visitpointsElement.textContent = parseInt(visitpointsElement.textContent) + puntos;
-        actualizarDatosPuntos(puntos,equipo);
     }
 
-    mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador + " de " + getNombreEquipo(equipo));
+    actualizarDatosPuntos(puntos,equipo,jugador);
+
+    mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
 }
 
-function actualizarpuntoscuarto(){
+function actualizarDatosPuntos(puntos,equipo,jugador){
+    //1º Actualizar más menos de los jugadores
+    actualizarmasmenos(puntos,equipo);
+    // 2º Guardar los puntos en total y 3º Añadir puntos al cuarto
+    actualizarpuntoscuarto(jugador,puntos);
+    //4º Checkear si hay empate y 5º Checkear alternancia en marcador
+    checkmarcador();
+    // 6º Parciales??
+    parciales(puntos,equipo);
+}
+
+function actualizarpuntoscuarto(jugador,puntos){
 
     //Guardar la variable de Puntos Cuarto
 
@@ -745,38 +850,39 @@ function actualizarpuntoscuarto(){
     switch(period){
         case 'Periodo 1':
             cuarto = 1;
+            cuartoJugador = "PTQ1"
             break;
 
         case 'Periodo 2':
             cuarto = 2;
+            cuartoJugador = "PTQ2"
+
             break;
 
         case 'Periodo 3':
             cuarto = 3;
+            cuartoJugador = "PTQ3"
+
             break;
 
         case 'Periodo 4':
             cuarto = 4;
+            cuartoJugador = "PTQ4"
+
             break;
         default:
             cuarto = 5;
+            cuartoJugador = "PTE"
+
         break;
     }
 
     //LLamar a función de recopilar datos de ese cuarto.
     guardarpuntoscuarto(idlocal,idvisitante,parseInt(localpointsElement.textContent),parseInt(visitpointsElement.textContent),cuarto);
+    guardarpuntoscuartoJugador(cuartoJugador,jugador.jugador,puntos);
 }
 
-function actualizarDatosPuntos(puntos,equipo){
-    //1º Actualizar más menos de los jugadores
-    actualizarmasmenos(puntos,equipo);
-    // 2º Guardar los puntos en total y 3º Añadir puntos al cuarto
-    actualizarpuntoscuarto();
-    //4º Checkear si hay empate y 5º Checkear alternancia en marcador
-    checkmarcador();
-    // 6º Parciales??
-    parciales(puntos,equipo);
-}
+
 
 //ACTUALIZAR MAS/MENOS
 function actualizarmasmenos(puntos,equipo){
@@ -822,6 +928,28 @@ function guardarpuntoscuarto(equipolocal,equipovisitante,puntoslocal,puntosvisit
     xhttp.send();
 }
 
+//ACTUALIZAR PUNTOSCUARTO
+function guardarpuntoscuartoJugador(cuarto,jugador,puntos){
+
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("La respuesta está completa en guardarpuntoscuartoJugador.");
+        }
+        else{
+            console.log("La respuesta está  NO completa en guardarpuntoscuartoJugador.");
+
+        }
+    };
+
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "guardarpuntoscuartoJugador.php?cuarto=" + cuarto + "&jugador=" + jugador + "&puntos=" + puntos, true);
+    xhttp.send();
+}
+
 //CHECK MARCADOR
 function checkmarcador(){
 
@@ -845,7 +973,7 @@ function checkmarcador(){
 }
 
 //PARCIALES
-function parciales(){
+function parciales(puntos,equipo){
 
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
@@ -979,6 +1107,22 @@ function addsecondplayed(){
 
     // Hacer la solicitud AJAX POST
     xhttp.open("GET", "addsecondplayed.php", true);
+    xhttp.send();
+}
+
+function addtiempoLider(ganador){
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("La respuesta está completa.");
+        }
+    };
+
+    // Hacer la solicitud AJAX POST
+    xhttp.open("GET", "addtiempoLider.php?ganador=" + ganador, true);
     xhttp.send();
 }
 
@@ -1283,7 +1427,7 @@ function mostrarListaJugadoresSub(jugadores,equipo){
 
 
 function missedShot(equipo,jugador,puntos){
-    mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador + " de " + getNombreEquipo(equipo));
+    mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
 }
 
 
@@ -1314,6 +1458,7 @@ function mostrarVentanaEmergente(accion,equipo) {
 }
 
 function mostrarListaJugadores(listaJugadores, accion, equipo) {
+    console.log("Estoy en mostrarlistaJugadores" + listaJugadores);
     // Crear la capa de fondo oscuro y agregarla al DOM
     var overlay = document.createElement('div');
     overlay.classList.add('overlay');
@@ -1342,12 +1487,17 @@ function mostrarListaJugadores(listaJugadores, accion, equipo) {
       while(contador < jugadores.length && contadorFila < 4){
         var jugador = jugadores[contador];
         contador++;
+
         var td = document.createElement("td");
         var boton = document.createElement("button");
+
         boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
-        boton.addEventListener("click", crearEventoClick(jugador.numero,accion,equipo));
+
+        boton.addEventListener("click", crearEventoClick(jugador,accion,equipo));
+
         td.appendChild(boton);
         tr.appendChild(td);
+
         contadorFila++;
       }
   
@@ -1372,7 +1522,7 @@ function mostrarListaJugadores(listaJugadores, accion, equipo) {
     ventana.classList.add("mostrar");
 
     // Función para crear el evento click con el valor del jugador como argumento
-    function crearEventoClick(jugador) {
+    function crearEventoClick(jugador,accion,equipo){
       return function() {
         registrarAccion(jugador, accion, equipo);
         ventana.parentNode.removeChild(ventana);
@@ -1394,7 +1544,7 @@ function registrarAccion(jugador, accion, equipo) {
     };
 
     // Hacer la solicitud AJAX
-    xhttp.open("GET", "actualizartablaPartido.php?jugador=" + encodeURIComponent(jugador) + "&accion=" + accion + "&equipo=" + equipo, true);
+    xhttp.open("GET", "actualizartablaPartido.php?jugador=" + encodeURIComponent(jugador.numero) + "&accion=" + accion + "&equipo=" + equipo, true);
     xhttp.send();
 }
 
@@ -1545,50 +1695,50 @@ function actualizarPantalla(jugador, accion, equipo){
         break;
         case 'FLH':
         // Lógica para actualizar la pantalla cuando se registra una FAL
-        mostrarMensajeLogLine("Falta hecha por el Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Falta hecha por el Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         pausarTemporizador();
         actualizarComparativa(accion,equipo);
         break;
         case 'FLR':
         // Lógica para actualizar la pantalla cuando se registra una FAL
-        mostrarMensajeLogLine("Falta recibida por Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Falta recibida por Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         break;
         case 'TEC':
         // Lógica para actualizar la pantalla cuando se registra un TEC
-        mostrarMensajeLogLine("Falta Técnica del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Falta Técnica del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         pausarTemporizador();
         actualizarComparativa('FLH',equipo);
         break;
         case 'RBO':
         // Lógica para actualizar la pantalla cuando se registra un RBO
-        mostrarMensajeLogLine("Rebote Ofensivo del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Rebote Ofensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         actualizarTotalRebotes(equipo);
         break;
         case 'RBD':
         // Lógica para actualizar la pantalla cuando se registra un RBD
-        mostrarMensajeLogLine("Rebote Defensivo del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Rebote Defensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         actualizarTotalRebotes(equipo);
         break;
         case 'ROB':
         // Lógica para actualizar la pantalla cuando se registra un ROB
-        mostrarMensajeLogLine("Robo del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Robo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         break;
         case 'TAP':
         // Lógica para actualizar la pantalla cuando se registra un TAP
-        mostrarMensajeLogLine("Tapón del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Tapón del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         break;
         case 'PRD':
         // Lógica para actualizar la pantalla cuando se registra un PRD
-        mostrarMensajeLogLine("Pérdida del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Pérdida del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         break;
         case 'AST':
         // Lógica para actualizar la pantalla cuando se registra un AST
-        mostrarMensajeLogLine("Asistencia del Nº " + jugador + " de " + getNombreEquipo(equipo));
+        mostrarMensajeLogLine("Asistencia del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
         actualizarComparativa(accion,equipo);
         break;
         default:

@@ -5,6 +5,11 @@ require_once __DIR__.'/includes/config.php';
 $tituloPagina = 'BallInt';
 
 $rutaApp = RUTA_APP;
+$contenidoPrincipal = '';
+$rutaImgs=RUTA_IMGS;
+
+
+$htmlEquiposClub = es\ucm\fdi\Equipo::mostrarEquipos();  
 
 //1º PASO DIFERENCIAR LOGEADO O NO
 if (isset($_SESSION["login"])) {
@@ -17,7 +22,9 @@ if (isset($_SESSION["login"])) {
         header('Location: paneldeControl.php');
 
     }else{
-        header('Location: perfil.php');
+        $contenidoPrincipal .= <<<EOS
+        $htmlEquiposClub        
+        EOS;  
     }
 
 } else {

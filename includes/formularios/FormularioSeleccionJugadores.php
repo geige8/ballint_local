@@ -42,10 +42,11 @@ class FormularioSeleccionJugadores extends Formulario{
                 </thead>
                 <tbody>
         EOF;
+        
         $contador = 1;
         foreach ($jugadores as $jugador) {
             $html .= "<tr>";
-            $html .= "<td>" . $contador . ". " .  $jugador['nombre'] . " " . $jugador['apellido1'] . " " .  $jugador['apellido2'] . " " . "</td>";
+            $html .= "<td>" . $contador . ". " .  $jugador['nombre'] . " " . $jugador['apellido1'] . " " .  $jugador['apellido2'] . "#" .  $jugador['numero'] . " " ."</td>";
             $html .= "<td><input type='checkbox' name='seleccionados[]' value='" . $jugador['user']. "'></td>";
             $html .= "</tr>";
             $contador++; 
@@ -147,7 +148,7 @@ class FormularioSeleccionJugadores extends Formulario{
         //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
         $tablaTemporalCreada = Equipo::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
         $tablaTemporalCreada2 = Partido::crearTablaTemporal($idEquipo, $nombreRival);
-        $tablapartidosactualizada = Partido::actualizarentrada($idEquipo, $nombreRival,$fecha,$hora);
+        $tablapartidosactualizada = Partido::insertarPartido($idEquipo, $nombreRival,$fecha,$hora);
 
         if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {
 

@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-$equipo = $_GET['equipo'];
+    $equipo = $_GET['equipo'];
 
-$result = es\ucm\fdi\Partido::addtimeout($equipo);
+    $result = es\ucm\fdi\Partido::addtimeout($equipo);
 
 ?>
