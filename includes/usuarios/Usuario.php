@@ -28,24 +28,12 @@ class Usuario{
 
     public static function login($nombreUsuario, $password1){ //OK
 
-        echo "Nombre que llega: $nombreUsuario";
-        echo "Pass que llega: $password1";
         //Quiero obtener la password del nombre de usuario que me la devolvera en el caso de que exista
         $usuario = self::buscaUsuario($nombreUsuario);
-        echo "Nombre que llega 2: $usuario->nombreUsuario";
-        echo "Pass que llega 2: $usuario->password ";
 
-        /*
         //Si me devuelve algo Y las passwords introducidas y obtenidas son iguales, es que hay acceso
         if ($usuario && $usuario->compruebaPassword($password1,$usuario->password)) {
 
-            //$_SESSION['tipo_usuario']= $usuario->tipoUser;            
-            return true;
-        }
-        */
-        if ($password1 == $usuario->password) {
-
-            //$_SESSION['tipo_usuario']= $usuario->tipoUser;            
             return $usuario;
         }
 
@@ -73,12 +61,12 @@ class Usuario{
         return $result;
     }
 
-    /*
-    public function compruebaPassword($password1,$password2)
-    {
+    
+    public function compruebaPassword($password1,$password2){
+
         return password_verify($password1,$password2);
     }
-    */
+    
 
 
 
@@ -189,7 +177,9 @@ class Usuario{
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $query = "INSERT INTO credenciales (user,password,rol)  VALUES ('$usuarionombre', '12345', '$tipoUsuario')"; 
+        $passwordAux = password_hash('12345', PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO credenciales (user,password,rol)  VALUES ('$usuarionombre', '$passwordAux', '$tipoUsuario')"; 
 
         $rs = $conn->query($query);
 
@@ -199,18 +189,29 @@ class Usuario{
         }
         else{
              // Obtener el ID de la fila insertada
-            $insertedId = $conn->insert_id;
-            $result = self::insertarUsuarioEquipo($insertedId, $equipoUsuario);
+
             //En función de su rol lo meto a jugadores o entrenadores
 
             switch($tipoUsuario){
 
                 case 'E':
+                    $insertedId = $conn->insert_id;
+                    $result = self::insertarUsuarioEquipo($insertedId, $equipoUsuario);
                     $result = self::insertaEntrenadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
                 break;
+
                 case 'J':
+                    $insertedId = $conn->insert_id;
+                    $result = self::insertarUsuarioEquipo($insertedId, $equipoUsuario);
                     $result = self::insertarJugadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
                 break;
+
+                case 'DT':
+                    $insertedId = $conn->insert_id;
+                    $result = self::insertarDTEquipo($insertedId);
+                    $result = self::insertaEntrenadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
+                break;
+
                 default:
                 break;
             }
@@ -271,6 +272,32 @@ class Usuario{
         if (!$rs) {
             $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function insertarDTEquipo($idUsuario){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $equiposClub = Equipo::getListadoEquipos();
+
+        foreach($equiposClub as $equipo){
+
+            $idEquipoUsuario = Equipo::getidEquipo($equipo);
+
+            $query = "INSERT INTO usuarios_equipos (equipo_id,usuario_id)  VALUES ($idEquipoUsuario,$idUsuario)"; 
+
+            $rs = $conn->query($query);
+    
+            if (!$rs) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+
         }
 
         return $result;

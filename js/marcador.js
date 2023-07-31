@@ -872,7 +872,7 @@ function actualizarpuntoscuarto(jugador,puntos){
             break;
         default:
             cuarto = 5;
-            cuartoJugador = "PTE"
+            cuartoJugador = "PTQE"
 
         break;
     }

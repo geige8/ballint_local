@@ -9,15 +9,18 @@ class Jugador{
         $this->id = $id;
     }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //Obtener el numero de un jugador
     public static function getNumJugador($jugador){
 
-        //Obtengo la conexión realizada
+        $result = false;
+
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $query = "SELECT numero FROM jugadores WHERE user = '$jugador'";
 
         $rs = $conn->query($query);
-        $result = false;
 
         if ($rs) {
             $fila = $rs->fetch_assoc();
@@ -29,18 +32,18 @@ class Jugador{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
         return $result;
-
-
     }
 
+    //Obtener el nombre de un jugador
     public static function getnombreJugador($jugador){
 
-        //Obtengo la conexión realizada
+        $result = false;
+
         $conn = Aplicacion::getInstance()->getConexionBd();
+
         $query = "SELECT nombre,apellido1,apellido2 FROM jugadores WHERE user = '$jugador'";
 
         $rs = $conn->query($query);
-        $result = false;
 
         if ($rs) {
             $fila = $rs->fetch_assoc();
@@ -52,10 +55,9 @@ class Jugador{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
         return $result;
-
-
     }
 
+    //Guardar los datos de un jugador al finalizar el partido
     public static function guardaDatosJugador($jugador){
 
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -80,7 +82,12 @@ class Jugador{
         ROB = ROB + {$jugador['ROB']},
         TAP = TAP + {$jugador['TAP']},
         PRD = PRD + {$jugador['PRD']},
-        AST = AST + {$jugador['AST']}
+        AST = AST + {$jugador['AST']},
+        PTQ1 = PTQ1 + {$jugador['PTQ1']},
+        PTQ2 = PTQ2 + {$jugador['PTQ2']},
+        PTQ3 = PTQ3 + {$jugador['PTQ3']},
+        PTQ4 = PTQ4 + {$jugador['PTQ4']},
+        PTQE = PTQE + {$jugador['PTQE']}
         WHERE user = '{$jugador['jugador']}'";
 
         // Ejecutar la consulta
@@ -95,6 +102,7 @@ class Jugador{
         return $resultado;
     }
 
+    //Obtener las estadisticas del jugador
     public static function statsfromJugador($usuario){
 
         $jugador = array();
@@ -276,33 +284,54 @@ class Jugador{
         } else {
             $jugador['ASTP'] = 0;
         }
-    
-        // Estadística Avanzada (Aquí agregar las líneas restantes si las hay)
-    
+
+        //Puntos Por Cuartos
+        $jugador['PTQ1'] = $usuario['PTQ1'];
+        $jugador['PTQ2'] = $usuario['PTQ2'];
+        $jugador['PTQ3'] = $usuario['PTQ3'];
+        $jugador['PTQ4'] = $usuario['PTQ4'];
+        $jugador['PTQE'] = $usuario['PTQE'];
+
+        if ($usuario['PJ'] > 0) {
+            $jugador['PTQ1P'] = number_format(($jugador['PTQ1'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+            $jugador['PTQ2P'] = number_format(($jugador['PTQ2'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+            $jugador['PTQ3P'] = number_format(($jugador['PTQ3'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+            $jugador['PTQ4P'] = number_format(($jugador['PTQ4'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+            $jugador['PTQEP'] = number_format(($jugador['PTQE'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+
+        } else {
+            $jugador['PTQ1P'] = 0;
+            $jugador['PTQ2P'] = 0;
+            $jugador['PTQ3P'] = 0;
+            $jugador['PTQ4P'] = 0;
+            $jugador['PTQEP'] = 0;
+        }
+        
         return $jugador;
     }
     
+    //Obtener las estadisticas avanzadas del jugador a partir de las estadisticas simples
     public static function statsAvanzadasfromJugador($jugador){
 
         $jugadorAvanzado = array();
 
         //PORCENTAJES DE USO DE TIRO
-        $jugadorAvanzado['T2P'] = number_format((($jugador['T2A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
-        $jugadorAvanzado['T3P'] = number_format((($jugador['T3A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
-        $jugadorAvanzado['T1P'] = number_format((($jugador['TLA']*0.44)/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2);
+        $jugadorAvanzado['T2P'] = number_format((($jugador['T2A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
+        $jugadorAvanzado['T3P'] = number_format((($jugador['T3A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
+        $jugadorAvanzado['T1P'] = number_format((($jugador['TLA']*0.44)/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
 
         //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
-        $jugadorAvanzado['eFGP'] = ((($jugador['T2A']+$jugador['T3A'])+0.5*$jugador['T3A'])/($jugador['TCA']+$jugador['TCF']));
+        $jugadorAvanzado['eFGP'] = ((($jugador['T2A']+$jugador['T3A'])+0.5*$jugador['T3A'])/($jugador['TCA']+$jugador['TCF']))*100;
 
         //TRUE SHOOTING (TS%). 
         //Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44. 
         //TS% = PTS / 2(FGA + 0.44 * FTA)
-        $jugadorAvanzado['TSP'] = ($jugador['PTS'])/(2*(($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))));
+        $jugadorAvanzado['TSP'] = ($jugador['PTS'])/(2*(($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))))*100;
 
         //PORCENTAJE DE ASISTENCIAS (AS%). 
         //Porcentaje de asistencias respecto a los tiros de campo anotados. 
         //La fórmula es: AS% = AS / (2PM + 3PM)
-        $jugadorAvanzado['ASP'] = ($jugador['AST'])/(($jugador['T2A'])+($jugador['T3A']));
+        $jugadorAvanzado['ASP'] = ($jugador['AST'])/(($jugador['T2A'])+($jugador['T3A']))*100;
 
         //El indicador de uso del jugador (USG%) se calcula con la siguiente expresión, lo usaremos solo en los partidos
 
@@ -315,7 +344,7 @@ class Jugador{
     
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Mostrar:
+    //MOSTRAR:
     public static function mostrarStatsJugador($jugador){
 
         $html = "";
@@ -377,6 +406,21 @@ class Jugador{
 
             <p>Asistencias: {$jugador['AST']}</p>
             <p>Asistencias PP: {$jugador['ASTP']}</p>
+
+            <p>Puntos en Q1: {$jugador['PTQ1']}</p>
+            <p>Puntos en Q1 PP: {$jugador['PTQ1P']}</p>
+
+            <p>Puntos en Q2:  {$jugador['PTQ2']}</p>
+            <p>Puntos en Q2 PP: {$jugador['PTQ2P']}</p>
+
+            <p>Puntos en Q3: {$jugador['PTQ3']}</p>
+            <p>Puntos en Q3 PP: {$jugador['PTQ3P']}</p>
+
+            <p>Puntos en Q4:  {$jugador['PTQ4']}</p>
+            <p>Puntos en Q4 PP: {$jugador['PTQ4P']}</p>
+
+            <p>Puntos en EXTRA:  {$jugador['PTQE']}</p>
+            <p>Puntos en EXTRA PP: {$jugador['PTQEP']}</p>
 
         </div>    
         ";
@@ -440,7 +484,7 @@ class Jugador{
 
 
         $html .= "</div>";
-    return $html;
+        return $html;
     }
 
     public static function mostrarStatsAvanzadasJugador($jugadorAvanzado){
@@ -502,56 +546,56 @@ class Jugador{
         $html = "";
 
         $html .= "
-    <table>
-        <tr>
-            <th>Rival</th>
-            <th>Fecha</th>
-            <th>Titular</th>
-            <th>Minutos</th>
-            <th>+/-</th>
-            <th>T2A</th>
-            <th>T2F</th>
-            <th>T3A</th>
-            <th>T3F</th>
-            <th>TLA</th>
-            <th>TLF</th>
-            <th>FLH</th>
-            <th>FLR</th>
-            <th>TEC</th>
-            <th>RBO</th>
-            <th>RBD</th>
-            <th>ROB</th>
-            <th>TAP</th>
-            <th>PRD</th>
-            <th>AST</th>
-        </tr>
-        <tr>
-            <td>
-            <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
-            {$partido['visitante']}
-        </a>
-            </td>
-            <td>{$partido['fecha']}</td>
-            <td>{$estadisticas['titular']}</td>
-            <td>{$estadisticas['segundosjugados']}</td>
-            <td>{$estadisticas['masmenos']}</td>
-            <td>{$estadisticas['T2A']}</td>
-            <td>{$estadisticas['T2F']}</td>
-            <td>{$estadisticas['T3A']}</td>
-            <td>{$estadisticas['T3F']}</td>
-            <td>{$estadisticas['TLA']}</td>
-            <td>{$estadisticas['TLF']}</td>
-            <td>{$estadisticas['FLH']}</td>
-            <td>{$estadisticas['FLR']}</td>
-            <td>{$estadisticas['TEC']}</td>
-            <td>{$estadisticas['RBO']}</td>
-            <td>{$estadisticas['RBD']}</td>
-            <td>{$estadisticas['ROB']}</td>
-            <td>{$estadisticas['TAP']}</td>
-            <td>{$estadisticas['PRD']}</td>
-            <td>{$estadisticas['AST']}</td>
-        </tr>
-    </table>";
+            <table>
+                <tr>
+                    <th>Rival</th>
+                    <th>Fecha</th>
+                    <th>Titular</th>
+                    <th>Minutos</th>
+                    <th>+/-</th>
+                    <th>T2A</th>
+                    <th>T2F</th>
+                    <th>T3A</th>
+                    <th>T3F</th>
+                    <th>TLA</th>
+                    <th>TLF</th>
+                    <th>FLH</th>
+                    <th>FLR</th>
+                    <th>TEC</th>
+                    <th>RBO</th>
+                    <th>RBD</th>
+                    <th>ROB</th>
+                    <th>TAP</th>
+                    <th>PRD</th>
+                    <th>AST</th>
+                </tr>
+                <tr>
+                    <td>
+                    <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
+                    {$partido['visitante']}
+                </a>
+                    </td>
+                    <td>{$partido['fecha']}</td>
+                    <td>{$estadisticas['titular']}</td>
+                    <td>{$estadisticas['segundosjugados']}</td>
+                    <td>{$estadisticas['masmenos']}</td>
+                    <td>{$estadisticas['T2A']}</td>
+                    <td>{$estadisticas['T2F']}</td>
+                    <td>{$estadisticas['T3A']}</td>
+                    <td>{$estadisticas['T3F']}</td>
+                    <td>{$estadisticas['TLA']}</td>
+                    <td>{$estadisticas['TLF']}</td>
+                    <td>{$estadisticas['FLH']}</td>
+                    <td>{$estadisticas['FLR']}</td>
+                    <td>{$estadisticas['TEC']}</td>
+                    <td>{$estadisticas['RBO']}</td>
+                    <td>{$estadisticas['RBD']}</td>
+                    <td>{$estadisticas['ROB']}</td>
+                    <td>{$estadisticas['TAP']}</td>
+                    <td>{$estadisticas['PRD']}</td>
+                    <td>{$estadisticas['AST']}</td>
+                </tr>
+            </table>";
         return $html;
     }
 

@@ -428,7 +428,7 @@ class Equipo{
                 PTQ2 INT DEFAULT 0,
                 PTQ3 INT DEFAULT 0,
                 PTQ4 INT DEFAULT 0,
-                PTE INT DEFAULT 0
+                PTQE INT DEFAULT 0
             );";
             $result = $conn->query($sql);
         
