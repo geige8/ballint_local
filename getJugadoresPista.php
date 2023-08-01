@@ -6,7 +6,7 @@ $tituloPagina = '';
 
 $rutaApp = RUTA_APP;
 
-$jugadores = es\ucm\fdi\Equipo::getJugadoresPista();
+$jugadores = es\ucm\fdi\Partido::getJugadoresPista();
 
 // Devolver la lista de jugadores en formato JSON
 header('Content-Type: application/json');

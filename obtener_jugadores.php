@@ -8,7 +8,7 @@ $rutaApp = RUTA_APP;
 
 $equipo = $_GET['equipo'];
 
-$jugadores = es\ucm\fdi\Equipo::getJugadoresJugando($equipo);
+$jugadores = es\ucm\fdi\Partido::getJugadoresJugando($equipo);
 
 // Devolver la lista de jugadores en formato JSON
 header('Content-Type: application/json');

@@ -146,8 +146,8 @@ class FormularioSeleccionJugadores extends Formulario{
         
         // Si todo está correcto, llamamos a la función para crear la tabla temporal
         //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
-        $tablaTemporalCreada = Equipo::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
-        $tablaTemporalCreada2 = Partido::crearTablaTemporal($idEquipo, $nombreRival);
+        $tablaTemporalCreada = Partido::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
+        $tablaTemporalCreada2 = Partido::crearTablaTemporalE($idEquipo, $nombreRival);
         $tablapartidosactualizada = Partido::insertarPartido($idEquipo, $nombreRival,$fecha,$hora);
 
         if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {

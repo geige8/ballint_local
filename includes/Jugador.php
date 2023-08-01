@@ -101,6 +101,8 @@ class Jugador{
 
         return $resultado;
     }
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Obtener las estadisticas del jugador
     public static function statsfromJugador($usuario){
@@ -502,45 +504,6 @@ class Jugador{
         return $html;
     }
 
-    //Función para mostrar los datos de los últimos partidos.
-
-    public static function mostrarUltimosPartidosJugador($jugador){
-
-        $html = "";
-
-        $idUser = Usuario::getidNombreUser($jugador);
-
-        $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
-
-        foreach($equiposdelUsuario as $equipo){
-
-            //Para cada equipo al que pertenezca quiero mostrar los partidos.
-            //Tengo que obtener el id de cada partido de ese equipo
-            
-            $partidos = Partido::getpartidosfromEquipo($equipo);
-
-            //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
-
-            foreach($partidos as $partido){
-
-                //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-                
-                $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
-            
-                //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
-
-                //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
-
-                if($estadisticas){
-                    $html .= self::mostrarStatsPartidoJugador($partido,$estadisticas,$partido['id']);
-                }
-            
-            }
-        }
-        
-        return $html;
-    }
-
     public static function mostrarStatsPartidoJugador($partido,$estadisticas,$partidoId){
 
         $html = "";
@@ -596,6 +559,44 @@ class Jugador{
                     <td>{$estadisticas['AST']}</td>
                 </tr>
             </table>";
+        return $html;
+    }
+
+    //Función para mostrar los datos de los últimos partidos.
+    public static function mostrarUltimosPartidosJugador($jugador){
+
+        $html = "";
+
+        $idUser = Usuario::getidNombreUser($jugador);
+
+        $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
+
+        foreach($equiposdelUsuario as $equipo){
+
+            //Para cada equipo al que pertenezca quiero mostrar los partidos.
+            //Tengo que obtener el id de cada partido de ese equipo
+            
+            $partidos = Partido::getpartidosfromEquipo($equipo);
+
+            //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+
+            foreach($partidos as $partido){
+
+                //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+                
+                $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
+            
+                //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+                //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+                if($estadisticas){
+                    $html .= self::mostrarStatsPartidoJugador($partido,$estadisticas,$partido['id']);
+                }
+            
+            }
+        }
+        
         return $html;
     }
 

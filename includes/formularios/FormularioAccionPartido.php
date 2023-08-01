@@ -14,7 +14,7 @@ class FormularioAccionPartido extends Formulario{
         $html = "";
 
         // Obtenemos la lista de jugadores desde la clase Equipo
-        $jugadores = Equipo::getJugadoresJugando($this->idEquipo);
+        $jugadores = Partido::getJugadoresJugando($this->idEquipo);
 
         // Generamos los botones para seleccionar los jugadores
         $html .= '<div>';

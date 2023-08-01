@@ -19,8 +19,8 @@ $visitante = $_GET['idEquipoVisit'];
 //$htmlaccionPartido = $form->gestiona();
 
 
-$jugadoresLocal = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($local)));
-$jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Equipo::getJugadoresEquipoPartido($visitante)));
+$jugadoresLocal = htmlspecialchars(json_encode(es\ucm\fdi\Partido::getJugadoresEquipoPartido($local)));
+$jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Partido::getJugadoresEquipoPartido($visitante)));
 
 $idPartido = es\ucm\fdi\Partido::getIdPartido($local,$visitante);
 
