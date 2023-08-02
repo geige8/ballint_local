@@ -65,10 +65,10 @@ class Jugador{
         $sql = "UPDATE jugadores
         SET 
         PJ = PJ + 1,
-        MT = MT + {$jugador['segundosjugados']},
+        MT = MT + {$jugador['MT']},
         TIT = TIT + ({$jugador['titular']} = 1),
         SUP = SUP + ({$jugador['titular']} = 0),
-        MSMS = MSMS + {$jugador['masmenos']},
+        MSMS = MSMS + {$jugador['MSMS']},
         T2A = T2A + {$jugador['T2A']},
         T2F = T2F + {$jugador['T2F']},
         T3A = T3A + {$jugador['T3A']},
@@ -230,6 +230,14 @@ class Jugador{
         } else {
             $jugador['FLRP'] = 0;
         }
+
+        // TECNICAS
+        $jugador['TEC'] = $usuario['TEC'];
+        if ($usuario['PJ'] > 0) {
+            $jugador['TECP'] = number_format(($jugador['TEC'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
+        } else {
+            $jugador['TECP'] = 0;
+        }
     
         // Rebotes Partido
         $jugador['REB'] = $usuario['RBO'] + $usuario['RBD'];
@@ -287,6 +295,9 @@ class Jugador{
             $jugador['ASTP'] = 0;
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //ESTADISTICA AVANZADA
+
         //Puntos Por Cuartos
         $jugador['PTQ1'] = $usuario['PTQ1'];
         $jugador['PTQ2'] = $usuario['PTQ2'];
@@ -308,42 +319,62 @@ class Jugador{
             $jugador['PTQ4P'] = 0;
             $jugador['PTQEP'] = 0;
         }
-        
-        return $jugador;
-    }
-    
-    //Obtener las estadisticas avanzadas del jugador a partir de las estadisticas simples
-    public static function statsAvanzadasfromJugador($jugador){
 
-        $jugadorAvanzado = array();
+        // PORCENTAJES DE USO DE TIRO
+        $total_shots = $jugador['T2A'] + $jugador['T3A'] + ($jugador['TLA'] * 0.44);
+        if ($total_shots > 0) {
+            $jugador['T2PU'] = number_format(($jugador['T2A'] / $total_shots), 2) * 100;
+            $jugador['T3PU'] = number_format(($jugador['T3A'] / $total_shots), 2) * 100;
+            $jugador['T1PU'] = number_format((($jugador['TLA'] * 0.44) / $total_shots), 2) * 100;
+        } else {
+            $jugador['T2PU'] = 0;
+            $jugador['T3PU'] = 0;
+            $jugador['T1PU'] = 0;
+        }
 
-        //PORCENTAJES DE USO DE TIRO
-        $jugadorAvanzado['T2P'] = number_format((($jugador['T2A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
-        $jugadorAvanzado['T3P'] = number_format((($jugador['T3A'])/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
-        $jugadorAvanzado['T1P'] = number_format((($jugador['TLA']*0.44)/($jugador['T2A']+$jugador['T3A']+($jugador['TLA']*0.44))),2)*100;
+        // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
+        $total_attempts = $jugador['TCA'] + $jugador['TCF'];
+        if ($total_attempts > 0) {
+            $jugador['eFGP'] = (($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100;
+        } else {
+            $jugador['eFGP'] = 0;
+        }
 
-        //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
-        $jugadorAvanzado['eFGP'] = ((($jugador['T2A']+$jugador['T3A'])+0.5*$jugador['T3A'])/($jugador['TCA']+$jugador['TCF']))*100;
+        // TRUE SHOOTING (TS%).
+        // Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44.
+        // TS% = PTS / 2(FGA + 0.44 * FTA)
+        $total_field_attempts = $jugador['TCA'] + $jugador['TCF'];
+        $total_free_attempts = $jugador['TLA'] + $jugador['TLF'];
+        if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
+            $jugador['TSP'] = ($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)) * 100;
+        } else {
+            $jugador['TSP'] = 0;
+        }
 
-        //TRUE SHOOTING (TS%). 
-        //Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44. 
-        //TS% = PTS / 2(FGA + 0.44 * FTA)
-        $jugadorAvanzado['TSP'] = ($jugador['PTS'])/(2*(($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))))*100;
-
-        //PORCENTAJE DE ASISTENCIAS (AS%). 
-        //Porcentaje de asistencias respecto a los tiros de campo anotados. 
-        //La fórmula es: AS% = AS / (2PM + 3PM)
-        $jugadorAvanzado['ASP'] = ($jugador['AST'])/(($jugador['T2A'])+($jugador['T3A']))*100;
+        // PORCENTAJE DE ASISTENCIAS (AS%).
+        // Porcentaje de asistencias respecto a los tiros de campo anotados.
+        // La fórmula es: AS% = AS / (2PM + 3PM)
+        $total_field_made = $jugador['T2A'] + $jugador['T3A'];
+        if ($total_field_made > 0) {
+            $jugador['ASP'] = ($jugador['AST']) / $total_field_made * 100;
+        } else {
+            $jugador['ASP'] = 0;
+        }
 
         //El indicador de uso del jugador (USG%) se calcula con la siguiente expresión, lo usaremos solo en los partidos
-
+        //$jugador['PUSO'] = (((($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))+$jugador['PRD'])*($equipo['MT']/5))/(($jugador['MT'])*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))+$equipo['PRD'])))*100;
+        
         // GmSc - Game Score; the formula is PTS + 0.4 * FG - 0.7 * FGA - 0.4*(FTA - FT) + 0.7 * ORB + 0.3 * DRB + STL + 0.7 * AST + 0.7 * BLK - 0.4 * PF - TOV. 
         // Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. 
         // The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.).
+        $jugador['GS'] = ($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD']);
 
-        return $jugadorAvanzado;
-    }
-    
+        //VALORACION
+
+        $jugador['VAL'] = $jugador['PTS']+$jugador['REB']+$jugador['AST']+$jugador['ROB']+$jugador['FLR']+$jugador['TAP']-$jugador['TCF']-$jugador['PRD']-$jugador['FLH'];
+        
+        return $jugador;
+    }  
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //MOSTRAR:
@@ -540,8 +571,8 @@ class Jugador{
                     </td>
                     <td>{$partido['fecha']}</td>
                     <td>{$estadisticas['titular']}</td>
-                    <td>{$estadisticas['segundosjugados']}</td>
-                    <td>{$estadisticas['masmenos']}</td>
+                    <td>{$estadisticas['MT']}</td>
+                    <td>{$estadisticas['MSMS']}</td>
                     <td>{$estadisticas['T2A']}</td>
                     <td>{$estadisticas['T2F']}</td>
                     <td>{$estadisticas['T3A']}</td>

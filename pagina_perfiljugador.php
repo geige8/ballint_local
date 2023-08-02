@@ -14,11 +14,10 @@
     $usuario = es\ucm\fdi\Usuario::getDatosPerfilJugador($jugador);
 
     $player = es\ucm\fdi\Jugador::statsfromJugador($usuario);
-    $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($player);
     
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($player);
     $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejora($player);
-    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
+    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($player);
 
     $idUser = es\ucm\fdi\Usuario::getidNombreUser($jugador);
     

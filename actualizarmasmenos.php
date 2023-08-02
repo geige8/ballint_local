@@ -7,6 +7,6 @@ $puntos = $_GET['puntos'];
 
 $equipo = $_GET['equipo'];
 
-$result = es\ucm\fdi\Partido::actualizarmasmenos($puntos,$equipo);
+$result = es\ucm\fdi\Partido::actualizarMSMS($puntos,$equipo);
 
 ?>

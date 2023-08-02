@@ -283,7 +283,7 @@ document.getElementById("graficos-button").addEventListener("click", () => {
             overlay.parentNode.removeChild(overlay);
         });
 
-    //Botón 3: Mostrar Box Score (NO PDF) completo de los 12 jugadores OK
+    //Botón 3: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTA)
 
         var fullboxscore = document.createElement('button');
         fullboxscore.classList.add('fullboxscore');
@@ -367,9 +367,19 @@ document.getElementById("graficos-button").addEventListener("click", () => {
         ventana.appendChild(evaluacionplayer);
 
         evaluacionplayer.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
+
+            getJugadoresLocal(function(jugadores) {
+                if (jugadores) {
+                    console.log(jugadores);
+                    evaluacionJugadores(jugadores);
+         
+                } else {
+                  console.log("Error al obtener los jugadores");
+                }
+            });
         });
 
     //Botón 8: Mostrar PDF con Evaluación X Equipo.
@@ -383,6 +393,20 @@ document.getElementById("graficos-button").addEventListener("click", () => {
         // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
+        });
+
+        //Botón 9: CAMBIOS SUGERIDOS
+
+        var cambiossugeridos = document.createElement('button');
+        cambiossugeridos.classList.add('cambiossugeridos');
+        cambiossugeridos.innerHTML = 'CAMBIOS SUGERIDOS';
+        ventana.appendChild(cambiossugeridos);
+
+        cambiossugeridos.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+            cambiossugeridosporfactor(idlocal);
         });
 
     // Mostrar la ventana emergente
@@ -420,17 +444,12 @@ function generarPDFcompleto() {
     pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
 }
 
-
 //1º
 function getplantillastats(){
 
     var jugadores = null;
     jugadores = getJugadores();+
     jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
-
-}
-function getstatsavanzadas(){
-
 
 }
 
@@ -510,10 +529,60 @@ function generarPDFplaybyplay() {
     
 }
 
-
+function getJugadoresporFactor(callback,factor,equipo) {
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
   
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var jugadores = JSON.parse(this.responseText);
+          console.log(jugadores);
+          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getJugadoresporFactor.php?factor=" + factor + "&equipo=" + equipo, true);
+    xhttp.send();
+  }
 
+  function getEvaluacionJugador(callback,jugador) {
 
+    // Convertir el objeto jugador a una cadena JSON
+    var jugadorJSON = JSON.stringify(jugador);
+
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+  
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var evaluaciones = JSON.parse(this.responseText);
+          console.log(evaluaciones);
+          callback(evaluaciones); // Llamar a la devolución de llamada con los jugadores
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getEvaluacionJugador.php?jugador=" + encodeURIComponent(jugadorJSON), true);
+    xhttp.send();
+  }
+  
 function getJugadores(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
@@ -535,6 +604,31 @@ function getJugadores(callback) {
   
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getJugadores.php", true);
+    xhttp.send();
+  }
+
+
+  function getJugadoresLocal(callback) {
+    // Crear una solicitud AJAX
+    var xhttp = new XMLHttpRequest();
+  
+    // Definir la función de respuesta
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText) {
+          console.log("La respuesta está completa.");
+          // La respuesta ha sido recibida
+          var jugadores = JSON.parse(this.responseText);
+          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+        } else {
+          console.log("La respuesta está vacía o incompleta.");
+          callback(null); // Llamar a la devolución de llamada con valor nulo
+        }
+      }
+    };
+  
+    // Hacer la solicitud AJAX
+    xhttp.open("GET", "getJugadoresLocal.php?equipo=" + idlocal, true);
     xhttp.send();
   }
 
@@ -562,7 +656,7 @@ function getJugadores(callback) {
     xhttp.send();
   }
 
-  function getParcialCambio(callback) {
+    function getParcialCambio(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
   
@@ -585,88 +679,435 @@ function getJugadores(callback) {
     xhttp.open("GET", "getParcialCambio.php", true);
     xhttp.send();
   }
-  
-  function guardarvariable() {
-    
-  }
-  
-  function mostrarImpactoLastTimeOut(parcial) {
+
+
+    function cambiossugeridosporfactor(equipo){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+        
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+        
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        var mensaje = document.createElement('p');
+        mensaje.textContent = `Para que factor quieres obtener cambios sugeridos`;
+        contenido.appendChild(mensaje);
+        
+        //OK
+
+        var botonT2A = document.createElement("button");
+        botonT2A.textContent = "T2A";
+        botonT2A.addEventListener("click", crearListaCambio("T2A",equipo));
+        contenido.appendChild(botonT2A);
+
+        var botonT3A = document.createElement("button");
+        botonT3A.textContent = "T3A";
+        botonT3A.addEventListener("click", crearListaCambio("T3A",equipo));
+        contenido.appendChild(botonT3A);
+
+        var botonTLA = document.createElement("button");
+        botonTLA.textContent = "TLA";
+        botonTLA.addEventListener("click", crearListaCambio("TLA",equipo));
+        contenido.appendChild(botonTLA);
+
+        var botonMSMS = document.createElement("button");
+        botonMSMS.textContent = "MSMS";
+        botonMSMS.addEventListener("click", crearListaCambio("MSMS",equipo));
+        contenido.appendChild(botonMSMS);
+
+        var botonFLH = document.createElement("button");
+        botonFLH.textContent = "FLH";
+        botonFLH.addEventListener("click", crearListaCambio("FLH",equipo));
+        contenido.appendChild(botonFLH);
+
+        var botonFLR = document.createElement("button");
+        botonFLR.textContent = "FLR";
+        botonFLR.addEventListener("click", crearListaCambio("FLR",equipo));
+        contenido.appendChild(botonFLR);
+
+        var botonMT = document.createElement("button");
+        botonMT.textContent = "MT";
+        botonMT.addEventListener("click", crearListaCambio("MT",equipo));
+        contenido.appendChild(botonMT);
+
+        var botonRBO = document.createElement("button");
+        botonRBO.textContent = "RBO";
+        botonRBO.addEventListener("click", crearListaCambio("RBO",equipo));
+        contenido.appendChild(botonRBO);
+
+        var botonRBD = document.createElement("button");
+        botonRBD.textContent = "RBD";
+        botonRBD.addEventListener("click", crearListaCambio("RBD",equipo));
+        contenido.appendChild(botonRBD);
+
+        var botonAST = document.createElement("button");
+        botonAST.textContent = "AST";
+        botonAST.addEventListener("click", crearListaCambio("AST",equipo));
+        contenido.appendChild(botonAST);
+
+        var botonROB = document.createElement("button");
+        botonROB.textContent = "ROB";
+        botonROB.addEventListener("click", crearListaCambio("ROB",equipo));
+        contenido.appendChild(botonROB);
+
+        var botonTAP = document.createElement("button");
+        botonTAP.textContent = "TAP";
+        botonTAP.addEventListener("click", crearListaCambio("TAP",equipo));
+        contenido.appendChild(botonTAP);
+
+        var botonPTQ1 = document.createElement("button");
+        botonPTQ1.textContent = "PTQ1";
+        botonPTQ1.addEventListener("click", crearListaCambio("PTQ1",equipo));
+        contenido.appendChild(botonPTQ1);
+
+        var botonPTQ2 = document.createElement("button");
+        botonPTQ2.textContent = "PTQ2";
+        botonPTQ2.addEventListener("click", crearListaCambio("PTQ2",equipo));
+        contenido.appendChild(botonPTQ2);
+
+        var botonPTQ3 = document.createElement("button");
+        botonPTQ3.textContent = "PTQ3";
+        botonPTQ3.addEventListener("click", crearListaCambio("PTQ3",equipo));
+        contenido.appendChild(botonPTQ3);
+
+        var botonPTQ4 = document.createElement("button");
+        botonPTQ4.textContent = "PTQ4";
+        botonPTQ4.addEventListener("click", crearListaCambio("PTQ4",equipo));
+        contenido.appendChild(botonPTQ4);
+
+        var botonPTQE = document.createElement("button");
+        botonPTQE.textContent = "PTQE";
+        botonPTQE.addEventListener("click", crearListaCambio("PTQE",equipo));
+        contenido.appendChild(botonPTQE);
+
+        //NO OK
+
+        var botonT2P = document.createElement("button");
+        botonT2P.textContent = "T2P";
+        botonT2P.addEventListener("click", crearListaCambio("T2P",equipo));
+        contenido.appendChild(botonT2P);
+
+        var botonT3P = document.createElement("button");
+        botonT3P.textContent = "T3P";
+        botonT3P.addEventListener("click", crearListaCambio("T3P",equipo));
+        contenido.appendChild(botonT3P);
+
+        var botonTLP = document.createElement("button");
+        botonTLP.textContent = "TLP";
+        botonTLP.addEventListener("click", crearListaCambio("TLP",equipo));
+        contenido.appendChild(botonTLP);
+        
+        var botonPTSP = document.createElement("button");
+        botonPTSP.textContent = "PTSP";
+        botonPTSP.addEventListener("click", crearListaCambio("PTSP",equipo));
+        contenido.appendChild(botonPTSP);
+
+        var botonREB = document.createElement("button");
+        botonREB.textContent = "REB";
+        botonREB.addEventListener("click", crearListaCambio("REB",equipo));
+        contenido.appendChild(botonREB);
+
+        var botonVAL = document.createElement("button");
+        botonVAL.textContent = "VAL";
+        botonVAL.addEventListener("click", crearListaCambio("VAL",equipo));
+        contenido.appendChild(botonVAL);
+
+        function crearListaCambio(factor,equipo){
+            return function() {
+                console.log(factor + ' ' + equipo);
+                getJugadoresporFactor(function(jugadores) {
+                    if (jugadores) {
+                        mostrarListaJugadoresporFactor(jugadores,factor);
+                    } else {
+                        console.log("Error al obtener los jugadores");
+                    }
+                    }, factor, equipo);            
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+            }
+        }
+        
+        // Agregar el contenido a la ventana emergente
+        ventana.appendChild(contenido);
+        
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+        
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+    }
+
+    function evaluacionJugadores(jugadores){
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('p');
+        mensaje.textContent = `De que jugador quieres una evaluacion:`;
+        contenido.appendChild(mensaje);
+
+        // Crear una tabla para la lista de jugadores
+        var tabla = document.createElement("table");
+        contador = 0;
+
+        for(var j = 0; j < Math.ceil(jugadores.length/3);j++){
+
+            var tr = document.createElement("tr");
+        
+            contadorFila = 0;
+        
+            while(contador < jugadores.length && contadorFila < 4){
+              var jugador = jugadores[contador];
+              contador++;
+      
+              var td = document.createElement("td");
+              var boton = document.createElement("button");
+      
+              boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
+      
+              boton.addEventListener("click", crearEvaluacion(jugador));
+      
+              td.appendChild(boton);
+              tr.appendChild(td);
+      
+              contadorFila++;
+            }
+        
+            tabla.appendChild(tr);
+        }
+
+        ventana.appendChild(tabla);
+
+        // Función para crear el evento click con el valor del jugador como argumento
+        function crearEvaluacion(jugador){
+            return function() {
+                console.log(jugador)
+                getEvaluacionJugador(function(evaluacion) {
+                    if (evaluacion) {
+                        mostrarEvaluacionJugador(evaluacion);
+                    } else {
+                        console.log("Error al obtener la evaluacion");
+                    }
+                }, jugador);            
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+            }
+        }
+
+        // Agregar el contenido a la ventana emergente
+        ventana.appendChild(contenido);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+        
+    }
+
+    function mostrarEvaluacionJugador(evaluacion){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('p');
+        mensaje.textContent = `La evaluación del Jugador es:`;
+        contenido.appendChild(mensaje);
+
+        // Agregar el contenido a la ventana emergente
+        for (var clave in evaluacion) {
+            if (evaluacion[clave] === 1) {
+                var mensaje = document.createElement('p');
+                mensaje.textContent = `Su ${clave} es mayor al habitual.`;
+                contenido.appendChild(mensaje);
+            } else {
+                var mensaje = document.createElement('p');
+                mensaje.textContent = `Su ${clave} es menor al habitual.`;
+                contenido.appendChild(mensaje);
+            }
+        }      
+
+        ventana.appendChild(contenido);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+
+
+    }
+
+    function mostrarListaJugadoresporFactor(jugadores,factor){
     // Crear la capa de fondo oscuro y agregarla al DOM
     var overlay = document.createElement('div');
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
-  
+
     // Crear la ventana emergente y agregarla al cuerpo del documento
     var ventana = document.createElement('div');
     ventana.classList.add("ventana-graficos");
     document.body.appendChild(ventana);
-  
+
     // Crear el contenido que deseas mostrar en la ventana emergente
     var contenido = document.createElement('div');
     contenido.classList.add('contenido');
-  
+
+    var mensaje = document.createElement('p');
+    mensaje.textContent = `Mejores Cambios según: ${factor}`;
+    contenido.appendChild(mensaje);
+
+    // Aquí implemento
+    //Ordenar
+    jugadores.sort(function(a, b) {
+    return (b.factor+b.historico) - (a.factor+a.historico);
+    });
+
+    for (var i = 0; i < jugadores.length; i++) {
+    var jugador = jugadores[i];
+    var elementoJugador = document.createElement('div');
+    elementoJugador.textContent = `${jugador.numero}-${jugador.nombrejugador} - ${factor}:${jugador.factor} - H:${jugador.historico} `;
+    contenido.appendChild(elementoJugador);
+    }
+        
+    // Agregar el contenido a la ventana emergente
+    ventana.appendChild(contenido);
+
+    // Crear el botón de cerrar y agregar el controlador de eventos
+    var cerrar = document.createElement('button');
+    cerrar.classList.add('cerrar');
+    cerrar.innerHTML = 'X';
+    ventana.appendChild(cerrar);
+
+    cerrar.addEventListener('click', function() {
+    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+    ventana.parentNode.removeChild(ventana);
+    overlay.parentNode.removeChild(overlay);
+    });
+    }
+
+    function mostrarImpactoLastTimeOut(parcial) {
+    // Crear la capa de fondo oscuro y agregarla al DOM
+    var overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+    document.body.appendChild(overlay);
+
+    // Crear la ventana emergente y agregarla al cuerpo del documento
+    var ventana = document.createElement('div');
+    ventana.classList.add("ventana-graficos");
+    document.body.appendChild(ventana);
+
+    // Crear el contenido que deseas mostrar en la ventana emergente
+    var contenido = document.createElement('div');
+    contenido.classList.add('contenido');
+
     // Aquí utilizo las comillas inversas para poder interpolación de variables
     var mensaje = document.createElement('p');
     mensaje.textContent = `El parcial desde el último Tiempo Muerto es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
     contenido.appendChild(mensaje);
-  
+
     // Agregar el contenido a la ventana emergente
     ventana.appendChild(contenido);
-  
+
     // Crear el botón de cerrar y agregar el controlador de eventos
     var cerrar = document.createElement('button');
     cerrar.classList.add('cerrar');
     cerrar.innerHTML = 'X';
     ventana.appendChild(cerrar);
-  
-    cerrar.addEventListener('click', function() {
-      // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-      ventana.parentNode.removeChild(ventana);
-      overlay.parentNode.removeChild(overlay);
-    });
-  }
 
-  function mostrarImpactoLastChange(parcial) {
+    cerrar.addEventListener('click', function() {
+    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+    ventana.parentNode.removeChild(ventana);
+    overlay.parentNode.removeChild(overlay);
+    });
+    }
+
+    function mostrarImpactoLastChange(parcial) {
     // Crear la capa de fondo oscuro y agregarla al DOM
     var overlay = document.createElement('div');
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
-  
+
     // Crear la ventana emergente y agregarla al cuerpo del documento
     var ventana = document.createElement('div');
     ventana.classList.add("ventana-graficos");
     document.body.appendChild(ventana);
-  
+
     // Crear el contenido que deseas mostrar en la ventana emergente
     var contenido = document.createElement('div');
     contenido.classList.add('contenido');
-  
+
     // Aquí utilizo las comillas inversas para poder interpolación de variables
     var mensaje = document.createElement('p');
     mensaje.textContent = `El parcial desde el último Cambio es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
     contenido.appendChild(mensaje);
-  
+
     // Agregar el contenido a la ventana emergente
     ventana.appendChild(contenido);
-  
+
     // Crear el botón de cerrar y agregar el controlador de eventos
     var cerrar = document.createElement('button');
     cerrar.classList.add('cerrar');
     cerrar.innerHTML = 'X';
     ventana.appendChild(cerrar);
-  
+
     cerrar.addEventListener('click', function() {
-      // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-      ventana.parentNode.removeChild(ventana);
-      overlay.parentNode.removeChild(overlay);
+    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+    ventana.parentNode.removeChild(ventana);
+    overlay.parentNode.removeChild(overlay);
     });
-  }
+    }
 
 
-  
-  
-
-function mostrarBoxScoreCompleto(jugadores) {
+    function mostrarBoxScoreCompleto(jugadores) {
 
     // Crear la capa de fondo oscuro y agregarla al DOM
     var overlay = document.createElement('div');
@@ -683,7 +1124,7 @@ function mostrarBoxScoreCompleto(jugadores) {
     cerrar.classList.add('cerrar');
     cerrar.innerHTML = 'X';
     ventana.appendChild(cerrar);
-    
+
     cerrar.addEventListener('click', function() {
     // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
         ventana.parentNode.removeChild(ventana);
@@ -730,8 +1171,8 @@ function mostrarBoxScoreCompleto(jugadores) {
         // Cálculo de puntos, faltas y tiempo
         var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
         var faltasPlayer = jugador.FLH;
-        var minutosjugador = Math.floor(jugador.segundosjugados / 60);
-        var segundosjugador = jugador.segundosjugados % 60;
+        var minutosjugador = Math.floor(jugador.MT / 60);
+        var segundosjugador = jugador.MT % 60;
         var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
 
         var playerfullRow = document.createElement('tr');
@@ -779,27 +1220,27 @@ function mostrarBoxScoreCompleto(jugadores) {
     displaytablas.appendChild(visitfullPlayersDisplay);
 
     generarPDFStats(displaytablas);
-}
+    }
 
-function generarPDFStats(displaytablas) {
+    function generarPDFStats(displaytablas) {
     // Crear un nuevo documento jsPDF
     var doc = new jsPDF();
-  
+
     // Obtener el contenido HTML del elemento displaytablas
     var htmlContent = displaytablas.innerHTML;
-  
+
     // Definir las opciones de formato para el contenido HTML
     var options = {
-      html2canvas: { scale: 2 },
-      margin: { top: 20, bottom: 20, left: 20, right: 20 },
+        html2canvas: { scale: 2 },
+        margin: { top: 20, bottom: 20, left: 20, right: 20 },
     };
-  
+
     // Generar el PDF a partir del contenido HTML
     doc.html(htmlContent, options).then(function () {
-      // Descargar el archivo PDF
-      doc.save(idlocal + '.' + idvisitante + '(Stats).pdf');
+        // Descargar el archivo PDF
+        doc.save(idlocal + '.' + idvisitante + '(Stats).pdf');
     });
-  } 
+    } 
 
 
 /////////////////////////////////////////////////////////////
@@ -832,7 +1273,7 @@ function addPoints(equipo,jugador,puntos){
 
 function actualizarDatosPuntos(puntos,equipo,jugador){
     //1º Actualizar más menos de los jugadores
-    actualizarmasmenos(puntos,equipo);
+    actualizarMSMS(puntos,equipo);
     // 2º Guardar los puntos en total y 3º Añadir puntos al cuarto
     actualizarpuntoscuarto(jugador,puntos);
     //4º Checkear si hay empate y 5º Checkear alternancia en marcador
@@ -885,7 +1326,7 @@ function actualizarpuntoscuarto(jugador,puntos){
 
 
 //ACTUALIZAR MAS/MENOS
-function actualizarmasmenos(puntos,equipo){
+function actualizarMSMS(puntos,equipo){
 
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
@@ -902,7 +1343,7 @@ function actualizarmasmenos(puntos,equipo){
     };
 
     // Hacer la solicitud AJAX
-    xhttp.open("GET", "actualizarmasmenos.php?puntos=" + puntos + "&equipo=" + equipo, true);
+    xhttp.open("GET", "actualizarMSMS.php?puntos=" + puntos + "&equipo=" + equipo, true);
     xhttp.send();
 }
 
@@ -1175,8 +1616,8 @@ function mostrarJugadoresPista(jugadores) {
         // Cálculo de puntos, faltas y tiempo
         var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
         var faltasPlayer = jugador.FLH;
-        var minutosjugador = Math.floor(jugador.segundosjugados / 60);
-        var segundosjugador = jugador.segundosjugados % 60;
+        var minutosjugador = Math.floor(jugador.MT / 60);
+        var segundosjugador = jugador.MT % 60;
         var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
 
         var playerRow = document.createElement('tr');

@@ -27,11 +27,10 @@ if (in_array('J', $roles)) {
 
     //Rol J
     $jugador = es\ucm\fdi\Jugador::statsfromJugador($usuario);
-    $statsAvanzadas = es\ucm\fdi\Jugador::statsAvanzadasfromJugador($jugador);
     
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($jugador);
     $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejora($jugador);
-    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($statsAvanzadas);
+    $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($jugador);
 
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);
     $htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
