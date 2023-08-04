@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-08-2023 a las 12:33:31
+-- Tiempo de generación: 04-08-2023 a las 19:24:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -108,6 +108,7 @@ CREATE TABLE `equipos` (
   `TLA` int(11) NOT NULL,
   `TLF` int(11) NOT NULL,
   `FLH` int(11) NOT NULL,
+  `TEC` int(11) NOT NULL,
   `FLR` int(11) NOT NULL,
   `RBO` int(11) NOT NULL,
   `RBD` int(11) NOT NULL,
@@ -126,9 +127,9 @@ CREATE TABLE `equipos` (
 -- Volcado de datos para la tabla `equipos`
 --
 
-INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `W`, `L`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 'Nacional', 'Liceo Frances Nacional Masculino', 'Masculino', NULL, 5, 0, 4, 0, 0, 90, 10, 10, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'Sub22Femenino', 'Sub22', 'Liceo Frances Sub22 Femenino', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `W`, `L`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `TEC`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
+(1, 'NacionalMasculino', 'Nacional', 'Liceo Frances Nacional Masculino', 'Masculino', NULL, 6, 0, 5, 47, 32, 120, 10, 10, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 'Sub22Femenino', 'Sub22', 'Liceo Frances Sub22 Femenino', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -175,14 +176,14 @@ CREATE TABLE `jugadores` (
 --
 
 INSERT INTO `jugadores` (`id`, `user`, `nombre`, `apellido1`, `apellido2`, `numero`, `PJ`, `MT`, `TIT`, `SUP`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'Pedro', 'Pedro', 'Martinez', 'Fernandez', 1, 7, 66, 11, 0, 26, 9, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0),
-(2, 'JuanPe', 'Juan ', 'Pérez', 'García', 2, 7, 66, 11, 0, 26, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0),
-(3, 'PaGar3', 'Pablo ', 'Alonso ', 'García', 3, 7, 66, 11, 0, 26, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0),
-(4, 'JBruq', 'Javier', 'Bru', 'Querol', 4, 7, 66, 11, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'PaGCV', 'Pablo Gregorio', 'Carrasco', 'Villacastin', 5, 7, 66, 11, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'DavidC', 'David', 'Casillas', 'Pirajno', 6, 7, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'PabEG', 'Pablo', 'Esteban', 'Gonzalez', 7, 7, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'Manull', 'Manuel', 'Martinez', 'Llimona', 8, 7, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(1, 'Pedro', 'Pedro', 'Martinez', 'Fernandez', 1, 8, 72, 12, 0, 26, 9, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0),
+(2, 'JuanPe', 'Juan ', 'Pérez', 'García', 2, 8, 72, 12, 0, 26, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0),
+(3, 'PaGar3', 'Pablo ', 'Alonso ', 'García', 3, 8, 72, 12, 0, 26, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0),
+(4, 'JBruq', 'Javier', 'Bru', 'Querol', 4, 8, 72, 12, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 'PaGCV', 'Pablo Gregorio', 'Carrasco', 'Villacastin', 5, 8, 72, 12, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 'DavidC', 'David', 'Casillas', 'Pirajno', 6, 8, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 'PabEG', 'Pablo', 'Esteban', 'Gonzalez', 7, 8, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 'Manull', 'Manuel', 'Martinez', 'Llimona', 8, 8, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (9, 'Ikermc', 'Iker', 'Mateo', 'Castaño', 9, 7, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (10, 'Linomf', 'Lino', 'Monteagudo', 'Fuentes', 10, 5, 0, 0, 9, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (11, 'Beltmn', 'Beltrán', 'Moraleda', 'Navarro', 11, 5, 0, 0, 9, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -212,233 +213,8 @@ CREATE TABLE `partidos` (
 --
 
 INSERT INTO `partidos` (`id`, `local`, `visitante`, `fecha`, `hora`, `WL`) VALUES
-(21, 'NacionalMasculino', 'TresCantosNacional', '2023-07-25', '11:05:00', NULL),
-(24, 'NacionalMasculino', 'VeritasPozuelo', '2023-07-30', '12:53:00', NULL),
-(25, 'NacionalMasculino', 'AlcorconBasket', '2023-07-06', '13:48:00', NULL),
 (28, 'NacionalMasculino', 'UrosdeRivas', '2023-08-09', '10:16:00', NULL),
 (29, 'NacionalMasculino', 'CBLR', '2023-08-04', '11:32:00', NULL);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partido`
---
-
-CREATE TABLE `tmp_partido` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `jugador` varchar(50) NOT NULL,
-  `nombrejugador` varchar(50) NOT NULL,
-  `numero` int(2) DEFAULT NULL,
-  `titular` tinyint(1) NOT NULL,
-  `en_juego` tinyint(1) NOT NULL,
-  `MT` int(11) DEFAULT 0,
-  `MSMS` int(11) DEFAULT 0,
-  `T2A` int(11) DEFAULT 0,
-  `T2F` int(11) DEFAULT 0,
-  `T3A` int(11) DEFAULT 0,
-  `T3F` int(11) DEFAULT 0,
-  `TLA` int(11) DEFAULT 0,
-  `TLF` int(11) DEFAULT 0,
-  `FLH` int(11) DEFAULT 0,
-  `FLR` int(11) DEFAULT 0,
-  `TEC` int(11) DEFAULT 0,
-  `RBO` int(11) DEFAULT 0,
-  `RBD` int(11) DEFAULT 0,
-  `ROB` int(11) DEFAULT 0,
-  `TAP` int(11) DEFAULT 0,
-  `PRD` int(11) DEFAULT 0,
-  `AST` int(11) DEFAULT 0,
-  `PTQ1` int(11) DEFAULT 0,
-  `PTQ2` int(11) DEFAULT 0,
-  `PTQ3` int(11) DEFAULT 0,
-  `PTQ4` int(11) DEFAULT 0,
-  `PTQE` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partido`
---
-
-INSERT INTO `tmp_partido` (`id`, `equipo`, `jugador`, `nombrejugador`, `numero`, `titular`, `en_juego`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 'Pedro', 'Pedro Martinez Fernandez', 1, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'NacionalMasculino', 'JuanPe', 'Juan  Pérez García', 2, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'NacionalMasculino', 'PaGar3', 'Pablo  Alonso  García', 3, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 'NacionalMasculino', 'JBruq', 'Javier Bru Querol', 4, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'NacionalMasculino', 'PaGCV', 'Pablo Gregorio Carrasco Villacastin', 5, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'NacionalMasculino', 'DavidC', 'David Casillas Pirajno', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'NacionalMasculino', 'PabEG', 'Pablo Esteban Gonzalez', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'NacionalMasculino', 'Manull', 'Manuel Martinez Llimona', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 'CBLR', 'LuisAngel', 'LuisAngel', 18, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'CBLR', 'Agustinio', 'Agustinio', 4, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 'CBLR', 'Fernando', 'Fernando', 5, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'CBLR', 'Mariote', 'Mariote', 7, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 'CBLR', 'JuanPablo', 'JuanPablo', 8, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 'CBLR', 'Lucas', 'Lucas', 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'CBLR', 'Martín', 'Martín', 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 'CBLR', 'Lolo', 'Lolo', 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 'CBLR', 'Martino', 'Martino', 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 'CBLR', 'Diawara', 'Diawara', 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 'CBLR', 'JuanPedrito', 'JuanPedrito', 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(20, 'CBLR', 'Guillermin', 'Guillermin', 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partidoe`
---
-
-CREATE TABLE `tmp_partidoe` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `lider` tinyint(1) NOT NULL,
-  `empate` tinyint(1) NOT NULL DEFAULT 1,
-  `timeouts` int(11) DEFAULT 0,
-  `faltasbanquillo` int(11) DEFAULT 0,
-  `alternancias` int(11) DEFAULT 0,
-  `vecesempatados` int(11) DEFAULT 0,
-  `veceslider` int(11) DEFAULT 0,
-  `parcial_lastto` int(11) DEFAULT 0,
-  `parcial_lastchange` int(11) DEFAULT 0,
-  `parcial` int(11) DEFAULT 0,
-  `mayorventaja` int(11) DEFAULT 0,
-  `tiempolider` int(11) DEFAULT 0,
-  `PPP` int(11) DEFAULT 0,
-  `PPR` int(11) DEFAULT 0,
-  `MT` int(11) DEFAULT 0,
-  `MSMS` int(11) DEFAULT 0,
-  `T2A` int(11) DEFAULT 0,
-  `T2F` int(11) DEFAULT 0,
-  `T3A` int(11) DEFAULT 0,
-  `T3F` int(11) DEFAULT 0,
-  `TLA` int(11) DEFAULT 0,
-  `TLF` int(11) DEFAULT 0,
-  `FLH` int(11) DEFAULT 0,
-  `FLR` int(11) DEFAULT 0,
-  `TEC` int(11) DEFAULT 0,
-  `ROB` int(11) DEFAULT 0,
-  `TAP` int(11) DEFAULT 0,
-  `PRD` int(11) DEFAULT 0,
-  `AST` int(11) DEFAULT 0,
-  `PTQ1` int(11) DEFAULT 0,
-  `PTQ2` int(11) DEFAULT 0,
-  `PTQ3` int(11) DEFAULT 0,
-  `PTQ4` int(11) DEFAULT 0,
-  `PTQE` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partidoe`
---
-
-INSERT INTO `tmp_partidoe` (`id`, `equipo`, `lider`, `empate`, `timeouts`, `faltasbanquillo`, `alternancias`, `vecesempatados`, `veceslider`, `parcial_lastto`, `parcial_lastchange`, `parcial`, `mayorventaja`, `tiempolider`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'CBLR', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partidoe_21`
---
-
-CREATE TABLE `tmp_partidoe_21` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `timeouts` int(11) DEFAULT 0,
-  `faltasbanquillo` int(11) DEFAULT 0,
-  `puntos` int(11) DEFAULT 0,
-  `lider` tinyint(1) NOT NULL,
-  `empate` tinyint(1) NOT NULL DEFAULT 1,
-  `alternancias` int(11) DEFAULT 0,
-  `vecesempatados` int(11) DEFAULT 0,
-  `veceslider` int(11) DEFAULT 0,
-  `q1` int(11) DEFAULT 0,
-  `q2` int(11) DEFAULT 0,
-  `q3` int(11) DEFAULT 0,
-  `q4` int(11) DEFAULT 0,
-  `extra` int(11) DEFAULT 0,
-  `parcial_lastto` int(11) NOT NULL DEFAULT 0,
-  `parcial_lastchange` int(11) NOT NULL DEFAULT 0,
-  `parcial` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partidoe_21`
---
-
-INSERT INTO `tmp_partidoe_21` (`id`, `equipo`, `timeouts`, `faltasbanquillo`, `puntos`, `lider`, `empate`, `alternancias`, `vecesempatados`, `veceslider`, `q1`, `q2`, `q3`, `q4`, `extra`, `parcial_lastto`, `parcial_lastchange`, `parcial`) VALUES
-(1, 'NacionalMasculino', 0, 0, 2, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0),
-(2, 'TresCantosNacional', 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partidoe_24`
---
-
-CREATE TABLE `tmp_partidoe_24` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `timeouts` int(11) DEFAULT 0,
-  `faltasbanquillo` int(11) DEFAULT 0,
-  `puntos` int(11) DEFAULT 0,
-  `lider` tinyint(1) NOT NULL,
-  `empate` tinyint(1) NOT NULL DEFAULT 1,
-  `alternancias` int(11) DEFAULT 0,
-  `vecesempatados` int(11) DEFAULT 0,
-  `veceslider` int(11) DEFAULT 0,
-  `q1` int(11) DEFAULT 0,
-  `q2` int(11) DEFAULT 0,
-  `q3` int(11) DEFAULT 0,
-  `q4` int(11) DEFAULT 0,
-  `extra` int(11) DEFAULT 0,
-  `parcial_lastto` int(11) DEFAULT 0,
-  `parcial_lastchange` int(11) DEFAULT 0,
-  `parcial` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partidoe_24`
---
-
-INSERT INTO `tmp_partidoe_24` (`id`, `equipo`, `timeouts`, `faltasbanquillo`, `puntos`, `lider`, `empate`, `alternancias`, `vecesempatados`, `veceslider`, `q1`, `q2`, `q3`, `q4`, `extra`, `parcial_lastto`, `parcial_lastchange`, `parcial`) VALUES
-(1, 'NacionalMasculino', 3, 0, 2, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0, 4),
-(2, 'VeritasPozuelo', 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partidoe_25`
---
-
-CREATE TABLE `tmp_partidoe_25` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `timeouts` int(11) DEFAULT 0,
-  `faltasbanquillo` int(11) DEFAULT 0,
-  `puntos` int(11) DEFAULT 0,
-  `lider` tinyint(1) NOT NULL,
-  `empate` tinyint(1) NOT NULL DEFAULT 1,
-  `alternancias` int(11) DEFAULT 0,
-  `vecesempatados` int(11) DEFAULT 0,
-  `veceslider` int(11) DEFAULT 0,
-  `q1` int(11) DEFAULT 0,
-  `q2` int(11) DEFAULT 0,
-  `q3` int(11) DEFAULT 0,
-  `q4` int(11) DEFAULT 0,
-  `extra` int(11) DEFAULT 0,
-  `parcial_lastto` int(11) DEFAULT 0,
-  `parcial_lastchange` int(11) DEFAULT 0,
-  `parcial` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partidoe_25`
---
-
-INSERT INTO `tmp_partidoe_25` (`id`, `equipo`, `timeouts`, `faltasbanquillo`, `puntos`, `lider`, `empate`, `alternancias`, `vecesempatados`, `veceslider`, `q1`, `q2`, `q3`, `q4`, `extra`, `parcial_lastto`, `parcial_lastchange`, `parcial`) VALUES
-(1, 'NacionalMasculino', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'AlcorconBasket', 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -490,23 +266,32 @@ CREATE TABLE `tmp_partidoe_28` (
 --
 
 INSERT INTO `tmp_partidoe_28` (`id`, `equipo`, `lider`, `empate`, `timeouts`, `faltasbanquillo`, `alternancias`, `vecesempatados`, `veceslider`, `parcial_lastto`, `parcial_lastchange`, `parcial`, `mayorventaja`, `tiempolider`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 1, 0, 1, 0, 1, 0, 1, 2, 2, 9, 9, 0, 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0),
-(2, 'UrosdeRivas', 0, 0, 0, 0, 1, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(1, 'NacionalMasculino', 1, 0, 1, 0, 1, 0, 1, 2, 2, 9, 9, 0, 9, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0),
+(2, 'UrosdeRivas', 0, 0, 0, 0, 1, 0, 0, 0, 0, -9, 0, 0, 7, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tmp_partido_21`
+-- Estructura de tabla para la tabla `tmp_partidoe_29`
 --
 
-CREATE TABLE `tmp_partido_21` (
+CREATE TABLE `tmp_partidoe_29` (
   `id` int(11) NOT NULL,
   `equipo` varchar(50) NOT NULL,
-  `jugador` varchar(50) NOT NULL,
-  `nombrejugador` varchar(50) NOT NULL,
-  `numero` int(2) DEFAULT NULL,
-  `titular` tinyint(1) NOT NULL,
-  `en_juego` tinyint(1) NOT NULL,
+  `lider` tinyint(1) NOT NULL,
+  `empate` tinyint(1) NOT NULL DEFAULT 1,
+  `timeouts` int(11) DEFAULT 0,
+  `faltasbanquillo` int(11) DEFAULT 0,
+  `alternancias` int(11) DEFAULT 0,
+  `vecesempatados` int(11) DEFAULT 0,
+  `veceslider` int(11) DEFAULT 0,
+  `parcial_lastto` int(11) DEFAULT 0,
+  `parcial_lastchange` int(11) DEFAULT 0,
+  `parcial` int(11) DEFAULT 0,
+  `mayorventaja` int(11) DEFAULT 0,
+  `tiempolider` int(11) DEFAULT 0,
+  `PPP` int(11) DEFAULT 0,
+  `PPR` int(11) DEFAULT 0,
   `MT` int(11) DEFAULT 0,
   `MSMS` int(11) DEFAULT 0,
   `T2A` int(11) DEFAULT 0,
@@ -518,178 +303,24 @@ CREATE TABLE `tmp_partido_21` (
   `FLH` int(11) DEFAULT 0,
   `FLR` int(11) DEFAULT 0,
   `TEC` int(11) DEFAULT 0,
-  `RBO` int(11) DEFAULT 0,
-  `RBD` int(11) DEFAULT 0,
   `ROB` int(11) DEFAULT 0,
   `TAP` int(11) DEFAULT 0,
   `PRD` int(11) DEFAULT 0,
   `AST` int(11) DEFAULT 0,
-  `PTQ1` int(11) NOT NULL,
-  `PTQ2` int(11) NOT NULL,
-  `PTQ3` int(11) NOT NULL,
-  `PTQ4` int(11) NOT NULL,
-  `PTQE` int(11) NOT NULL
+  `PTQ1` int(11) DEFAULT 0,
+  `PTQ2` int(11) DEFAULT 0,
+  `PTQ3` int(11) DEFAULT 0,
+  `PTQ4` int(11) DEFAULT 0,
+  `PTQE` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `tmp_partido_21`
+-- Volcado de datos para la tabla `tmp_partidoe_29`
 --
 
-INSERT INTO `tmp_partido_21` (`id`, `equipo`, `jugador`, `nombrejugador`, `numero`, `titular`, `en_juego`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 'Pedro', 'Pedro Martinez Fernandez', 1, 1, 1, 18, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'NacionalMasculino', 'JuanPe', 'Juan  Pérez García', 2, 1, 1, 18, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'NacionalMasculino', 'PaGar3', 'Pablo  Alonso  García', 3, 1, 1, 18, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 'NacionalMasculino', 'JBruq', 'Javier Bru Querol', 4, 1, 1, 18, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'NacionalMasculino', 'PaGCV', 'Pablo Gregorio Carrasco Villacastin', 5, 1, 1, 18, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'NacionalMasculino', 'DavidC', 'David Casillas Pirajno', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'NacionalMasculino', 'PabEG', 'Pablo Esteban Gonzalez', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'NacionalMasculino', 'Manull', 'Manuel Martinez Llimona', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 'NacionalMasculino', 'Ikermc', 'Iker Mateo Castaño', 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'NacionalMasculino', 'Linomf', 'Lino Monteagudo Fuentes', 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 'NacionalMasculino', 'Beltmn', 'Beltrán Moraleda Navarro', 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'NacionalMasculino', 'JoacoY', 'Joaquín Yañez Saz', 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 'TresCantosNacional', 'Juanpedro', 'Juanpedro', 1, 1, 1, 18, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 'TresCantosNacional', 'Pablo', 'Pablo', 2, 1, 1, 18, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'TresCantosNacional', 'Pedrote', 'Pedrote', 3, 1, 1, 18, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 'TresCantosNacional', 'Juan', 'Juan', 4, 1, 1, 18, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 'TresCantosNacional', 'Manolo', 'Manolo', 5, 1, 1, 18, -2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 'TresCantosNacional', 'Lucas', 'Lucas', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 'TresCantosNacional', 'Martín', 'Martín', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(20, 'TresCantosNacional', 'Isaca', 'Isaca', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(21, 'TresCantosNacional', 'Webo', 'Webo', 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(22, 'TresCantosNacional', 'Malin', 'Malin', 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(23, 'TresCantosNacional', 'Pablote', 'Pablote', 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(24, 'TresCantosNacional', 'Gonzalo', 'Gonzalo', 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partido_24`
---
-
-CREATE TABLE `tmp_partido_24` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `jugador` varchar(50) NOT NULL,
-  `nombrejugador` varchar(50) NOT NULL,
-  `numero` int(2) DEFAULT NULL,
-  `titular` tinyint(1) NOT NULL,
-  `en_juego` tinyint(1) NOT NULL,
-  `MT` int(11) DEFAULT 0,
-  `MSMS` int(11) DEFAULT 0,
-  `T2A` int(11) DEFAULT 0,
-  `T2F` int(11) DEFAULT 0,
-  `T3A` int(11) DEFAULT 0,
-  `T3F` int(11) DEFAULT 0,
-  `TLA` int(11) DEFAULT 0,
-  `TLF` int(11) DEFAULT 0,
-  `FLH` int(11) DEFAULT 0,
-  `FLR` int(11) DEFAULT 0,
-  `TEC` int(11) DEFAULT 0,
-  `RBO` int(11) DEFAULT 0,
-  `RBD` int(11) DEFAULT 0,
-  `ROB` int(11) DEFAULT 0,
-  `TAP` int(11) DEFAULT 0,
-  `PRD` int(11) DEFAULT 0,
-  `AST` int(11) DEFAULT 0,
-  `PTQ1` int(11) NOT NULL,
-  `PTQ2` int(11) NOT NULL,
-  `PTQ3` int(11) NOT NULL,
-  `PTQ4` int(11) NOT NULL,
-  `PTQE` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partido_24`
---
-
-INSERT INTO `tmp_partido_24` (`id`, `equipo`, `jugador`, `nombrejugador`, `numero`, `titular`, `en_juego`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 'Pedro', 'Pedro Martinez Fernandez', 1, 1, 1, 0, 14, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'NacionalMasculino', 'JuanPe', 'Juan  Pérez García', 2, 1, 1, 0, 14, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'NacionalMasculino', 'PaGar3', 'Pablo  Alonso  García', 3, 1, 1, 0, 14, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 'NacionalMasculino', 'JBruq', 'Javier Bru Querol', 4, 1, 1, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'NacionalMasculino', 'PaGCV', 'Pablo Gregorio Carrasco Villacastin', 5, 1, 1, 0, 14, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'NacionalMasculino', 'DavidC', 'David Casillas Pirajno', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'NacionalMasculino', 'PabEG', 'Pablo Esteban Gonzalez', 7, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'NacionalMasculino', 'Manull', 'Manuel Martinez Llimona', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 'NacionalMasculino', 'Ikermc', 'Iker Mateo Castaño', 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'NacionalMasculino', 'Linomf', 'Lino Monteagudo Fuentes', 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 'NacionalMasculino', 'Beltmn', 'Beltrán Moraleda Navarro', 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'NacionalMasculino', 'AlbertoST', 'Alberto Sanz Toril', 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 'VeritasPozuelo', 'LuisAngel', 'LuisAngel', 18, 1, 1, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 'VeritasPozuelo', 'Agustinio', 'Agustinio', 4, 1, 1, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'VeritasPozuelo', 'Fernando', 'Fernando', 5, 1, 1, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 'VeritasPozuelo', 'Mariote', 'Mariote', 7, 1, 1, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 'VeritasPozuelo', 'JuanPablo', 'JuanPablo', 8, 1, 1, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 'VeritasPozuelo', 'Lucas', 'Lucas', 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 'VeritasPozuelo', 'Martín', 'Martín', 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(20, 'VeritasPozuelo', 'Lolo', 'Lolo', 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(21, 'VeritasPozuelo', 'Martino', 'Martino', 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(22, 'VeritasPozuelo', 'Diawara', 'Diawara', 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(23, 'VeritasPozuelo', 'JuanPedrito', 'JuanPedrito', 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(24, 'VeritasPozuelo', 'Guillermin', 'Guillermin', 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tmp_partido_25`
---
-
-CREATE TABLE `tmp_partido_25` (
-  `id` int(11) NOT NULL,
-  `equipo` varchar(50) NOT NULL,
-  `jugador` varchar(50) NOT NULL,
-  `nombrejugador` varchar(50) NOT NULL,
-  `numero` int(2) DEFAULT NULL,
-  `titular` tinyint(1) NOT NULL,
-  `en_juego` tinyint(1) NOT NULL,
-  `MT` int(11) DEFAULT 0,
-  `MSMS` int(11) DEFAULT 0,
-  `T2A` int(11) DEFAULT 0,
-  `T2F` int(11) DEFAULT 0,
-  `T3A` int(11) DEFAULT 0,
-  `T3F` int(11) DEFAULT 0,
-  `TLA` int(11) DEFAULT 0,
-  `TLF` int(11) DEFAULT 0,
-  `FLH` int(11) DEFAULT 0,
-  `FLR` int(11) DEFAULT 0,
-  `TEC` int(11) DEFAULT 0,
-  `RBO` int(11) DEFAULT 0,
-  `RBD` int(11) DEFAULT 0,
-  `ROB` int(11) DEFAULT 0,
-  `TAP` int(11) DEFAULT 0,
-  `PRD` int(11) DEFAULT 0,
-  `AST` int(11) DEFAULT 0,
-  `PTQ1` int(11) NOT NULL,
-  `PTQ2` int(11) NOT NULL,
-  `PTQ3` int(11) NOT NULL,
-  `PTQ4` int(11) NOT NULL,
-  `PTQE` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tmp_partido_25`
---
-
-INSERT INTO `tmp_partido_25` (`id`, `equipo`, `jugador`, `nombrejugador`, `numero`, `titular`, `en_juego`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculino', 'Pedro', 'Pedro Martinez Fernandez', 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'NacionalMasculino', 'JuanPe', 'Juan  Pérez García', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'NacionalMasculino', 'PaGar3', 'Pablo  Alonso  García', 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 'NacionalMasculino', 'JBruq', 'Javier Bru Querol', 4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'NacionalMasculino', 'PaGCV', 'Pablo Gregorio Carrasco Villacastin', 5, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'NacionalMasculino', 'DavidC', 'David Casillas Pirajno', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'NacionalMasculino', 'PabEG', 'Pablo Esteban Gonzalez', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'NacionalMasculino', 'Manull', 'Manuel Martinez Llimona', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 'NacionalMasculino', 'Ikermc', 'Iker Mateo Castaño', 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'AlcorconBasket', 'LuisAngel', 'LuisAngel', 18, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 'AlcorconBasket', 'Federico', 'Federico', 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'AlcorconBasket', 'Pedrote', 'Pedrote', 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 'AlcorconBasket', 'Mariote', 'Mariote', 4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 'AlcorconBasket', 'JuanPablo', 'JuanPablo', 5, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'AlcorconBasket', 'Lucas', 'Lucas', 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 'AlcorconBasket', 'Martín', 'Martín', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 'AlcorconBasket', 'Lolo', 'Lolo', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 'AlcorconBasket', 'Webo', 'Webo', 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `tmp_partidoe_29` (`id`, `equipo`, `lider`, `empate`, `timeouts`, `faltasbanquillo`, `alternancias`, `vecesempatados`, `veceslider`, `parcial_lastto`, `parcial_lastchange`, `parcial`, `mayorventaja`, `tiempolider`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
+(1, 'NacionalMasculino', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 'CBLR', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -758,6 +389,70 @@ INSERT INTO `tmp_partido_28` (`id`, `equipo`, `jugador`, `nombrejugador`, `numer
 (22, 'UrosdeRivas', 'Diawara', 'Diawara', 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (23, 'UrosdeRivas', 'JuanPedrito', 'JuanPedrito', 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (24, 'UrosdeRivas', 'Guillermin', 'Guillermin', 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tmp_partido_29`
+--
+
+CREATE TABLE `tmp_partido_29` (
+  `id` int(11) NOT NULL,
+  `equipo` varchar(50) NOT NULL,
+  `jugador` varchar(50) NOT NULL,
+  `nombrejugador` varchar(50) NOT NULL,
+  `numero` int(2) DEFAULT NULL,
+  `titular` tinyint(1) NOT NULL,
+  `en_juego` tinyint(1) NOT NULL,
+  `MT` int(11) DEFAULT 0,
+  `MSMS` int(11) DEFAULT 0,
+  `T2A` int(11) DEFAULT 0,
+  `T2F` int(11) DEFAULT 0,
+  `T3A` int(11) DEFAULT 0,
+  `T3F` int(11) DEFAULT 0,
+  `TLA` int(11) DEFAULT 0,
+  `TLF` int(11) DEFAULT 0,
+  `FLH` int(11) DEFAULT 0,
+  `FLR` int(11) DEFAULT 0,
+  `TEC` int(11) DEFAULT 0,
+  `RBO` int(11) DEFAULT 0,
+  `RBD` int(11) DEFAULT 0,
+  `ROB` int(11) DEFAULT 0,
+  `TAP` int(11) DEFAULT 0,
+  `PRD` int(11) DEFAULT 0,
+  `AST` int(11) DEFAULT 0,
+  `PTQ1` int(11) DEFAULT 0,
+  `PTQ2` int(11) DEFAULT 0,
+  `PTQ3` int(11) DEFAULT 0,
+  `PTQ4` int(11) DEFAULT 0,
+  `PTQE` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tmp_partido_29`
+--
+
+INSERT INTO `tmp_partido_29` (`id`, `equipo`, `jugador`, `nombrejugador`, `numero`, `titular`, `en_juego`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
+(1, 'NacionalMasculino', 'Pedro', 'Pedro Martinez Fernandez', 1, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 'NacionalMasculino', 'JuanPe', 'Juan  Pérez García', 2, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, 'NacionalMasculino', 'PaGar3', 'Pablo  Alonso  García', 3, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 'NacionalMasculino', 'JBruq', 'Javier Bru Querol', 4, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 'NacionalMasculino', 'PaGCV', 'Pablo Gregorio Carrasco Villacastin', 5, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 'NacionalMasculino', 'DavidC', 'David Casillas Pirajno', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 'NacionalMasculino', 'PabEG', 'Pablo Esteban Gonzalez', 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 'NacionalMasculino', 'Manull', 'Manuel Martinez Llimona', 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(9, 'CBLR', 'LuisAngel', 'LuisAngel', 18, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 'CBLR', 'Agustinio', 'Agustinio', 4, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 'CBLR', 'Fernando', 'Fernando', 5, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(12, 'CBLR', 'Mariote', 'Mariote', 7, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(13, 'CBLR', 'JuanPablo', 'JuanPablo', 8, 1, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(14, 'CBLR', 'Lucas', 'Lucas', 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(15, 'CBLR', 'Martín', 'Martín', 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(16, 'CBLR', 'Lolo', 'Lolo', 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(17, 'CBLR', 'Martino', 'Martino', 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(18, 'CBLR', 'Diawara', 'Diawara', 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(19, 'CBLR', 'JuanPedrito', 'JuanPedrito', 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(20, 'CBLR', 'Guillermin', 'Guillermin', 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -836,63 +531,27 @@ ALTER TABLE `partidos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tmp_partido`
---
-ALTER TABLE `tmp_partido`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partidoe`
---
-ALTER TABLE `tmp_partidoe`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partidoe_21`
---
-ALTER TABLE `tmp_partidoe_21`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partidoe_24`
---
-ALTER TABLE `tmp_partidoe_24`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partidoe_25`
---
-ALTER TABLE `tmp_partidoe_25`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indices de la tabla `tmp_partidoe_28`
 --
 ALTER TABLE `tmp_partidoe_28`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tmp_partido_21`
+-- Indices de la tabla `tmp_partidoe_29`
 --
-ALTER TABLE `tmp_partido_21`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partido_24`
---
-ALTER TABLE `tmp_partido_24`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `tmp_partido_25`
---
-ALTER TABLE `tmp_partido_25`
+ALTER TABLE `tmp_partidoe_29`
   ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `tmp_partido_28`
 --
 ALTER TABLE `tmp_partido_28`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `tmp_partido_29`
+--
+ALTER TABLE `tmp_partido_29`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -938,64 +597,28 @@ ALTER TABLE `partidos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT de la tabla `tmp_partido`
---
-ALTER TABLE `tmp_partido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partidoe`
---
-ALTER TABLE `tmp_partidoe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partidoe_21`
---
-ALTER TABLE `tmp_partidoe_21`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partidoe_24`
---
-ALTER TABLE `tmp_partidoe_24`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partidoe_25`
---
-ALTER TABLE `tmp_partidoe_25`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT de la tabla `tmp_partidoe_28`
 --
 ALTER TABLE `tmp_partidoe_28`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `tmp_partido_21`
+-- AUTO_INCREMENT de la tabla `tmp_partidoe_29`
 --
-ALTER TABLE `tmp_partido_21`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partido_24`
---
-ALTER TABLE `tmp_partido_24`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT de la tabla `tmp_partido_25`
---
-ALTER TABLE `tmp_partido_25`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+ALTER TABLE `tmp_partidoe_29`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tmp_partido_28`
 --
 ALTER TABLE `tmp_partido_28`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT de la tabla `tmp_partido_29`
+--
+ALTER TABLE `tmp_partido_29`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios_equipos`
