@@ -1292,6 +1292,31 @@ class Partido{
         return $jugadores;
     }
 
+    public static function getEquipos(){
+           
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("SELECT * FROM tmp_partidoe");
+
+        $rs = $conn->query($query);
+
+        $jugadores = array();
+
+        if ($rs) {
+            $i = 0;
+            while ($row = $rs->fetch_assoc()) {
+                $jugadores[$i] = $row;
+                $i++;
+            }
+            $rs->free();
+        } 
+        else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $jugadores;
+    }
+
     public static function getJugadoresLocal($equipo){
            
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -1420,12 +1445,18 @@ class Partido{
         );
         
         foreach ($variables as $variable) {
-            if ($jugadorArray[$variable] > $historico[$variable]) {
-                $evaluaciones[$variable] = 1;
+            if ($historico['PJ'] != 0) {
+                if ($jugadorArray[$variable] >= ($historico[$variable] / $historico['PJ'])) {
+                    $evaluaciones[$variable] = "1";
+                } else {
+                    $evaluaciones[$variable] = "0";
+                }
             } else {
-                $evaluaciones[$variable] = 0;
+                $evaluaciones[$variable] = "1"; 
             }
         }
+        
+
         return  $evaluaciones;
     }
 

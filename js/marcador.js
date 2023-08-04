@@ -70,206 +70,269 @@ document.getElementById("start-timer").addEventListener("click", () => {
 //BOTÓN DE PAUSA
 
 // Definir la función de pausa del temporizador
-function pausarTemporizador() {
-    resettimer.disabled = false;
-    periodselect.disabled = false;
-    durationselect.disabled = false;
-    clearInterval(int);
-}
-
-// Asignar la función al evento click del botón
-document.getElementById("pause-timer").addEventListener("click", pausarTemporizador);
-
-
-//BOTÓN DE RESET/PONER TIEMPO
-document.getElementById("reset-timer").addEventListener("click", () => {
-
-    period = document.getElementById("periodSelect").value;
-
-    clearInterval(int);
-
-    duration = document.getElementById("durationSelect").value;
-
-    //Iniciar Variable a 0 de Puntos Cuarto.
-
-
-    // Actualizar los minutos del cronómetro
-    minutes = parseInt(duration);
-    seconds = 0;
-
-    let m = minutes < 10 ? "0" + minutes : minutes;
-    let s = seconds < 10 ? "0" + seconds : seconds;
-
-    timeRef.innerHTML = `${m} : ${s}`;
-
-    starttimer.disabled = false;
-    pausetimer.disabled = false;
-
-
-}); 
-
-//FUNCIONAMIENTO DE MOSTRAR EL RELOJ
-function displayTimer() {
-    
-    if(seconds <= 0) {
-        minutes--;
-        seconds = 60;
-    }
-
-    seconds -= 1;
-
-    //Actualizar Tiempos jugadores
-    let ganador = saberganador();
-
-    addsecondplayed();
-    getJugadoresPista();
-    addtiempoLider(ganador);
-
-    let m = minutes < 10 ? "0" + minutes : minutes;
-    let s = seconds < 10 ? "0" + seconds : seconds;
-
-    timeRef.innerHTML = `${m} : ${s}`;
-
-    if (minutes === 0 && seconds === 0) {
-        clearInterval(int);
-        timeRef.innerHTML = "Tiempo finalizado";
-       
+    function pausarTemporizador() {
         resettimer.disabled = false;
         periodselect.disabled = false;
         durationselect.disabled = false;
-
+        clearInterval(int);
     }
-}
+
+// Asignar la función al evento click del botón
+    document.getElementById("pause-timer").addEventListener("click", pausarTemporizador);
+
+
+//BOTÓN DE RESET/PONER TIEMPO
+    document.getElementById("reset-timer").addEventListener("click", () => {
+
+        period = document.getElementById("periodSelect").value;
+
+        clearInterval(int);
+
+        duration = document.getElementById("durationSelect").value;
+
+        //Iniciar Variable a 0 de Puntos Cuarto.
+
+
+        // Actualizar los minutos del cronómetro
+        minutes = parseInt(duration);
+        seconds = 0;
+
+        let m = minutes < 10 ? "0" + minutes : minutes;
+        let s = seconds < 10 ? "0" + seconds : seconds;
+
+        timeRef.innerHTML = `${m} : ${s}`;
+
+        starttimer.disabled = false;
+        pausetimer.disabled = false;
+
+
+    }); 
+
+    //FUNCIONAMIENTO DE MOSTRAR EL RELOJ
+    function displayTimer() {
+        
+        if(seconds <= 0) {
+            minutes--;
+            seconds = 60;
+        }
+
+        seconds -= 1;
+
+        //Actualizar Tiempos jugadores
+        let ganador = saberganador();
+
+        addsecondplayed();
+        getJugadoresPista();
+        addtiempoLider(ganador);
+
+        let m = minutes < 10 ? "0" + minutes : minutes;
+        let s = seconds < 10 ? "0" + seconds : seconds;
+
+        timeRef.innerHTML = `${m} : ${s}`;
+
+        if (minutes === 0 && seconds === 0) {
+            clearInterval(int);
+            timeRef.innerHTML = "Tiempo finalizado";
+        
+            resettimer.disabled = false;
+            periodselect.disabled = false;
+            durationselect.disabled = false;
+
+        }
+    }
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 //APARTADO MARCADORES DE LOS EQUIPOS
 
-let idpartidoDisplay = document.querySelector('.idpartido-display');
-let idpartidoElement = idpartidoDisplay.querySelector('.id');
+    let idpartidoDisplay = document.querySelector('.idpartido-display');
+    let idpartidoElement = idpartidoDisplay.querySelector('.id');
 
-function saberganador(){
+    function saberganador(){
 
-    if((parseInt(localpointsElement.textContent)) > (parseInt(visitpointsElement.textContent))){
+        if((parseInt(localpointsElement.textContent)) > (parseInt(visitpointsElement.textContent))){
 
-        return true;
-
-    }
-    else{
-        return false;
-    }
-}
-
-document.getElementById("endgame-button").addEventListener("click", () => {
-    // Mostrar ventana de confirmación
-    var confirmacion = confirm("¿Estás seguro de que deseas finalizar el partido?");
-
-    // Si se hace clic en "Aceptar", realizar las acciones
-    if (confirmacion) {
-        // Guardar los datos para cada jugador
-        ganador = saberganador();
-        var idMatch = idpartidoElement.textContent;
-        saveplayers(ganador,idMatch);
-        header('Location: index.php');
-
-    }
-});
-
-function saveplayers($ganador,$id){
-
-    //Guardar las tablas, renombrandolas
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        console.log("La respuesta está completa en save players.");
-        
-        // Guardar la información de las tablas para futuras consultas y redirigir al index
-        renametables();
-        window.location.href = "index.php";
-
-    }
-    else{
-        console.log("La respuesta está  NO completa en save players.");
-
-    }
-    };
-
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "saveplayers.php?equipo=" + idlocal,"&ganador=" + $ganador,"&idPartido=" + $id, true);
-    xhttp.send();
-}
-
-
-function renametables(){
-
-        //Guardar las tablas, renombrandolas
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en mas menos.");
+            return true;
 
         }
         else{
-            console.log("La respuesta está  NO completa en mas menos.");
+            return false;
+        }
+    }
+
+    document.getElementById("endgame-button").addEventListener("click", () => {
+        // Mostrar ventana de confirmación
+        var confirmacion = confirm("¿Estás seguro de que deseas finalizar el partido?");
+
+        // Si se hace clic en "Aceptar", realizar las acciones
+        if (confirmacion) {
+            // Guardar los datos para cada jugador
+            ganador = saberganador();
+            var idMatch = idpartidoElement.textContent;
+            saveplayers(ganador,idMatch);
+            header('Location: index.php');
 
         }
-    };
-
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "renombrartablas.php?id=" + parseInt(idpartidoElement.textContent), true);
-    xhttp.send();
-}
-
-
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
-//BOTÓN DE GRÁFICOS
-document.getElementById("graficos-button").addEventListener("click", () => {
-
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement("div");
-    ventana.classList.add("ventana-graficos");
-    document.body.appendChild(ventana);
-
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
-    
-    cerrar.addEventListener('click', function() {
-    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-        ventana.parentNode.removeChild(ventana);
-        overlay.parentNode.removeChild(overlay);
     });
 
-    //Botón 1: Mostrar PDF COMPLETO.
+    function saveplayers($ganador,$id){
 
-        var mostrarstats = document.createElement('button');
-        mostrarstats.classList.add('mostrarstats');
-        mostrarstats.innerHTML = 'Estadisticas Completas';
-        ventana.appendChild(mostrarstats);
+        //Guardar las tablas, renombrandolas
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("La respuesta está completa en save players.");
+            
+            // Guardar la información de las tablas para futuras consultas y redirigir al index
+            renametables();
+            window.location.href = "index.php";
+
+        }
+        else{
+            console.log("La respuesta está  NO completa en save players.");
+
+        }
+        };
+
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "saveplayers.php?equipo=" + idlocal,"&ganador=" + $ganador,"&idPartido=" + $id, true);
+        xhttp.send();
+    }
+
+    function renametables(){
+
+            //Guardar las tablas, renombrandolas
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en mas menos.");
+
+            }
+            else{
+                console.log("La respuesta está  NO completa en mas menos.");
+
+            }
+        };
+
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "renombrartablas.php?id=" + parseInt(idpartidoElement.textContent), true);
+        xhttp.send();
+    }
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+    //BOTÓN DE GRÁFICOS Y TODA LA FUNCIONALIDAD:
+
+    document.getElementById("graficos-button").addEventListener("click", () => {
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement("div");
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
         
-        mostrarstats.addEventListener('click', function() {
-            generarPDF();
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
         });
 
-    //Botón 2: Mostrar PDF Con todo el JUGADA A JUGADA OK
+        //Botón 0: Guardar PDF con todo
+
+            var pdfcompleto = document.createElement('button');
+            pdfcompleto.classList.add('pdfcompleto');
+            pdfcompleto.innerHTML = 'PDF COMPLETO';
+            ventana.appendChild(pdfcompleto);
+
+            pdfcompleto.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+
+            });
+
+        //Botón 1: Mostrar EstadisticaCompleta.
+
+            var mostrarstats = document.createElement('button');
+            mostrarstats.classList.add('mostrarstats');
+            mostrarstats.innerHTML = 'Estadisticas Completas';
+            ventana.appendChild(mostrarstats);
+            
+            mostrarstats.addEventListener('click', function() {
+                //generarPDF();
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getJugadores(function(jugadores) {
+                    if (jugadores) {
+                        getEquipos(function(equipos) {
+                            if (equipos) {
+                            // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                            mostrarEstadisticaCompleta(jugadores,equipos);
+                            } else {
+                            console.log("Error al obtener los jugadores");
+                            }
+                        });
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            });
+
+
+        //Botón 2: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTA)
+
+            var fullboxscore = document.createElement('button');
+            fullboxscore.classList.add('fullboxscore');
+            fullboxscore.innerHTML = 'Full Box Score';
+            ventana.appendChild(fullboxscore);
+
+            fullboxscore.addEventListener('click', function() {
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getJugadores(function(jugadores) {
+                    if (jugadores) {
+                    // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                    mostrarBoxScoreCompleto(jugadores);
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            });
+
+        //Botón 3: Mostrar PDF Con todos los índices de Estatística Avanzada.
+
+            var estadisticaavanzada = document.createElement('button');
+            estadisticaavanzada.classList.add('estadisticaavanzada');
+            estadisticaavanzada.innerHTML = 'Estadistica Avanzada';
+            ventana.appendChild(estadisticaavanzada);
+
+            estadisticaavanzada.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+
+            });
+
+            
+        //Botón 4: Mostrar PDF Con todo el JUGADA A JUGADA OK
 
         var playbyplay = document.createElement('button');
         playbyplay.classList.add('playbyplay');
@@ -283,196 +346,324 @@ document.getElementById("graficos-button").addEventListener("click", () => {
             overlay.parentNode.removeChild(overlay);
         });
 
-    //Botón 3: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTA)
+        //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTA)
 
-        var fullboxscore = document.createElement('button');
-        fullboxscore.classList.add('fullboxscore');
-        fullboxscore.innerHTML = 'Full Box Score';
-        ventana.appendChild(fullboxscore);
+            var impactoTimeOut = document.createElement('button');
+            impactoTimeOut.classList.add('impactoTimeOut');
+            impactoTimeOut.innerHTML = 'Impacto Time Out';
+            ventana.appendChild(impactoTimeOut);
 
-        fullboxscore.addEventListener('click', function() {
+            impactoTimeOut.addEventListener('click', function() {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-            getJugadores(function(jugadores) {
-                if (jugadores) {
-                  // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
-                  mostrarBoxScoreCompleto(jugadores);
-                } else {
-                  console.log("Error al obtener los jugadores");
-                }
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getParcialTO(function(parcial) {
+                    if (parcial) {
+                    // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                    mostrarImpactoLastTimeOut(parcial);
+                    } else {
+                    console.log("Error al obtener el parcial");
+                    }
+                });
             });
-        });
 
-    //Botón 4: Mostrar PDF Con todos los índices de Estatística Avanzada.
 
-        var estadisticaavanzada = document.createElement('button');
-        estadisticaavanzada.classList.add('estadisticaavanzada');
-        estadisticaavanzada.innerHTML = 'Estadistica Avanzada';
-        ventana.appendChild(estadisticaavanzada);
+        //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTA)
+            var impactoCambio = document.createElement('button');
+            impactoCambio.classList.add('impactoCambio');
+            impactoCambio.innerHTML = 'Impacto Cambios';
+            ventana.appendChild(impactoCambio);
 
-        estadisticaavanzada.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-        });
-
-    //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTA)
-
-        var impactoTimeOut = document.createElement('button');
-        impactoTimeOut.classList.add('impactoTimeOut');
-        impactoTimeOut.innerHTML = 'Impacto Time Out';
-        ventana.appendChild(impactoTimeOut);
-
-        impactoTimeOut.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-            getParcialTO(function(parcial) {
-                if (parcial) {
-                  // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
-                  mostrarImpactoLastTimeOut(parcial);
-                } else {
-                  console.log("Error al obtener el parcial");
-                }
+            impactoCambio.addEventListener('click', function() {
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getParcialCambio(function(parcial) {
+                    if (parcial) {
+                    // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                    mostrarImpactoLastChange(parcial);
+                    } else {
+                    console.log("Error al obtener el parcial");
+                    }
+                });
             });
-        });
 
+        //Botón 7: Mostrar PDF con Evaluación X Jugador.
 
-    //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTA)
-        var impactoCambio = document.createElement('button');
-        impactoCambio.classList.add('impactoCambio');
-        impactoCambio.innerHTML = 'Impacto Cambios';
-        ventana.appendChild(impactoCambio);
+            var evaluacionplayer = document.createElement('button');
+            evaluacionplayer.classList.add('evaluacionplayer');
+            evaluacionplayer.innerHTML = 'Evaluación Jugador';
+            ventana.appendChild(evaluacionplayer);
 
-        impactoCambio.addEventListener('click', function() {
+            evaluacionplayer.addEventListener('click', function() {
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+
+                getJugadoresLocal(function(jugadores) {
+                    if (jugadores) {
+                        console.log(jugadores);
+                        evaluacionJugadores(jugadores);
+            
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            });
+
+        //Botón 8: Mostrar PDF con Evaluación X Equipo.
+
+            var evaluacionequipo = document.createElement('button');
+            evaluacionequipo.classList.add('evaluacionequipo');
+            evaluacionequipo.innerHTML = 'Evaluación Equipo';
+            ventana.appendChild(evaluacionequipo);
+
+            evaluacionequipo.addEventListener('click', function() {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-            getParcialCambio(function(parcial) {
-                if (parcial) {
-                // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
-                mostrarImpactoLastChange(parcial);
-                } else {
-                console.log("Error al obtener el parcial");
-                }
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
             });
-        });
 
-    //Botón 7: Mostrar PDF con Evaluación X Jugador.
+            //Botón 9: CAMBIOS SUGERIDOS
 
-        var evaluacionplayer = document.createElement('button');
-        evaluacionplayer.classList.add('evaluacionplayer');
-        evaluacionplayer.innerHTML = 'Evaluación Jugador';
-        ventana.appendChild(evaluacionplayer);
+            var cambiossugeridos = document.createElement('button');
+            cambiossugeridos.classList.add('cambiossugeridos');
+            cambiossugeridos.innerHTML = 'CAMBIOS SUGERIDOS';
+            ventana.appendChild(cambiossugeridos);
 
-        evaluacionplayer.addEventListener('click', function() {
+            cambiossugeridos.addEventListener('click', function() {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-
-            getJugadoresLocal(function(jugadores) {
-                if (jugadores) {
-                    console.log(jugadores);
-                    evaluacionJugadores(jugadores);
-         
-                } else {
-                  console.log("Error al obtener los jugadores");
-                }
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                cambiossugeridosporfactor(idlocal);
             });
-        });
 
-    //Botón 8: Mostrar PDF con Evaluación X Equipo.
+        // Mostrar la ventana emergente
+        ventana.classList.add("mostrar");
 
-        var evaluacionequipo = document.createElement('button');
-        evaluacionequipo.classList.add('evaluacionequipo');
-        evaluacionequipo.innerHTML = 'Evaluación Equipo';
-        ventana.appendChild(evaluacionequipo);
+    });
 
-        evaluacionequipo.addEventListener('click', function() {
+
+    function mostrarEstadisticaCompleta(jugadores,equipos) {
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+    
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+    
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+    
+        cerrar.addEventListener('click', function() {
         // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
         });
+    
+        var localfullTable = document.createElement('table');
+        var visitfullTable = document.createElement('table');
+    
+        // Crear la primera fila para el nombre del equipo
+        var localfullTeamRow = localfullTable.insertRow();
+        var visitfullTeamRow = visitfullTable.insertRow();
 
-        //Botón 9: CAMBIOS SUGERIDOS
+        var equipoLocal = equipos[0];
 
-        var cambiossugeridos = document.createElement('button');
-        cambiossugeridos.classList.add('cambiossugeridos');
-        cambiossugeridos.innerHTML = 'CAMBIOS SUGERIDOS';
-        ventana.appendChild(cambiossugeridos);
-
-        cambiossugeridos.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-            cambiossugeridosporfactor(idlocal);
-        });
-
-    // Mostrar la ventana emergente
-    ventana.classList.add("mostrar");
-
-});
-
-//Botón 1: Mostrar PDF Completo
-function generarPDFcompleto() {
+        var equipovisitante = equipos[1];
 
 
-    //Llamar a las funciones que devuelvan el html.
-
-    //1º Llamar a la función de estadisticas.
-
-
-    // Definir el contenido del documento PDF
-
-    var contenidoPDF = {
-        content: [
-        { text: 'Estadísitca Completa: ' +  getNombreEquipo(idlocal) + ' vs ' + getNombreEquipo(idvisitante), style: 'header' },
-        { text: playbyplay.innerHTML , style: 'body' },
-        { text: 'Resultado Final: ' +  getNombreEquipo(idlocal) + ' ' + parseInt(localpointsElement.textContent) + ' vs ' + parseInt(localpointsElement.textContent) + ' ' + getNombreEquipo(idvisitante), style: 'header' },
-        ],
-        styles: {
-        header: { fontSize: 18, bold: true },
-        body: { fontSize: 12 }
+        var localfullTeamCell = localfullTeamRow.insertCell();
+        localfullTeamCell.colSpan = 12;
+        localfullTeamCell.innerHTML = 'Equipo Local:' + equipoLocal.equipo;
+    
+        var visitfullTeamCell = visitfullTeamRow.insertCell();
+        visitfullTeamCell.colSpan =12;
+        visitfullTeamCell.innerHTML = 'Equipo Visitante ' + equipovisitante.equipo;
+    
+        // Crear la segunda fila para las cabeceras
+        var localfullHeaderRow = localfullTable.insertRow();
+        var visitfullHeaderRow = visitfullTable.insertRow();
+    
+        var headers = [
+            'Nº', 
+            'Nombre', 
+            'Titular', 
+            'Time', 
+            '+/-', 
+            'T2A', 
+            'T2P', 
+            'Ptos.', 
+            'Faltas', 
+            'Time', 
+            'Minutos',
+            '+/-',
+            'PTS',
+            'T2A',
+            'T2%',
+            'T3A',
+            'T3%',
+            'TCA',
+            'TC%',
+            'TLA',
+            'TL%',
+            'FLH',
+            'FLR',
+            'TEC',
+            'RBO',
+            'RBD',
+            'RBT',
+            'ROB',
+            'TAP',
+            'PRD',
+            'AST',
+            'PTQ1',
+            'PTQ2',
+            'PTQ3',
+            'PTQ4',
+            'PTQE',
+            'T2%Us',
+            'T3%Us',
+            'TL%Us',
+            'eFG%',
+            'TS%',
+            'AS%',
+            'GS',
+            'VAL'
+          ];
+          
+    
+        for (var i = 0; i < headers.length; i++) {
+            var localfullHeaderCell = localfullHeaderRow.insertCell();
+            localfullHeaderCell.innerHTML = headers[i];
+    
+            var visitfullHeaderCell = visitfullHeaderRow.insertCell();
+            visitfullHeaderCell.innerHTML = headers[i];
         }
-    };
     
-    // Generar el archivo PDF
-    var pdfDocGenerator = pdfMake.createPdf(contenidoPDF);
+        //Ordeno para obtener primero a los titulares.
+        jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
     
-    // Descargar el archivo PDF
-    pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
-}
+    
+        // Recorrer los jugadores y agregarlos a las tablas
+        for (var i = 0; i < jugadores.length; i++) {
+            var jugador = jugadores[i];
+    
+            // Cálculo de puntos, faltas y tiempo
+            var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
+            var faltasPlayer = jugador.FLH;
+            var minutosjugador = Math.floor(jugador.MT / 60);
+            var segundosjugador = jugador.MT % 60;
+            var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
+    
+            var playerfullRow = document.createElement('tr');
+    
+            // Crear las celdas para los datos del jugador
+            var numberfullCell = playerfullRow.insertCell();
+            numberfullCell.innerHTML = jugador.numero;
+    
+            var namefullCell = playerfullRow.insertCell();
+            namefullCell.innerHTML = jugador.nombrejugador;
+    
+            var pointsfullCell = playerfullRow.insertCell();
+            pointsfullCell.innerHTML = puntosPlayer;
+    
+            var foulsfullCell = playerfullRow.insertCell();
+            foulsfullCell.innerHTML = faltasPlayer;
+    
+            var timefullCell = playerfullRow.insertCell();
+            timefullCell.innerHTML = minutosPlayer;
+    
+            if (isLocal(jugador.equipo)) {
+                localfullTable.appendChild(playerfullRow);
+            } else {
+                visitfullTable.appendChild(playerfullRow);
+            }
+        }
+    
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var displaytablas = document.createElement("div");
+        displaytablas.classList.add("displaytablas");
+        ventana.appendChild(displaytablas);
+    
+        // Obtener los elementos de anclaje para las tablas
+        var localfullPlayersDisplay = document.createElement('div');
+        var visitfullPlayersDisplay = document.createElement('div');
+    
+        // Agregar las tablas al contenedor correspondiente
+        localfullPlayersDisplay.innerHTML = '';
+        localfullPlayersDisplay.appendChild(localfullTable);
+    
+        visitfullPlayersDisplay.innerHTML = '';
+        visitfullPlayersDisplay.appendChild(visitfullTable);
+    
+        displaytablas.appendChild(localfullPlayersDisplay);
+        displaytablas.appendChild(visitfullPlayersDisplay);
+    }
 
-//1º
-function getplantillastats(){
-
-    var jugadores = null;
-    jugadores = getJugadores();+
-    jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
-
-}
+    function generarPDFcompleto() {
 
 
-function generarPDFplaybyplay() {
+        //Llamar a las funciones que devuelvan el html.
+
+        //1º Llamar a la función de estadisticas.
+
+
+        // Definir el contenido del documento PDF
+
+        var contenidoPDF = {
+            content: [
+            { text: 'Estadísitca Completa: ' +  getNombreEquipo(idlocal) + ' vs ' + getNombreEquipo(idvisitante), style: 'header' },
+            { text: playbyplay.innerHTML , style: 'body' },
+            { text: 'Resultado Final: ' +  getNombreEquipo(idlocal) + ' ' + parseInt(localpointsElement.textContent) + ' vs ' + parseInt(localpointsElement.textContent) + ' ' + getNombreEquipo(idvisitante), style: 'header' },
+            ],
+            styles: {
+            header: { fontSize: 18, bold: true },
+            body: { fontSize: 12 }
+            }
+        };
+        
+        // Generar el archivo PDF
+        var pdfDocGenerator = pdfMake.createPdf(contenidoPDF);
+        
+        // Descargar el archivo PDF
+        pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+    }
+
+    function getplantillastats(){
+
+        var jugadores = null;
+        jugadores = getJugadores();+
+        jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
+
+    }
+
+    function generarPDFplaybyplay() {
     // Obtener el contenido del div
     const divContent = document.querySelector('.info-display');
-  
+
     // Crear una nueva instancia de jsPDF
     const doc = new jsPDF();
-  
+
 
     // Obtener el contenido dividido por líneas
     const lines = divContent.innerHTML.split('\n');
-  
+
     // Definir las posiciones iniciales para el contenido
     let xPosition = 15;
     let yPosition = 15;
-  
+
     // Calcular la altura total del contenido para ajustar la posición en "y"
     const lineHeight = 10; // Altura de una línea (ajústala según tu preferencia)
     const totalHeight = lines.length * lineHeight;
-  
+
     // Verificar si el contenido se ajusta en una sola página o requiere varias páginas
 
     // Configurar el tamaño de página (A4 en este caso)
@@ -485,26 +676,26 @@ function generarPDFplaybyplay() {
     const availableHeight = pageHeight - pageMargin * 2;
 
     const requireMultiplePages = totalHeight > availableHeight;
-  
+
     // Función para agregar una página nueva al PDF y restablecer las coordenadas
 
     function newPage() {
         doc.addPage();
-    
+
         doc.setFontSize(18); // Restaurar el tamaño de fuente para el título en nuevas páginas
         doc.setFontStyle('bold'); // Restaurar el estilo de fuente para el título en nuevas páginas
-    
+
         doc.text(15, 15, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la nueva página
-    
+
         yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
     }
-    
-  
+
+
     // Añadir el título al PDF
     doc.setFontSize(18); // Tamaño de fuente para el título
     doc.setFontStyle('bold'); // Estilo de fuente para el título (negrita)
     doc.text(xPosition, yPosition, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la posición (15, 15)
-    
+
     yPosition = 15 + lineHeight; // Restablecer la posición en "y" para el contenido
 
     // Restaurar el estilo de fuente por defecto (opcional)
@@ -513,173 +704,195 @@ function generarPDFplaybyplay() {
 
     // Agregar cada línea al PDF con un salto de línea
     lines.forEach((line, index) => {
-      if (requireMultiplePages && yPosition + lineHeight > pageHeight - pageMargin) {
+        if (requireMultiplePages && yPosition + lineHeight > pageHeight - pageMargin) {
         // Si el contenido no cabe en la página actual, agregar una nueva página
         newPage();
-      }
+        }
 
         doc.text(15, yPosition, line);
         yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
 
     });
 
-  
+
     // Guardar o mostrar el PDF
     doc.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
-    
-}
 
-function getJugadoresporFactor(callback,factor,equipo) {
+    }
+
+    function getJugadoresporFactor(callback,factor,equipo) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var jugadores = JSON.parse(this.responseText);
-          console.log(jugadores);
-          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var jugadores = JSON.parse(this.responseText);
+            console.log(jugadores);
+            callback(jugadores); // Llamar a la devolución de llamada con los jugadores
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getJugadoresporFactor.php?factor=" + factor + "&equipo=" + equipo, true);
     xhttp.send();
-  }
+    }
 
-  function getEvaluacionJugador(callback,jugador) {
+    function getEvaluacionJugador(callback,jugador) {
 
     // Convertir el objeto jugador a una cadena JSON
     var jugadorJSON = JSON.stringify(jugador);
 
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var evaluaciones = JSON.parse(this.responseText);
-          console.log(evaluaciones);
-          callback(evaluaciones); // Llamar a la devolución de llamada con los jugadores
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var evaluaciones = JSON.parse(this.responseText);
+            console.log(evaluaciones);
+            callback(evaluaciones); // Llamar a la devolución de llamada con los jugadores
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getEvaluacionJugador.php?jugador=" + encodeURIComponent(jugadorJSON), true);
     xhttp.send();
-  }
+    }
   
-function getJugadores(callback) {
+    function getJugadores(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var jugadores = JSON.parse(this.responseText);
-          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var jugadores = JSON.parse(this.responseText);
+            callback(jugadores); // Llamar a la devolución de llamada con los jugadores
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getJugadores.php", true);
     xhttp.send();
-  }
+    }
 
+    function getEquipos(callback) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var equipos = JSON.parse(this.responseText);
+                callback(equipos); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getEquipos.php", true);
+        xhttp.send();
+        }
 
-  function getJugadoresLocal(callback) {
+    function getJugadoresLocal(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var jugadores = JSON.parse(this.responseText);
-          callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var jugadores = JSON.parse(this.responseText);
+            callback(jugadores); // Llamar a la devolución de llamada con los jugadores
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getJugadoresLocal.php?equipo=" + idlocal, true);
     xhttp.send();
-  }
+    }
 
-  function getParcialTO(callback) {
+    function getParcialTO(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var parcial = JSON.parse(this.responseText);
-          callback(parcial); // Llamar a la devolución de llamada con el parcial
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var parcial = JSON.parse(this.responseText);
+            callback(parcial); // Llamar a la devolución de llamada con el parcial
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getParcialTO.php", true);
     xhttp.send();
-  }
+    }
 
     function getParcialCambio(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
-  
+
     // Definir la función de respuesta
     xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState == 4 && this.status == 200) {
         if (this.responseText) {
-          console.log("La respuesta está completa.");
-          // La respuesta ha sido recibida
-          var parcial = JSON.parse(this.responseText);
-          callback(parcial); // Llamar a la devolución de llamada con el parcial
+            console.log("La respuesta está completa.");
+            // La respuesta ha sido recibida
+            var parcial = JSON.parse(this.responseText);
+            callback(parcial); // Llamar a la devolución de llamada con el parcial
         } else {
-          console.log("La respuesta está vacía o incompleta.");
-          callback(null); // Llamar a la devolución de llamada con valor nulo
+            console.log("La respuesta está vacía o incompleta.");
+            callback(null); // Llamar a la devolución de llamada con valor nulo
         }
-      }
+        }
     };
-  
+
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getParcialCambio.php", true);
     xhttp.send();
-  }
-
+    }
 
     function cambiossugeridosporfactor(equipo){
         // Crear la capa de fondo oscuro y agregarla al DOM
@@ -909,7 +1122,7 @@ function getJugadores(callback) {
                 console.log(jugador)
                 getEvaluacionJugador(function(evaluacion) {
                     if (evaluacion) {
-                        mostrarEvaluacionJugador(evaluacion);
+                        mostrarEvaluacionJugador(evaluacion,jugador);
                     } else {
                         console.log("Error al obtener la evaluacion");
                     }
@@ -936,7 +1149,7 @@ function getJugadores(callback) {
         
     }
 
-    function mostrarEvaluacionJugador(evaluacion){
+    function mostrarEvaluacionJugador(evaluacion,jugador){
         // Crear la capa de fondo oscuro y agregarla al DOM
         var overlay = document.createElement('div');
         overlay.classList.add('overlay');
@@ -953,22 +1166,17 @@ function getJugadores(callback) {
 
         // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('p');
-        mensaje.textContent = `La evaluación del Jugador es:`;
+        mensaje.textContent = `La evaluación de ${jugador['nombrejugador']} es:`;
         contenido.appendChild(mensaje);
 
         // Agregar el contenido a la ventana emergente
         for (var clave in evaluacion) {
-            if (evaluacion[clave] === 1) {
-                var mensaje = document.createElement('p');
-                mensaje.textContent = `Su ${clave} es mayor al habitual.`;
-                contenido.appendChild(mensaje);
-            } else {
-                var mensaje = document.createElement('p');
-                mensaje.textContent = `Su ${clave} es menor al habitual.`;
-                contenido.appendChild(mensaje);
-            }
-        }      
-
+            var mensaje = document.createElement('p');
+            mensaje.textContent = `Su ${clave} es ${evaluacion[clave] === "1" ? 'mayor o igual' : 'menor'} al habitual.`;
+            mensaje.style.color = evaluacion[clave] === "1" ? 'green' : 'red';
+            contenido.appendChild(mensaje);
+        }
+     
         ventana.appendChild(contenido);
 
         // Crear el botón de cerrar y agregar el controlador de eventos
@@ -1012,10 +1220,10 @@ function getJugadores(callback) {
     });
 
     for (var i = 0; i < jugadores.length; i++) {
-    var jugador = jugadores[i];
-    var elementoJugador = document.createElement('div');
-    elementoJugador.textContent = `${jugador.numero}-${jugador.nombrejugador} - ${factor}:${jugador.factor} - H:${jugador.historico} `;
-    contenido.appendChild(elementoJugador);
+        var jugador = jugadores[i];
+        var elementoJugador = document.createElement('div');
+        elementoJugador.textContent = `${jugador.numero}-${jugador.nombrejugador} - ${factor}:${jugador.factor} - H:${jugador.historico} `;
+        contenido.appendChild(elementoJugador);
     }
         
     // Agregar el contenido a la ventana emergente
@@ -1105,7 +1313,6 @@ function getJugadores(callback) {
     overlay.parentNode.removeChild(overlay);
     });
     }
-
 
     function mostrarBoxScoreCompleto(jugadores) {
 
@@ -1247,951 +1454,943 @@ function getJugadores(callback) {
 /////////////////////////////////////////////////////////////
 //MARCADOR DE PUNTOS
 
-// Obtener el elemento con la clase "localScore-display"
-let localScoreDisplay = document.querySelector('.localScore-display');
-// Obtener el elemento con la clase "points" dentro del elemento "localScoreDisplay"
-let localpointsElement = localScoreDisplay.querySelector('.points');
-// Obtener el elemento con la clase "visitScore-display"
-let visitScoreDisplay = document.querySelector('.visitScore-display');
-// Obtener el elemento con la clase "points" dentro del elemento "visitScoreDisplay"
-let visitpointsElement = visitScoreDisplay.querySelector('.points');
+    // Obtener el elemento con la clase "localScore-display"
+    let localScoreDisplay = document.querySelector('.localScore-display');
 
-function addPoints(equipo,jugador,puntos){
-    if(isLocal(equipo)){
-        // Actualizar el valor del marcador
-        localpointsElement.textContent = parseInt(localpointsElement.textContent) + puntos;
-    }
-    else{
-        // Actualizar el valor del marcador
-        visitpointsElement.textContent = parseInt(visitpointsElement.textContent) + puntos;
-    }
+    // Obtener el elemento con la clase "points" dentro del elemento "localScoreDisplay"
+    let localpointsElement = localScoreDisplay.querySelector('.points');
 
-    actualizarDatosPuntos(puntos,equipo,jugador);
+    // Obtener el elemento con la clase "visitScore-display"
+    let visitScoreDisplay = document.querySelector('.visitScore-display');
 
-    mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-}
+    // Obtener el elemento con la clase "points" dentro del elemento "visitScoreDisplay"
+    let visitpointsElement = visitScoreDisplay.querySelector('.points');
 
-function actualizarDatosPuntos(puntos,equipo,jugador){
-    //1º Actualizar más menos de los jugadores
-    actualizarMSMS(puntos,equipo);
-    // 2º Guardar los puntos en total y 3º Añadir puntos al cuarto
-    actualizarpuntoscuarto(jugador,puntos);
-    //4º Checkear si hay empate y 5º Checkear alternancia en marcador
-    checkmarcador();
-    // 6º Parciales??
-    parciales(puntos,equipo);
-}
+    function addPoints(equipo,jugador,puntos){
+        if(isLocal(equipo)){
+            // Actualizar el valor del marcador
+            localpointsElement.textContent = parseInt(localpointsElement.textContent) + puntos;
+        }
+        else{
+            // Actualizar el valor del marcador
+            visitpointsElement.textContent = parseInt(visitpointsElement.textContent) + puntos;
+        }
 
-function actualizarpuntoscuarto(jugador,puntos){
+        actualizarDatosPuntos(puntos,equipo,jugador);
 
-    //Guardar la variable de Puntos Cuarto
-
-    period = document.getElementById("periodSelect").value;
-
-    switch(period){
-        case 'Periodo 1':
-            cuarto = 1;
-            cuartoJugador = "PTQ1"
-            break;
-
-        case 'Periodo 2':
-            cuarto = 2;
-            cuartoJugador = "PTQ2"
-
-            break;
-
-        case 'Periodo 3':
-            cuarto = 3;
-            cuartoJugador = "PTQ3"
-
-            break;
-
-        case 'Periodo 4':
-            cuarto = 4;
-            cuartoJugador = "PTQ4"
-
-            break;
-        default:
-            cuarto = 5;
-            cuartoJugador = "PTQE"
-
-        break;
+        mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
     }
 
-    //LLamar a función de recopilar datos de ese cuarto.
-    guardarpuntoscuarto(idlocal,idvisitante,parseInt(localpointsElement.textContent),parseInt(visitpointsElement.textContent),cuarto);
-    guardarpuntoscuartoJugador(cuartoJugador,jugador.jugador,puntos);
-}
+    function actualizarDatosPuntos(puntos,equipo,jugador){
+        //1º Actualizar más menos de los jugadores
+        actualizarMSMS(puntos,equipo);
+        // 2º Guardar los puntos en total y 3º Añadir puntos al cuarto
+        actualizarpuntoscuarto(jugador,puntos);
+        //4º Checkear si hay empate y 5º Checkear alternancia en marcador
+        checkmarcador();
+        // 6º Parciales??
+        parciales(puntos,equipo);
+    }
 
+    function actualizarpuntoscuarto(jugador,puntos){
 
+        //Guardar la variable de Puntos Cuarto
 
-//ACTUALIZAR MAS/MENOS
-function actualizarMSMS(puntos,equipo){
+        period = document.getElementById("periodSelect").value;
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+        switch(period){
+            case 'Periodo 1':
+                cuarto = 1;
+                cuartoJugador = "PTQ1"
+                break;
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en mas menos.");
+            case 'Periodo 2':
+                cuarto = 2;
+                cuartoJugador = "PTQ2"
+
+                break;
+
+            case 'Periodo 3':
+                cuarto = 3;
+                cuartoJugador = "PTQ3"
+
+                break;
+
+            case 'Periodo 4':
+                cuarto = 4;
+                cuartoJugador = "PTQ4"
+
+                break;
+            default:
+                cuarto = 5;
+                cuartoJugador = "PTQE"
+
+            break;
         }
-        else{
-            console.log("La respuesta está  NO completa en mas menos.");
 
-        }
-    };
+        //LLamar a función de recopilar datos de ese cuarto.
+        guardarpuntoscuarto(idlocal,idvisitante,parseInt(localpointsElement.textContent),parseInt(visitpointsElement.textContent),cuarto);
+        guardarpuntoscuartoJugador(cuartoJugador,jugador.jugador,puntos);
+    }
 
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "actualizarMSMS.php?puntos=" + puntos + "&equipo=" + equipo, true);
-    xhttp.send();
-}
+    //ACTUALIZAR MAS/MENOS
+    function actualizarMSMS(puntos,equipo){
 
-//ACTUALIZAR PUNTOSCUARTO
-function guardarpuntoscuarto(equipolocal,equipovisitante,puntoslocal,puntosvisitante,cuarto){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en mas menos.");
+            }
+            else{
+                console.log("La respuesta está  NO completa en mas menos.");
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en guardarpuntoscuarto.");
-        }
-        else{
-            console.log("La respuesta está  NO completa en guardarpuntoscuarto.");
+            }
+        };
 
-        }
-    };
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "actualizarMSMS.php?puntos=" + puntos + "&equipo=" + equipo, true);
+        xhttp.send();
+    }
 
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "guardarpuntoscuarto.php?equipolocal=" + equipolocal + "&equipovisitante=" + equipovisitante + "&puntoslocal=" + puntoslocal + "&puntosvisitante=" + puntosvisitante + "&cuarto=" + cuarto, true);
-    xhttp.send();
-}
+    //ACTUALIZAR PUNTOSCUARTO
+    function guardarpuntoscuarto(equipolocal,equipovisitante,puntoslocal,puntosvisitante,cuarto){
 
-//ACTUALIZAR PUNTOSCUARTO
-function guardarpuntoscuartoJugador(cuarto,jugador,puntos){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en guardarpuntoscuarto.");
+            }
+            else{
+                console.log("La respuesta está  NO completa en guardarpuntoscuarto.");
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en guardarpuntoscuartoJugador.");
-        }
-        else{
-            console.log("La respuesta está  NO completa en guardarpuntoscuartoJugador.");
+            }
+        };
 
-        }
-    };
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "guardarpuntoscuarto.php?equipolocal=" + equipolocal + "&equipovisitante=" + equipovisitante + "&puntoslocal=" + puntoslocal + "&puntosvisitante=" + puntosvisitante + "&cuarto=" + cuarto, true);
+        xhttp.send();
+    }
 
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "guardarpuntoscuartoJugador.php?cuarto=" + cuarto + "&jugador=" + jugador + "&puntos=" + puntos, true);
-    xhttp.send();
-}
+    //ACTUALIZAR PUNTOSCUARTO
+    function guardarpuntoscuartoJugador(cuarto,jugador,puntos){
 
-//CHECK MARCADOR
-function checkmarcador(){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en guardarpuntoscuartoJugador.");
+            }
+            else{
+                console.log("La respuesta está  NO completa en guardarpuntoscuartoJugador.");
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en checkmarcador.");
-        }
-        else{
-            console.log("La respuesta está  NO completa en checkmarcador.");
+            }
+        };
 
-        }
-    };
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "guardarpuntoscuartoJugador.php?cuarto=" + cuarto + "&jugador=" + jugador + "&puntos=" + puntos, true);
+        xhttp.send();
+    }
 
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "checkmarcador.php", true);
-    xhttp.send();
-}
+    //CHECK MARCADOR
+    function checkmarcador(){
 
-//PARCIALES
-function parciales(puntos,equipo){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en checkmarcador.");
+            }
+            else{
+                console.log("La respuesta está  NO completa en checkmarcador.");
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa en parciales.");
-        }
-        else{
-            console.log("La respuesta está  NO completa en parciales.");
+            }
+        };
 
-        }
-    };
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "checkmarcador.php", true);
+        xhttp.send();
+    }
 
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "parciales.php?puntos=" + puntos + "&equipo=" + equipo, true);
-    xhttp.send();
-}
+    //PARCIALES
+    function parciales(puntos,equipo){
+
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa en parciales.");
+            }
+            else{
+                console.log("La respuesta está  NO completa en parciales.");
+
+            }
+        };
+
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "parciales.php?puntos=" + puntos + "&equipo=" + equipo, true);
+        xhttp.send();
+    }
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 //TIEMPOS MUERTOS y FALTAS BANQUILLO
 
-let timeoutLocal = document.querySelector(".timeout-local .timeout");
-let timeoutVisit = document.querySelector(".timeout-visit .timeout");
-let addTimeoutButtons = document.querySelectorAll(".add-timeout");
+    let timeoutLocal = document.querySelector(".timeout-local .timeout");
+    let timeoutVisit = document.querySelector(".timeout-visit .timeout");
+    let addTimeoutButtons = document.querySelectorAll(".add-timeout");
 
-// Obtener el elemento con la clase "buttons-coach-local"
-let localbuttonscoach = document.querySelector('.buttons-coach-local');
-// Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
-let localtimeout = localbuttonscoach.querySelector('.timeout');
-// Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
-let localfaltabanquillo = localbuttonscoach.querySelector('.faltabanquillo');
+    // Obtener el elemento con la clase "buttons-coach-local"
+    let localbuttonscoach = document.querySelector('.buttons-coach-local');
+    // Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
+    let localtimeout = localbuttonscoach.querySelector('.timeout');
+    // Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
+    let localfaltabanquillo = localbuttonscoach.querySelector('.faltabanquillo');
 
-// Obtener el elemento con la clase "buttons-coach-visit"
-let visitbuttonscoach = document.querySelector('.buttons-coach-visit');
-// Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
-let visittimeout = visitbuttonscoach.querySelector('.timeout');
-// Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
-let visitfaltabanquillo = visitbuttonscoach.querySelector('.faltabanquillo');
+    // Obtener el elemento con la clase "buttons-coach-visit"
+    let visitbuttonscoach = document.querySelector('.buttons-coach-visit');
+    // Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
+    let visittimeout = visitbuttonscoach.querySelector('.timeout');
+    // Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
+    let visitfaltabanquillo = visitbuttonscoach.querySelector('.faltabanquillo');
 
-function addTimeOut(equipo){
-    if(isLocal(equipo)){
-        // Actualizar el valor del marcador
-        localtimeout.textContent = parseInt(localtimeout.textContent) + 1;
-        pausarTemporizador();
-        timeout(equipo);
-        
-    }
-    else{
-        // Actualizar el valor del marcador
-        visittimeout.textContent = parseInt(visittimeout.textContent) + 1;
-        pausarTemporizador();
-        timeout(equipo);
-    }
-
-    mostrarMensajeLogLine("Tiempo Muerto de " + getNombreEquipo(equipo));
-}
-
-
-function addFaltaBanquillo(equipo){
-    if(isLocal(equipo)){
-        // Actualizar el valor del marcador
-        localfaltabanquillo.textContent = parseInt(localfaltabanquillo.textContent) + 1;
-        pausarTemporizador();
-        faltabanquillo(equipo);
-        
-    }
-    else{
-        // Actualizar el valor del marcador
-        visitfaltabanquillo.textContent = parseInt(visitfaltabanquillo.textContent) + 1;
-        pausarTemporizador();
-        faltabanquillo(equipo);
-    }
-
-    mostrarMensajeLogLine("Falta de Banquillo de " + getNombreEquipo(equipo));
-}
-
-function timeout(equipo){
-
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa.");
+    function addTimeOut(equipo){
+        if(isLocal(equipo)){
+            // Actualizar el valor del marcador
+            localtimeout.textContent = parseInt(localtimeout.textContent) + 1;
+            pausarTemporizador();
+            timeout(equipo);
+            
         }
-    };
-  
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "timeout.php?equipo=" + equipo, true);
-    xhttp.send();
-
-}
-
-function faltabanquillo(equipo){
-
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa.");
+        else{
+            // Actualizar el valor del marcador
+            visittimeout.textContent = parseInt(visittimeout.textContent) + 1;
+            pausarTemporizador();
+            timeout(equipo);
         }
-    };
-  
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "faltabanquillo.php?equipo=" + equipo, true);
-    xhttp.send();
 
-}
+        mostrarMensajeLogLine("Tiempo Muerto de " + getNombreEquipo(equipo));
+    }
+
+    function addFaltaBanquillo(equipo){
+        if(isLocal(equipo)){
+            // Actualizar el valor del marcador
+            localfaltabanquillo.textContent = parseInt(localfaltabanquillo.textContent) + 1;
+            pausarTemporizador();
+            faltabanquillo(equipo);
+            
+        }
+        else{
+            // Actualizar el valor del marcador
+            visitfaltabanquillo.textContent = parseInt(visitfaltabanquillo.textContent) + 1;
+            pausarTemporizador();
+            faltabanquillo(equipo);
+        }
+
+        mostrarMensajeLogLine("Falta de Banquillo de " + getNombreEquipo(equipo));
+    }
+
+    function timeout(equipo){
+
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa.");
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "timeout.php?equipo=" + equipo, true);
+        xhttp.send();
+
+    }
+
+    function faltabanquillo(equipo){
+
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa.");
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "faltabanquillo.php?equipo=" + equipo, true);
+        xhttp.send();
+
+    }
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 //MINUTAJE JUGADORES
 
-function addsecondplayed(){
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+    function addsecondplayed(){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa.");
-        }
-    };
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa.");
+            }
+        };
 
-    // Hacer la solicitud AJAX POST
-    xhttp.open("GET", "addsecondplayed.php", true);
-    xhttp.send();
-}
+        // Hacer la solicitud AJAX POST
+        xhttp.open("GET", "addsecondplayed.php", true);
+        xhttp.send();
+    }
 
-function addtiempoLider(ganador){
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
+    function addtiempoLider(ganador){
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("La respuesta está completa.");
-        }
-    };
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("La respuesta está completa.");
+            }
+        };
 
-    // Hacer la solicitud AJAX POST
-    xhttp.open("GET", "addtiempoLider.php?ganador=" + ganador, true);
-    xhttp.send();
-}
+        // Hacer la solicitud AJAX POST
+        xhttp.open("GET", "addtiempoLider.php?ganador=" + ganador, true);
+        xhttp.send();
+    }
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 //JUGADORES EN PISTA
 
-// Obtener el elemento con la clase "localScore-display"
-let localPlayersDisplay = document.querySelector('.localPlayers-display');
-// Obtener el elemento con la clase "visitScore-display"
-let visitPlayersDisplay = document.querySelector('.visitPlayers-display');
+    // Obtener el elemento con la clase "localScore-display"
+    let localPlayersDisplay = document.querySelector('.localPlayers-display');
+    // Obtener el elemento con la clase "visitScore-display"
+    let visitPlayersDisplay = document.querySelector('.visitPlayers-display');
 
-function mostrarJugadoresPista(jugadores) {
-    var playersLocalHTML = '';
-    var playersVisitHTML = '';
+    function mostrarJugadoresPista(jugadores) {
+        var playersLocalHTML = '';
+        var playersVisitHTML = '';
 
-    var localTable = document.createElement('table');
-    var visitTable = document.createElement('table');
+        var localTable = document.createElement('table');
+        var visitTable = document.createElement('table');
 
-    // Crear la primera fila para el nombre del equipo
-    var localTeamRow = localTable.insertRow();
-    var visitTeamRow = visitTable.insertRow();
+        // Crear la primera fila para el nombre del equipo
+        var localTeamRow = localTable.insertRow();
+        var visitTeamRow = visitTable.insertRow();
 
-    var localTeamCell = localTeamRow.insertCell();
-    localTeamCell.colSpan = 5;
-    localTeamCell.innerHTML = 'Equipo Local';
+        var localTeamCell = localTeamRow.insertCell();
+        localTeamCell.colSpan = 5;
+        localTeamCell.innerHTML = 'Equipo Local';
 
-    var visitTeamCell = visitTeamRow.insertCell();
-    visitTeamCell.colSpan = 5;
-    visitTeamCell.innerHTML = 'Equipo Visitante';
+        var visitTeamCell = visitTeamRow.insertCell();
+        visitTeamCell.colSpan = 5;
+        visitTeamCell.innerHTML = 'Equipo Visitante';
 
-    // Crear la segunda fila para las cabeceras
-    var localHeaderRow = localTable.insertRow();
-    var visitHeaderRow = visitTable.insertRow();
+        // Crear la segunda fila para las cabeceras
+        var localHeaderRow = localTable.insertRow();
+        var visitHeaderRow = visitTable.insertRow();
 
-    var headers = ['Nº','Ptos.', 'Faltas', 'Time'];
+        var headers = ['Nº','Ptos.', 'Faltas', 'Time'];
 
-    for (var i = 0; i < headers.length; i++) {
-        var localHeaderCell = localHeaderRow.insertCell();
-        localHeaderCell.innerHTML = headers[i];
+        for (var i = 0; i < headers.length; i++) {
+            var localHeaderCell = localHeaderRow.insertCell();
+            localHeaderCell.innerHTML = headers[i];
 
-        var visitHeaderCell = visitHeaderRow.insertCell();
-        visitHeaderCell.innerHTML = headers[i];
-    }
-
-    // Recorrer los jugadores y agregarlos a las tablas
-    for (var i = 0; i < jugadores.length; i++) {
-        var jugador = jugadores[i];
-
-        // Cálculo de puntos, faltas y tiempo
-        var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
-        var faltasPlayer = jugador.FLH;
-        var minutosjugador = Math.floor(jugador.MT / 60);
-        var segundosjugador = jugador.MT % 60;
-        var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
-
-        var playerRow = document.createElement('tr');
-
-        // Crear las celdas para los datos del jugador
-        var numberCell = playerRow.insertCell();
-        numberCell.innerHTML = jugador.numero;
-
-        var pointsCell = playerRow.insertCell();
-        pointsCell.innerHTML = puntosPlayer;
-
-        var foulsCell = playerRow.insertCell();
-        foulsCell.innerHTML = faltasPlayer;
-
-        var timeCell = playerRow.insertCell();
-        timeCell.innerHTML = minutosPlayer;
-
-        if (isLocal(jugador.equipo)) {
-            localTable.appendChild(playerRow);
-        } else {
-            visitTable.appendChild(playerRow);
+            var visitHeaderCell = visitHeaderRow.insertCell();
+            visitHeaderCell.innerHTML = headers[i];
         }
+
+        // Recorrer los jugadores y agregarlos a las tablas
+        for (var i = 0; i < jugadores.length; i++) {
+            var jugador = jugadores[i];
+
+            // Cálculo de puntos, faltas y tiempo
+            var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
+            var faltasPlayer = jugador.FLH;
+            var minutosjugador = Math.floor(jugador.MT / 60);
+            var segundosjugador = jugador.MT % 60;
+            var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
+
+            var playerRow = document.createElement('tr');
+
+            // Crear las celdas para los datos del jugador
+            var numberCell = playerRow.insertCell();
+            numberCell.innerHTML = jugador.numero;
+
+            var pointsCell = playerRow.insertCell();
+            pointsCell.innerHTML = puntosPlayer;
+
+            var foulsCell = playerRow.insertCell();
+            foulsCell.innerHTML = faltasPlayer;
+
+            var timeCell = playerRow.insertCell();
+            timeCell.innerHTML = minutosPlayer;
+
+            if (isLocal(jugador.equipo)) {
+                localTable.appendChild(playerRow);
+            } else {
+                visitTable.appendChild(playerRow);
+            }
+        }
+
+        // Agregar las tablas al contenedor correspondiente
+        localPlayersDisplay.innerHTML = '';
+        localPlayersDisplay.appendChild(localTable);
+
+        visitPlayersDisplay.innerHTML = '';
+        visitPlayersDisplay.appendChild(visitTable);
     }
 
-    // Agregar las tablas al contenedor correspondiente
-    localPlayersDisplay.innerHTML = '';
-    localPlayersDisplay.appendChild(localTable);
+    //Función para obtener el string de los jugadores con en_juego activo.
+    function getJugadoresPista() {
+        
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
-    visitPlayersDisplay.innerHTML = '';
-    visitPlayersDisplay.appendChild(visitTable);
-}
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
 
+                if (this.responseText) {
+                    console.log("La respuesta está completa.");                
+                    // La respuesta ha sido recibida
+                    mostrarJugadoresPista(JSON.parse(this.responseText));
+                } else {
+                    console.log("La respuesta está vacía o incompleta.");
+                }
+            }
+            };
+        
+            // Hacer la solicitud AJAX
+            xhttp.open("GET", "getJugadoresPista.php", true);
+            xhttp.send();
+    }
 
-//Función para obtener el string de los jugadores con en_juego activo.
-function getJugadoresPista() {
-    
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-
-            if (this.responseText) {
-                console.log("La respuesta está completa.");                
-                // La respuesta ha sido recibida
-                mostrarJugadoresPista(JSON.parse(this.responseText));
-            } else {
-                console.log("La respuesta está vacía o incompleta.");
-              }
-          }
-        };
-      
-        // Hacer la solicitud AJAX
-        xhttp.open("GET", "getJugadoresPista.php", true);
-        xhttp.send();
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 //SUSTITUCIONES
 
-function mostrarVentanaSub(equipo){
+    function mostrarVentanaSub(equipo){
 
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-
-        if (this.responseText) {
-            // La respuesta ha sido recibida
-            // Mostrar la ventana emergente con la lista de jugadores
-            mostrarListaJugadoresSub(JSON.parse(this.responseText), equipo);
-          } else {
-            console.log("La respuesta está vacía o incompleta.");
-        }
-      }
-    };
-  
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "obtener_jugadoresSub.php?equipo=" + equipo, true);
-    xhttp.send();
-
-}
-
-function makecambio(listajugadores){
-
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Convertir el objeto en una cadena JSON
-    var listaJugadoresJSON = JSON.stringify(listajugadores);
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
             if (this.responseText) {
                 // La respuesta ha sido recibida
-                console.log("La respuesta está completa.");
+                // Mostrar la ventana emergente con la lista de jugadores
+                mostrarListaJugadoresSub(JSON.parse(this.responseText), equipo);
             } else {
                 console.log("La respuesta está vacía o incompleta.");
             }
         }
-    };
-
-    // Hacer la solicitud AJAX POST
-    xhttp.open("POST", "makecambio.php", true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(listaJugadoresJSON);
-}
-
-
-function mostrarListaJugadoresSub(jugadores,equipo){
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement("div");
-    ventana.classList.add("ventana-sustitucion");
-    document.body.appendChild(ventana);
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var sustitucion = document.createElement("h1");
-    sustitucion.textContent = `Selecciona la sustitucion del equipo`;
-    ventana.appendChild(sustitucion);
-
-    // Crear los contenedores de lista para los jugadores 
-    var contenedorListas = document.createElement('div');
-    contenedorListas.classList.add('contenedor-listas');
-    ventana.appendChild(contenedorListas);
-
-    // Crear los contenedores de lista para los jugadores locales y visitantes
-    var contenedorJugadoresEnPista = document.createElement('div');
-    contenedorJugadoresEnPista.classList.add('contenedor-jugadoresEnPista');
-    contenedorListas.appendChild(contenedorJugadoresEnPista);
-
-    var contenedorJugadoresEnBanquillo = document.createElement('div');
-    contenedorJugadoresEnBanquillo.classList.add('contenedor-jugadoresEnBanquillo');
-    contenedorListas.appendChild(contenedorJugadoresEnBanquillo);
-
-    var p = document.createElement("p");
-    p.textContent = `Jugando en ${equipo}`;
-    contenedorJugadoresEnPista.appendChild(p);
-
-    var p = document.createElement("p");
-    p.textContent = `Banquillo en ${equipo}`;
-    contenedorJugadoresEnBanquillo.appendChild(p);
-
-    // Crear las listas de jugadores y agregarlos a los contenedores
-    var listaJugadoresEnPista = document.createElement('ul');
-    listaJugadoresEnPista.classList.add('lista-jugadores');
-    contenedorJugadoresEnPista.appendChild(listaJugadoresEnPista);
-
-    var listaJugadoresEnBanquillo = document.createElement('ul');
-    listaJugadoresEnBanquillo.classList.add('lista-jugadores');
-    contenedorJugadoresEnBanquillo.appendChild(listaJugadoresEnBanquillo);
-
-    // Agregar los jugadores a cada lista
-
-    console.log(jugadores);
-
-    var jugadoresEnPista = [];
-    var jugadoresEnBanquillo = [];
+        };
     
-    jugadores.forEach(function(jugador){
-        if (jugador.en_juego === '1') {
-        jugadoresEnPista.push(jugador);
-        } else {
-        jugadoresEnBanquillo.push(jugador);
-        }
-    });    
-    
-    jugadoresEnPista.forEach(function(jugador) {
-        var li = document.createElement('li');
-        var checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(jugador.numero + '-' + jugador.jugador + '-' + jugador.nombrejugador));
-        listaJugadoresEnPista.appendChild(li);
-    });
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "obtener_jugadoresSub.php?equipo=" + equipo, true);
+        xhttp.send();
 
-    jugadoresEnBanquillo.forEach(function(jugador) {
-        var li = document.createElement('li');
-        var checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(jugador.numero + '-' + jugador.jugador + '-' + jugador.nombrejugador));
-        listaJugadoresEnBanquillo.appendChild(li);
-    });
+    }
 
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
-    
-    cerrar.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-        ventana.parentNode.removeChild(ventana);
-        overlay.parentNode.removeChild(overlay);
-    });
+    function makecambio(listajugadores){
 
-    // Crear el botón de confirmar y agregar el controlador de eventos
-    var confirmar = document.createElement('button');
-    confirmar.classList.add('confirmar');
-    confirmar.innerHTML = 'Confirmar Cambio';
-    ventana.appendChild(confirmar);
-    
-    confirmar.addEventListener('click', function() {
-        // Obtener los jugadores seleccionados
-        var jugadoresSeleccionados = [];
-        var checkboxesSeleccionados = document.querySelectorAll('input[type="checkbox"]:checked');
-        checkboxesSeleccionados.forEach(function(checkbox) {
-            var jugador = checkbox.parentNode.textContent.split('-');
-            jugadoresSeleccionados.push({numero: jugador[0], jugador: jugador[1]});
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Convertir el objeto en una cadena JSON
+        var listaJugadoresJSON = JSON.stringify(listajugadores);
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+
+                if (this.responseText) {
+                    // La respuesta ha sido recibida
+                    console.log("La respuesta está completa.");
+                } else {
+                    console.log("La respuesta está vacía o incompleta.");
+                }
+            }
+        };
+
+        // Hacer la solicitud AJAX POST
+        xhttp.open("POST", "makecambio.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(listaJugadoresJSON);
+    }
+
+
+    function mostrarListaJugadoresSub(jugadores,equipo){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement("div");
+        ventana.classList.add("ventana-sustitucion");
+        document.body.appendChild(ventana);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var sustitucion = document.createElement("h1");
+        sustitucion.textContent = `Selecciona la sustitucion del equipo`;
+        ventana.appendChild(sustitucion);
+
+        // Crear los contenedores de lista para los jugadores 
+        var contenedorListas = document.createElement('div');
+        contenedorListas.classList.add('contenedor-listas');
+        ventana.appendChild(contenedorListas);
+
+        // Crear los contenedores de lista para los jugadores locales y visitantes
+        var contenedorJugadoresEnPista = document.createElement('div');
+        contenedorJugadoresEnPista.classList.add('contenedor-jugadoresEnPista');
+        contenedorListas.appendChild(contenedorJugadoresEnPista);
+
+        var contenedorJugadoresEnBanquillo = document.createElement('div');
+        contenedorJugadoresEnBanquillo.classList.add('contenedor-jugadoresEnBanquillo');
+        contenedorListas.appendChild(contenedorJugadoresEnBanquillo);
+
+        var p = document.createElement("p");
+        p.textContent = `Jugando en ${equipo}`;
+        contenedorJugadoresEnPista.appendChild(p);
+
+        var p = document.createElement("p");
+        p.textContent = `Banquillo en ${equipo}`;
+        contenedorJugadoresEnBanquillo.appendChild(p);
+
+        // Crear las listas de jugadores y agregarlos a los contenedores
+        var listaJugadoresEnPista = document.createElement('ul');
+        listaJugadoresEnPista.classList.add('lista-jugadores');
+        contenedorJugadoresEnPista.appendChild(listaJugadoresEnPista);
+
+        var listaJugadoresEnBanquillo = document.createElement('ul');
+        listaJugadoresEnBanquillo.classList.add('lista-jugadores');
+        contenedorJugadoresEnBanquillo.appendChild(listaJugadoresEnBanquillo);
+
+        // Agregar los jugadores a cada lista
+
+        console.log(jugadores);
+
+        var jugadoresEnPista = [];
+        var jugadoresEnBanquillo = [];
+        
+        jugadores.forEach(function(jugador){
+            if (jugador.en_juego === '1') {
+            jugadoresEnPista.push(jugador);
+            } else {
+            jugadoresEnBanquillo.push(jugador);
+            }
+        });    
+        
+        jugadoresEnPista.forEach(function(jugador) {
+            var li = document.createElement('li');
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            li.appendChild(checkbox);
+            li.appendChild(document.createTextNode(jugador.numero + '-' + jugador.jugador + '-' + jugador.nombrejugador));
+            listaJugadoresEnPista.appendChild(li);
         });
-        // Validar que se hayan seleccionado 5 jugadores locales y 5 visitantes
-        var cantidadEnJuego = document.querySelectorAll('.contenedor-jugadoresEnPista:nth-child(1) input[type="checkbox"]:checked').length;
-        var cantidadEnBanquillo = document.querySelectorAll('.contenedor-jugadoresEnBanquillo:nth-child(2) input[type="checkbox"]:checked').length;
-        if (cantidadEnJuego === 1 && cantidadEnBanquillo === 1) {
-            console.log(jugadoresSeleccionados);
-            // Llamar a una función con los jugadores seleccionados
-            makecambio(jugadoresSeleccionados);
-            getJugadoresPista();
-            
+
+        jugadoresEnBanquillo.forEach(function(jugador) {
+            var li = document.createElement('li');
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            li.appendChild(checkbox);
+            li.appendChild(document.createTextNode(jugador.numero + '-' + jugador.jugador + '-' + jugador.nombrejugador));
+            listaJugadoresEnBanquillo.appendChild(li);
+        });
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+        
+        cerrar.addEventListener('click', function() {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
             ventana.parentNode.removeChild(ventana);
             overlay.parentNode.removeChild(overlay);
-        } else {
-            alert('Por favor, seleccione 1 jugador de pista y otro de banquillo para continuar');
-        }
-    });
+        });
 
-    // Mostrar la ventana emergente
-    ventana.classList.add("mostrar");
+        // Crear el botón de confirmar y agregar el controlador de eventos
+        var confirmar = document.createElement('button');
+        confirmar.classList.add('confirmar');
+        confirmar.innerHTML = 'Confirmar Cambio';
+        ventana.appendChild(confirmar);
+        
+        confirmar.addEventListener('click', function() {
+            // Obtener los jugadores seleccionados
+            var jugadoresSeleccionados = [];
+            var checkboxesSeleccionados = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxesSeleccionados.forEach(function(checkbox) {
+                var jugador = checkbox.parentNode.textContent.split('-');
+                jugadoresSeleccionados.push({numero: jugador[0], jugador: jugador[1]});
+            });
+            // Validar que se hayan seleccionado 5 jugadores locales y 5 visitantes
+            var cantidadEnJuego = document.querySelectorAll('.contenedor-jugadoresEnPista:nth-child(1) input[type="checkbox"]:checked').length;
+            var cantidadEnBanquillo = document.querySelectorAll('.contenedor-jugadoresEnBanquillo:nth-child(2) input[type="checkbox"]:checked').length;
+            if (cantidadEnJuego === 1 && cantidadEnBanquillo === 1) {
+                console.log(jugadoresSeleccionados);
+                // Llamar a una función con los jugadores seleccionados
+                makecambio(jugadoresSeleccionados);
+                getJugadoresPista();
+                
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+            } else {
+                alert('Por favor, seleccione 1 jugador de pista y otro de banquillo para continuar');
+            }
+        });
 
-}
+        // Mostrar la ventana emergente
+        ventana.classList.add("mostrar");
+
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-function missedShot(equipo,jugador,puntos){
-    mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
 
 //Ventana Emergente que muestra los jugadores en juego, para X equipo, para asignarles X accion
 
-function mostrarVentanaEmergente(accion,equipo) {
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-
-        if (this.responseText) {
-            // La respuesta ha sido recibida
-            // Mostrar la ventana emergente con la lista de jugadores
-            mostrarListaJugadores(this.responseText, accion,equipo);
-          } else {
-            console.log("La respuesta está vacía o incompleta.");
-        }
-      }
-    };
-  
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "obtener_jugadores.php?equipo=" + equipo, true);
-    xhttp.send();
-}
-
-function mostrarListaJugadores(listaJugadores, accion, equipo) {
-    console.log("Estoy en mostrarlistaJugadores" + listaJugadores);
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-  
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement("div");
-    ventana.classList.add("ventana-emergente");
-    document.body.appendChild(ventana);
-  
-    // Crear una tabla para la lista de jugadores
-    var tabla = document.createElement("table");
-    contador = 0;
-    //Parseo el JSON
-    let jugadores = JSON.parse(listaJugadores);
-
-    var p = document.createElement("p");
-    p.textContent = `Equipo: ${equipo}`;
-    ventana.appendChild(p);
-  
-    for(var j = 0; j < Math.ceil(jugadores.length/3);j++){
-      var tr = document.createElement("tr");
-  
-      contadorFila = 0;
-  
-      while(contador < jugadores.length && contadorFila < 4){
-        var jugador = jugadores[contador];
-        contador++;
-
-        var td = document.createElement("td");
-        var boton = document.createElement("button");
-
-        boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
-
-        boton.addEventListener("click", crearEventoClick(jugador,accion,equipo));
-
-        td.appendChild(boton);
-        tr.appendChild(td);
-
-        contadorFila++;
-      }
-  
-      tabla.appendChild(tr);
+    function missedShot(equipo,jugador,puntos){
+        mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
     }
-  
-    ventana.appendChild(tabla);
-  
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
-  
-    cerrar.addEventListener('click', function() {
-      // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-      ventana.parentNode.removeChild(ventana);
-      overlay.parentNode.removeChild(overlay);
-    });
-  
-    // Mostrar la ventana emergente
-    ventana.classList.add("mostrar");
 
-    // Función para crear el evento click con el valor del jugador como argumento
-    function crearEventoClick(jugador,accion,equipo){
-      return function() {
-        registrarAccion(jugador, accion, equipo);
+    function mostrarVentanaEmergente(accion,equipo) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+            if (this.responseText) {
+                // La respuesta ha sido recibida
+                // Mostrar la ventana emergente con la lista de jugadores
+                mostrarListaJugadores(this.responseText, accion,equipo);
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+            }
+        }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "obtener_jugadores.php?equipo=" + equipo, true);
+        xhttp.send();
+    }
+
+    function mostrarListaJugadores(listaJugadores, accion, equipo) {
+        console.log("Estoy en mostrarlistaJugadores" + listaJugadores);
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+    
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement("div");
+        ventana.classList.add("ventana-emergente");
+        document.body.appendChild(ventana);
+    
+        // Crear una tabla para la lista de jugadores
+        var tabla = document.createElement("table");
+        contador = 0;
+        //Parseo el JSON
+        let jugadores = JSON.parse(listaJugadores);
+
+        var p = document.createElement("p");
+        p.textContent = `Equipo: ${equipo}`;
+        ventana.appendChild(p);
+    
+        for(var j = 0; j < Math.ceil(jugadores.length/3);j++){
+        var tr = document.createElement("tr");
+    
+        contadorFila = 0;
+    
+        while(contador < jugadores.length && contadorFila < 4){
+            var jugador = jugadores[contador];
+            contador++;
+
+            var td = document.createElement("td");
+            var boton = document.createElement("button");
+
+            boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
+
+            boton.addEventListener("click", crearEventoClick(jugador,accion,equipo));
+
+            td.appendChild(boton);
+            tr.appendChild(td);
+
+            contadorFila++;
+        }
+    
+        tabla.appendChild(tr);
+        }
+    
+        ventana.appendChild(tabla);
+    
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+    
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
         ventana.parentNode.removeChild(ventana);
         overlay.parentNode.removeChild(overlay);
-      }
-    }
-}
-  
-function registrarAccion(jugador, accion, equipo) {
-    // Crear una solicitud AJAX
-    var xhttp = new XMLHttpRequest();
-
-    // Definir la función de respuesta
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            //Actualizar la pantalla
-            actualizarPantalla(jugador, accion, equipo);
-        }
-    };
-
-    // Hacer la solicitud AJAX
-    xhttp.open("GET", "actualizartablaPartido.php?jugador=" + encodeURIComponent(jugador.numero) + "&accion=" + accion + "&equipo=" + equipo, true);
-    xhttp.send();
-}
-
-function mostrarMensajeLogLine(mensaje){
-
-    let infoRef = document.querySelector(".info-display");
-    let logline = '';
-    period = document.getElementById("periodSelect").value;
-    logline = `[${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})] - ¡${mensaje}!\n`;
-    infoRef.innerHTML += logline;
+        });
     
-}
+        // Mostrar la ventana emergente
+        ventana.classList.add("mostrar");
 
-function actualizarComparativa(campo,equipo){
-    if(isLocal(equipo)){
-        var parametro = '.' + campo + '-Local';
-
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
+        // Función para crear el evento click con el valor del jugador como argumento
+        function crearEventoClick(jugador,accion,equipo){
+        return function() {
+            registrarAccion(jugador, accion, equipo);
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        }
+        }
     }
-    else{
-        var parametro = '.' + campo + '-Visitante';
+    
+    function registrarAccion(jugador, accion, equipo) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
 
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //Actualizar la pantalla
+                actualizarPantalla(jugador, accion, equipo);
+            }
+        };
 
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
-    }
-    getJugadoresPista();
-}
-
-function actualizarTotalTiros(campo,equipo){
-    if(isLocal(equipo)){
-        let nuevoString = campo.slice(0, campo.length - 1);
-        var parametro = '.' + nuevoString + 'T-Local';
-
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
-    }
-    else{
-        let nuevoString = campo.slice(0, campo.length - 1);
-        var parametro = '.' + nuevoString + 'T-Visitante';
-
-
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
-    }
-}
-function actualizarPorcentaje(campo,equipo){
-    if(isLocal(equipo)){
-
-        let nuevoString = campo.slice(0, campo.length - 1);
-
-        var parametro = '.' + nuevoString + 'P-Local';
-        let  elemento = document.querySelector(parametro);
-
-        var anot = '.' + nuevoString + 'A-Local';
-        let  anotados = document.querySelector(anot);
-
-        var fall = '.' + nuevoString + 'F-Local';
-        let  fallados = document.querySelector(fall);
-
-        elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
-
-    }
-    else{
-
-        let nuevoString = campo.slice(0, campo.length - 1);
-
-        var parametro = '.' + nuevoString + 'P-Visitante';
-        let  elemento = document.querySelector(parametro);
-
-        var anot = '.' + nuevoString + 'A-Visitante';
-        let  anotados = document.querySelector(anot);
-
-        var fall = '.' + nuevoString + 'F-Visitante';
-        let  fallados = document.querySelector(fall);
-
-
-        elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
-
-    }
-}
-
-function actualizarTotalRebotes(equipo){
-
-    if(isLocal(equipo)){
-        var parametro = '.RB-Local';
-
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
-    }
-    else{
-        var parametro = ".RB-Visitante";
-
-
-        let  elemento = document.querySelector(parametro);
-        elemento.textContent = parseInt(elemento.textContent) + 1;
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "actualizartablaPartido.php?jugador=" + encodeURIComponent(jugador.numero) + "&accion=" + accion + "&equipo=" + equipo, true);
+        xhttp.send();
     }
 
-}
+    function mostrarMensajeLogLine(mensaje){
 
-function actualizarPantalla(jugador, accion, equipo){
-
-    //1º Mostrar el Mensaje del LogLine
-    // 2º Actualizar Comparativa o Marcador
-    switch (accion) {
-        case 'T2A':
-        // Lógica para actualizar la pantalla cuando se registra un T2A
-        addPoints(equipo,jugador,2);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'T2F':
-        // Lógica para actualizar la pantalla cuando se registra un T2F
-        missedShot(equipo,jugador,2);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'T3A':
-        // Lógica para actualizar la pantalla cuando se registra un T3A
-        addPoints(equipo,jugador,3);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'T3F':
-        // Lógica para actualizar la pantalla cuando se registra un T3F
-        missedShot(equipo,jugador,3);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'TLA':
-        // Lógica para actualizar la pantalla cuando se registra un TLA
-        addPoints(equipo,jugador,1);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'TLF':
-        // Lógica para actualizar la pantalla cuando se registra un TLF
-        missedShot(equipo,jugador,1);
-        actualizarComparativa(accion,equipo);
-        actualizarTotalTiros(accion,equipo)
-        actualizarPorcentaje(accion,equipo);
-        break;
-        case 'FLH':
-        // Lógica para actualizar la pantalla cuando se registra una FAL
-        mostrarMensajeLogLine("Falta hecha por el Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        pausarTemporizador();
-        actualizarComparativa(accion,equipo);
-        break;
-        case 'FLR':
-        // Lógica para actualizar la pantalla cuando se registra una FAL
-        mostrarMensajeLogLine("Falta recibida por Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        break;
-        case 'TEC':
-        // Lógica para actualizar la pantalla cuando se registra un TEC
-        mostrarMensajeLogLine("Falta Técnica del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        pausarTemporizador();
-        actualizarComparativa('FLH',equipo);
-        break;
-        case 'RBO':
-        // Lógica para actualizar la pantalla cuando se registra un RBO
-        mostrarMensajeLogLine("Rebote Ofensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        actualizarTotalRebotes(equipo);
-        break;
-        case 'RBD':
-        // Lógica para actualizar la pantalla cuando se registra un RBD
-        mostrarMensajeLogLine("Rebote Defensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        actualizarTotalRebotes(equipo);
-        break;
-        case 'ROB':
-        // Lógica para actualizar la pantalla cuando se registra un ROB
-        mostrarMensajeLogLine("Robo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        break;
-        case 'TAP':
-        // Lógica para actualizar la pantalla cuando se registra un TAP
-        mostrarMensajeLogLine("Tapón del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        break;
-        case 'PRD':
-        // Lógica para actualizar la pantalla cuando se registra un PRD
-        mostrarMensajeLogLine("Pérdida del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        break;
-        case 'AST':
-        // Lógica para actualizar la pantalla cuando se registra un AST
-        mostrarMensajeLogLine("Asistencia del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
-        actualizarComparativa(accion,equipo);
-        break;
-        default:
-        // Lógica para manejar casos en los que la acción no esté definida
-        break;
+        let infoRef = document.querySelector(".info-display");
+        let logline = '';
+        period = document.getElementById("periodSelect").value;
+        logline = `[${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})] - ¡${mensaje}!\n`;
+        infoRef.innerHTML += logline;
+        
     }
-}
+
+    function actualizarComparativa(campo,equipo){
+        if(isLocal(equipo)){
+            var parametro = '.' + campo + '-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+        else{
+            var parametro = '.' + campo + '-Visitante';
 
 
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+        getJugadoresPista();
+    }
+
+    function actualizarTotalTiros(campo,equipo){
+        if(isLocal(equipo)){
+            let nuevoString = campo.slice(0, campo.length - 1);
+            var parametro = '.' + nuevoString + 'T-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+        else{
+            let nuevoString = campo.slice(0, campo.length - 1);
+            var parametro = '.' + nuevoString + 'T-Visitante';
 
 
-///////////////////
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+    }
+
+    function actualizarPorcentaje(campo,equipo){
+        if(isLocal(equipo)){
+
+            let nuevoString = campo.slice(0, campo.length - 1);
+
+            var parametro = '.' + nuevoString + 'P-Local';
+            let  elemento = document.querySelector(parametro);
+
+            var anot = '.' + nuevoString + 'A-Local';
+            let  anotados = document.querySelector(anot);
+
+            var fall = '.' + nuevoString + 'F-Local';
+            let  fallados = document.querySelector(fall);
+
+            elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
+
+        }
+        else{
+
+            let nuevoString = campo.slice(0, campo.length - 1);
+
+            var parametro = '.' + nuevoString + 'P-Visitante';
+            let  elemento = document.querySelector(parametro);
+
+            var anot = '.' + nuevoString + 'A-Visitante';
+            let  anotados = document.querySelector(anot);
+
+            var fall = '.' + nuevoString + 'F-Visitante';
+            let  fallados = document.querySelector(fall);
+
+
+            elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
+
+        }
+    }
+
+    function actualizarTotalRebotes(equipo){
+
+        if(isLocal(equipo)){
+            var parametro = '.RB-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+        else{
+            var parametro = ".RB-Visitante";
+
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+
+    }
+
+    function actualizarPantalla(jugador, accion, equipo){
+
+        //1º Mostrar el Mensaje del LogLine
+        // 2º Actualizar Comparativa o Marcador
+        switch (accion) {
+            case 'T2A':
+            // Lógica para actualizar la pantalla cuando se registra un T2A
+            addPoints(equipo,jugador,2);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T2F':
+            // Lógica para actualizar la pantalla cuando se registra un T2F
+            missedShot(equipo,jugador,2);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T3A':
+            // Lógica para actualizar la pantalla cuando se registra un T3A
+            addPoints(equipo,jugador,3);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T3F':
+            // Lógica para actualizar la pantalla cuando se registra un T3F
+            missedShot(equipo,jugador,3);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'TLA':
+            // Lógica para actualizar la pantalla cuando se registra un TLA
+            addPoints(equipo,jugador,1);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'TLF':
+            // Lógica para actualizar la pantalla cuando se registra un TLF
+            missedShot(equipo,jugador,1);
+            actualizarComparativa(accion,equipo);
+            actualizarTotalTiros(accion,equipo)
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'FLH':
+            // Lógica para actualizar la pantalla cuando se registra una FAL
+            mostrarMensajeLogLine("Falta hecha por el Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            pausarTemporizador();
+            actualizarComparativa(accion,equipo);
+            break;
+            case 'FLR':
+            // Lógica para actualizar la pantalla cuando se registra una FAL
+            mostrarMensajeLogLine("Falta recibida por Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            break;
+            case 'TEC':
+            // Lógica para actualizar la pantalla cuando se registra un TEC
+            mostrarMensajeLogLine("Falta Técnica del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            pausarTemporizador();
+            actualizarComparativa('FLH',equipo);
+            break;
+            case 'RBO':
+            // Lógica para actualizar la pantalla cuando se registra un RBO
+            mostrarMensajeLogLine("Rebote Ofensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            actualizarTotalRebotes(equipo);
+            break;
+            case 'RBD':
+            // Lógica para actualizar la pantalla cuando se registra un RBD
+            mostrarMensajeLogLine("Rebote Defensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            actualizarTotalRebotes(equipo);
+            break;
+            case 'ROB':
+            // Lógica para actualizar la pantalla cuando se registra un ROB
+            mostrarMensajeLogLine("Robo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            break;
+            case 'TAP':
+            // Lógica para actualizar la pantalla cuando se registra un TAP
+            mostrarMensajeLogLine("Tapón del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            break;
+            case 'PRD':
+            // Lógica para actualizar la pantalla cuando se registra un PRD
+            mostrarMensajeLogLine("Pérdida del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            break;
+            case 'AST':
+            // Lógica para actualizar la pantalla cuando se registra un AST
+            mostrarMensajeLogLine("Asistencia del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            actualizarComparativa(accion,equipo);
+            break;
+            default:
+            // Lógica para manejar casos en los que la acción no esté definida
+            break;
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
 window.addEventListener('beforeunload', function (e) {
     // Cancela el evento de cierre para mostrar el cuadro de diálogo
     e.preventDefault();
