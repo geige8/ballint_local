@@ -5,33 +5,39 @@ require_once __DIR__.'/includes/config.php';
 $equipo = $_GET['equipo'];
 
 
-$tituloPagina = 'Perfil';
+$tituloPagina = $equipo;
 $rutaApp = RUTA_APP;
 $contenidoPrincipal = '';
 $rutaImgs=RUTA_IMGS;
 
+$datosEquipo = es\ucm\fdi\Equipo::datosfromEquipo($equipo);
 
-$htmlStatsEquipo = es\ucm\fdi\Equipo::mostrarStatsEquipo($equipo);
+$statsEquipo = es\ucm\fdi\Equipo::statsfromEquipo($datosEquipo);
+
+$htmlfrommostrarStatsEquipo = es\ucm\fdi\Equipo::mostrarStatsEquipo($statsEquipo);
+$htmlfrommostrarStatsAvanzadasJugadorEquipo = es\ucm\fdi\Equipo::mostrarStatsAvanzadasEquipo($statsEquipo);
 $htmllistajugadoresEquipo = es\ucm\fdi\Equipo::mostrarlistajugadoresEquipo($equipo);
-$htmlpartidos = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
-
-
+$htmlUltimosPartidosEquipo = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
 
 
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
             <h1>Detalles del Equipo '$equipo'</h1>
+            <div class="statsEquipos">
+                <h2>Estadisticas de {$datosEquipo['nombre_equipo']}: </h2>
+                $htmlfrommostrarStatsEquipo
+            </div>
             <div>
-                <h1>Estadisticas del  '$equipo'</h1>
-                $htmlStatsEquipo
+                <h1>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h1>
+                $htmlfrommostrarStatsAvanzadasJugadorEquipo
             </div>
             <div>
                 <h1>Jugadores del  '$equipo'</h1>
                 $htmllistajugadoresEquipo
             </div>
-            <div>
-                <h1>Ultimos Partidos del  '$equipo'</h1>
-                $htmlpartidos
+            <div class="lastgames">
+            <h2>Ultimos Partidos de {$datosEquipo['nombre_equipo']}: </h2>
+                $htmlUltimosPartidosEquipo
             </div>
         </div>
     EOS;

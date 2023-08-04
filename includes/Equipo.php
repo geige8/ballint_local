@@ -349,31 +349,13 @@ class Equipo{
     
         // Partidos Jugados
         $equipo['PJ'] = $team['PJ'];
-    
-        // Minutos
-        $minutosjugados = floor($team['MT'] / 60) ?? 0;
-        $segundosRestantes = $team['MT'] % 60 ?? 0;
-        $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
-        $equipo['MT'] = $tiempoFormato;
-    
-        // Minutos Promedio
-        if ($team['PJ'] > 0) {
-            $segundospromedio = ($team['MT'] ?? 0) / ($team['PJ'] ?? 0);
-            $minutosjugados = floor($segundospromedio / 60);
-            $segundosRestantes = $segundospromedio % 60;
-            $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
-            $equipo['MTP'] = $tiempoFormato;
-        } else {
-            $equipo['MTP'] = "00:00";
-        }
-    
-        // Más Menos Promedio
-        if ($team['PJ'] > 0) {
-            $equipo['MSMS'] = number_format(($team['MSMS'] ?? 0) / ($team['PJ'] ?? 0), 2);
-        } else {
-            $equipo['MSMS'] = 0;
-        }
-    
+
+        //Victorias
+        $equipo['W'] = $team['W'];
+
+        //Derrotas
+        $equipo['L'] = $team['L'];
+
         // Puntos
         $equipo['PPP'] = $team['PPP'];
 
@@ -391,6 +373,34 @@ class Equipo{
         } else {
             $equipo['PTSPR'] = 0;
         }
+
+        // Minutos
+        $minutosjugados = floor($team['MT'] / 60) ?? 0;
+        $segundosRestantes = $team['MT'] % 60 ?? 0;
+        $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
+        $equipo['MTT'] = $tiempoFormato;
+    
+        // Minutos Promedio
+        if ($team['PJ'] > 0) {
+            $segundospromedio = ($team['MT'] ?? 0) / ($team['PJ'] ?? 0);
+            $minutosjugados = floor($segundospromedio / 60);
+            $segundosRestantes = $segundospromedio % 60;
+            $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
+            $equipo['MTP'] = $tiempoFormato;
+        } else {
+            $equipo['MTP'] = "00:00";
+        }
+
+        $equipo['MSMS'] = $team['MSMS'];
+    
+        // Más Menos Promedio
+        if ($team['PJ'] > 0) {
+            $equipo['MSMSP'] = number_format(($team['MSMS'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['MSMSP'] = 0;
+        }
+    
+
     
         // Tiros de dos
         $equipo['T2A'] = $team['T2A'];
@@ -463,6 +473,14 @@ class Equipo{
         } else {
             $equipo['FLRP'] = 0;
         }
+
+        // TECNICAS
+        $equipo['TEC'] = $team['TEC'];
+        if ($team['PJ'] > 0) {
+            $equipo['TECP'] = number_format(($equipo['TEC'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['TECP'] = 0;
+        }
     
         // Rebotes Partido
         $equipo['REB'] = $team['RBO'] + $team['RBD'];
@@ -523,18 +541,18 @@ class Equipo{
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //ESTADISTICA AVANZADA
 
-        // Puntos de Titular
-        $equipo['TIT'] = $team['TIT']; //Llamar a función que obtenga eso
+        // // Puntos de Titular
+        // $equipo['TIT'] = $team['TIT']; //Llamar a función que obtenga eso
 
-        //Puntos de Suplente
-        $equipo['SUP'] = $team['SUP']; //Llamar a función que obtenga eso
+        // //Puntos de Suplente
+        // $equipo['SUP'] = $team['SUP']; //Llamar a función que obtenga eso
     
-        // Promedio Partidos Titular
-        if ($team['PJ'] > 0) {
-            $equipo['TITP'] = number_format(($team['TIT'] ?? 0) / ($team['PJ'] ?? 0), 2);
-        } else {
-            $equipo['TITP'] = 0;
-        }
+        // // Promedio Puntos Titular
+        // if ($team['PJ'] > 0) {
+        //     $equipo['TITP'] = number_format(($team['TIT'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        // } else {
+        //     $equipo['TITP'] = 0;
+        // }
 
         //Puntos Por Cuartos
         $equipo['PTQ1'] = $team['PTQ1'];
@@ -566,10 +584,6 @@ class Equipo{
         //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         $equipo['eFGP'] = ((($equipo['T2A']+$equipo['T3A'])+0.5*$equipo['T3A'])/($equipo['TCA']+$equipo['TCF']))*100;
 
-        //PORCENTAJE DE REBOTE OFENSIVO (%OR)
-        //OR% = ORB / (ORB + Opp DRB)
-        //$equipoAvanzado['ORP'] =
-
         //PORCENTAJE DE PÉRDIDAS (TO%)
         //TO% = TO / (FGA + 0.44 * FTA + TO)
         $equipo['TOP'] = (($equipo['PRD'])/(($equipo['TCA'] + $equipo['TCF'])+ (0.44*($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD']))*100;
@@ -581,7 +595,7 @@ class Equipo{
         //TRUE SHOOTING (TS%). 
         //Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44. 
         //TS% = PTS / 2(FGA + 0.44 * FTA)
-        $equipo['TSP'] = ($equipo['PTS'])/(2*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))))*100;
+        $equipo['TSP'] = ($equipo['PPP'])/(2*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))))*100;
 
         //PORCENTAJE DE ASISTENCIAS (AS%). 
         //Porcentaje de asistencias respecto a los tiros de campo anotados. 
@@ -591,17 +605,41 @@ class Equipo{
         //Posesiones
         //Pos = FGA + TO - OR + (FTA*0.44)
         $equipo['POS'] = 0.96*(($equipo['TCA'] + $equipo['TCF']) + $equipo['PRD'] - $equipo['RBO'] + (($team['TLA'] + $team['TLF'])*0.44));
-
+        
+        if ($team['PJ'] > 0) {
+            $equipo['POSP'] = number_format(($equipo['POS'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['POSP'] = 0;
+        }
         //OER (OFFENSIVE EFFICIENCY RATING): 
         //La fórmula es: OER  = PTS / POS
         $equipo['OER'] = ($equipo['PPP']/$equipo['POS'])*100;
+
+        if ($team['PJ'] > 0) {
+            $equipo['OERP'] = number_format(($equipo['OER'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['OERP'] = 0;
+        }
 
         //DER (DEFENSIVE EFFICIENCY RATING)
         //La fórmula es: DER = PTS / POS
         $equipo['DER'] = ($equipo['PPR']/$equipo['POS'])*100;
 
+        if ($team['PJ'] > 0) {
+            $equipo['DERP'] = number_format(($equipo['DER'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['DERP'] = 0;
+        }
+
         //Ritmo
-        $equipo['PACE']=($equipo['PPP']/$equipo['POS'])*100;
+        $equipo['PACE']=($equipo['PPP']/$equipo['POS']);
+
+        if ($team['PJ'] > 0) {
+            $equipo['PACEP'] = number_format(($equipo['PACE'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        } else {
+            $equipo['PACEP'] = 0;
+        }
+
 
         
         return $equipo;
@@ -613,50 +651,429 @@ class Equipo{
 
     public static function mostrarStatsEquipo($equipo){
 
-        $statsequipo = self::datosfromEquipo($equipo);
+
+        $html = "";
+        $html .= "
+            <div class='stats'>
+                <p>Partidos Jugados: {$equipo['PJ']}</p>
+                <p>Victorias: {$equipo['W']}</p>
+                <p>Derrotas: {$equipo['L']}</p>
+                <p>Puntos PP: {$equipo['PTSP']}</p>
+                <p>Puntos RPP: {$equipo['PTSPR']}</p>
+                <p>Minutos Totales: {$equipo['MTT']}</p>
+                <p>Minutos Promedio: {$equipo['MTP']}</p>
+                <p>+/- PP: {$equipo['MSMSP']}</p>
+                <p>T2A: {$equipo['T2A']}</p>
+                <p>T2A: {$equipo['T2P']}%</p>
+                <p>T2A PP: {$equipo['T2PP']}</p>
+    
+                <p>T3A: {$equipo['T3A']}</p>
+                <p>T3A: {$equipo['T3P']}%</p>
+                <p>T3A PP: {$equipo['T3PP']}</p>
+    
+                <p>TLA: {$equipo['TLA']}</p>
+                <p>TLA: {$equipo['TLP']}%</p>
+                <p>TLA PP: {$equipo['TLPP']}</p>
+    
+                <p>TCA: {$equipo['TCA']}</p>
+                <p>%TCA: {$equipo['TCP']}%</p>
+                <p>TCA PP: {$equipo['TCPP']}</p>
+    
+                <p>FP: {$equipo['FLH']}</p>
+                <p>FP PP: {$equipo['FLHP']}</p>
+    
+                <p>FR: {$equipo['FLR']}</p>
+                <p>FR PP: {$equipo['FLRP']}</p>
+    
+                <p>TEC: {$equipo['TEC']}</p>
+                <p>TEC PP: {$equipo['TEC']}</p>
+    
+                <p>RBO: {$equipo['RBO']}</p>
+                <p>RBO PP: {$equipo['RBOP']}</p>
+                
+                <p>RBD: {$equipo['RBD']}</p>
+                <p>RBD PP: {$equipo['RBDP']}</p>
+    
+                <p>RBT: {$equipo['REB']}</p>
+                <p>RBT PP: {$equipo['REBP']}</p>
+    
+                <p>ROB: {$equipo['ROB']}</p>
+                <p>ROB PP: {$equipo['ROBP']}</p>
+    
+                <p>TAP: {$equipo['TAP']}</p>
+                <p>TAP PP: {$equipo['TAPP']}</p>
+    
+                <p>PRD: {$equipo['PRD']}</p>
+                <p>PRD PP: {$equipo['PRDP']}</p>
+    
+                <p>AST: {$equipo['AST']}</p>
+                <p>AST PP: {$equipo['ASTP']}</p>
+
+                <p>Puntos en Q1: {$equipo['PTQ1']}</p>
+                <p>Puntos en Q1 PP: {$equipo['PTQ1P']}</p>
+    
+                <p>Puntos en Q2:  {$equipo['PTQ2']}</p>
+                <p>Puntos en Q2 PP: {$equipo['PTQ2P']}</p>
+    
+                <p>Puntos en Q3: {$equipo['PTQ3']}</p>
+                <p>Puntos en Q3 PP: {$equipo['PTQ3P']}</p>
+    
+                <p>Puntos en Q4:  {$equipo['PTQ4']}</p>
+                <p>Puntos en Q4 PP: {$equipo['PTQ4P']}</p>
+    
+                <p>Puntos en EXTRA:  {$equipo['PTQE']}</p>
+                <p>Puntos en EXTRA PP: {$equipo['PTQEP']}</p>
+
+            </div>    
+        ";
+        return $html;
+    }
+
+    public static function mostrarStatsAreasdeMejoraEquipo($equipo){
+
+        $html = "<div class='stats'>";
+
+
+            // Verificar y agregar el mensaje para T2P
+            if ($equipo['T2P'] <= 30) {
+                $html .= "<p>%T2A: {$equipo['T2P']}% - Tiene que mejorar</p>";
+            }
+            if ($equipo['T3P'] <= 30) {
+                $html .= "<p>%T3A: {$equipo['T3P']}% - Tiene que mejorar</p>";
+            }
+            if ($equipo['TLP'] <= 30) {
+                $html .= "<p>%TLA: {$equipo['TLP']}% - Tiene que mejorar</p>";
+            }
+            if ($equipo['TCP'] <= 30) {
+                $html .= "<p>%TCA: {$equipo['TCP']}% - Tiene que mejorar</p>";
+            }
+
+            /////
+
+            if ($equipo['FLHP'] >= 3) {
+                $html .= "<p>FLHP: {$equipo['FLHP']} - Tiene que mejorar</p>";
+            }
+            if ($equipo['FLRP'] <= 1) {
+                $html .= "<p>%FLRP: {$equipo['FLRP']}% - Tiene que mejorar</p>";
+            }
+
+            ///////
+
+            if ($equipo['RBOP'] < 1 ) {
+                $html .= "<p>RBOP: {$equipo['RBOP']} - Tiene que mejorar</p>";
+            }
+            if ($equipo['RBDP'] < 3) {
+                $html .= "<p>%RBDP: {$equipo['RBDP']}% - Tiene que mejorar</p>";
+            } 
+            if ($equipo['REBP'] < 3) {
+                $html .= "<p>REBP: {$equipo['REBP']} - Tiene que mejorar</p>";
+            }
+
+            ////////
+
+            if ($equipo['ROBP'] <= 1) {
+                $html .= "<p>ROBP: {$equipo['ROBP']} - Tiene que mejorar</p>";
+            } 
+            if ($equipo['TAPP'] <= 0.2) {
+                $html .= "<p>%TAPP: {$equipo['TAPP']} - Tiene que mejorar</p>";
+            } 
+            if ($equipo['PRDP'] >= 2) {
+                $html .= "<p>%PRDP: {$equipo['PRDP']} - Tiene que mejorar</p>";
+            } 
+            if ($equipo['ASTP'] <= 1) {
+                $html .= "<p>ASTP: {$equipo['ASTP']} - Tiene que mejorar</p>";
+            } 
+
+
+        $html .= "</div>";
+        return $html;
+    }
+
+    public static function mostrarStatsAvanzadasEquipo($equipoAvanzado){
+
+        $html = "";
+
+        $html .= "
+            <p>PORCENTAJES DE USO DE TIRO de 2: {$equipoAvanzado['T2PU']}%</p>
+            <p>PORCENTAJES DE USO DE TIRO de 3: {$equipoAvanzado['T3PU']}%</p>
+            <p>PORCENTAJES DE USO DE TIRO de 1: {$equipoAvanzado['T1PU']}%</p>
+            <p>PORCENTAJE DE TIRO EFECTIVO: {$equipoAvanzado['eFGP']}%</p>
+            <p>TRUE SHOOTING: {$equipoAvanzado['TSP']}%</p>
+            <p>PORCENTAJE DE ASISTENCIAS: {$equipoAvanzado['ASP']}%</p>
+            <p>PORCENTAJE DE PERDIDAS: {$equipoAvanzado['TOP']}%</p>
+            <p>PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO: {$equipoAvanzado['TLP']}%</p>
+            <p>POSESIONES POR PARTIDO: {$equipoAvanzado['POSP']}%</p>
+            <p>OFENSIVE EFFICIENCY: {$equipoAvanzado['OERP']}%</p>
+            <p>DEFENSIVE EFFICIENCY: {$equipoAvanzado['DERP']}%</p>
+            <p>RITMO DE PARTIDO: {$equipoAvanzado['PACEP']} Puntos x Posesion</p>
+
+        ";
+        return $html;
+    }
+
+    public static function mostrarStatsPartidoEquipo($partido, $estadisticas,$partidoId) {
+
+        $html = "";
+        $html .= "
+            <tr>
+                <td>
+                    <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
+                        {$partido['visitante']}
+                    </a>
+                </td>
+                <td>{$partido['fecha']}</td>
+                <td>{$estadisticas['PPP']}-{$estadisticas['PPR']}</td>
+                <td>{$estadisticas['timeouts']}</td>
+                <td>{$estadisticas['faltasbanquillo']}</td>
+                <td>{$estadisticas['alternancias']}</td>
+                <td>{$estadisticas['vecesempatados']}</td>
+                <td>{$estadisticas['veceslider']}</td>
+                <td>{$estadisticas['mayorventaja']}</td>
+                <td>{$estadisticas['tiempolider']}</td>
+                <td>{$estadisticas['PTQ1']}</td>
+                <td>{$estadisticas['PTQ2']}</td>
+                <td>{$estadisticas['PTQ3']}</td>
+                <td>{$estadisticas['PTQ4']}</td>
+                <td>{$estadisticas['PTQE']}</td>
+            </tr>";
+        return $html;
+    }
+
+    public static function mostrarDetallesPartidoporEquipos($estadisticas) {
 
         $html = "";
         $html .= "
         <table>
             <tr>
-                <th>PJ</th>
-                <th>MT</th>
-                <th>MSMS</th>
-                <th>T2A</th>
-                <th>T2F</th>
-                <th>T3A</th>
-                <th>T3F</th>
-                <th>TLA</th>
-                <th>TLF</th>
-                <th>FLH</th>
-                <th>FLR</th>
-                <th>RBO</th>
-                <th>RBD</th>
-                <th>ROB</th>
-                <th>TAP</th>
-                <th>PRD</th>
-                <th>AST</th>
-            </tr>
+                <th>Equipo</th>
+                <th>Marcador</th>
+                <th>Timeouts</th>
+                <th>Faltas Banquillo</th>
+                <th>Alternancias</th>
+                <th>Veces Empatados</th>
+                <th>Veces Líder</th>
+                <th>Mayor Ventaja</th>
+                <th>Tiempo Líder</th>
+                <th>PTQ1</th>
+                <th>PTQ2</th>
+                <th>PTQ3</th>
+                <th>PTQ4</th>
+                <th>PTQE</th>
+            </tr>";
+
+        foreach ($estadisticas as $equipoStats) {
+            $html .= "
             <tr>
-                <td>{$statsequipo['PJ']}</td>
-                <td>{$statsequipo['MT']}</td>
-                <td>{$statsequipo['MSMS']}</td>
-                <td>{$statsequipo['T2A']}</td>
-                <td>{$statsequipo['T2F']}</td>
-                <td>{$statsequipo['T3A']}</td>
-                <td>{$statsequipo['T3F']}</td>
-                <td>{$statsequipo['TLA']}</td>
-                <td>{$statsequipo['TLF']}</td>
-                <td>{$statsequipo['FLH']}</td>
-                <td>{$statsequipo['FLR']}</td>
-                <td>{$statsequipo['RBO']}</td>
-                <td>{$statsequipo['RBD']}</td>
-                <td>{$statsequipo['ROB']}</td>
-                <td>{$statsequipo['TAP']}</td>
-                <td>{$statsequipo['PRD']}</td>
-                <td>{$statsequipo['AST']}</td>
-            </tr>
-        </table>";
+                <td>{$equipoStats['equipo']}</td>
+                <td>{$equipoStats['PPP']}-{$equipoStats['PPR']}</td>
+                <td>{$equipoStats['timeouts']}</td>
+                <td>{$equipoStats['faltasbanquillo']}</td>
+                <td>{$equipoStats['alternancias']}</td>
+                <td>{$equipoStats['vecesempatados']}</td>
+                <td>{$equipoStats['veceslider']}</td>
+                <td>{$equipoStats['mayorventaja']}</td>
+                <td>{$equipoStats['tiempolider']}</td>
+                <td>{$equipoStats['PTQ1']}</td>
+                <td>{$equipoStats['PTQ2']}</td>
+                <td>{$equipoStats['PTQ3']}</td>
+                <td>{$equipoStats['PTQ4']}</td>
+                <td>{$equipoStats['PTQE']}</td>
+            </tr>";
+        }
+
+        $html .= "</table>";
+        return $html;
+    }
+
+    public static function mostrarStatsPartidoporEquipos($estadisticas) {
+
+        $html = "";
+        $html .= "
+        <table>
+            <tr>
+                <th>Equipo</th>
+                <th>Marcador</th>
+                <th>Timeouts</th>
+                <th>Faltas Banquillo</th>
+                <th>Alternancias</th>
+                <th>Veces Empatados</th>
+                <th>Veces Líder</th>
+                <th>Mayor Ventaja</th>
+                <th>Tiempo Líder</th>
+                <th>PTQ1</th>
+                <th>PTQ2</th>
+                <th>PTQ3</th>
+                <th>PTQ4</th>
+                <th>PTQE</th>
+            </tr>";
+
+        foreach ($estadisticas as $equipoStats) {
+            $html .= "
+            <tr>
+                <td>{$equipoStats['equipo']}</td>
+                <td>{$equipoStats['PPP']}-{$equipoStats['PPR']}</td>
+                <td>{$equipoStats['timeouts']}</td>
+                <td>{$equipoStats['faltasbanquillo']}</td>
+                <td>{$equipoStats['alternancias']}</td>
+                <td>{$equipoStats['vecesempatados']}</td>
+                <td>{$equipoStats['veceslider']}</td>
+                <td>{$equipoStats['mayorventaja']}</td>
+                <td>{$equipoStats['tiempolider']}</td>
+                <td>{$equipoStats['PTQ1']}</td>
+                <td>{$equipoStats['PTQ2']}</td>
+                <td>{$equipoStats['PTQ3']}</td>
+                <td>{$equipoStats['PTQ4']}</td>
+                <td>{$equipoStats['PTQE']}</td>
+            </tr>";
+        }
+
+        $html .= "</table>";
+        return $html;
+    }
+    public static function mostrarStatsPartidoporJugadores($estadisticas) {
+        $html = "";
+        $html .= "
+        <table>
+            <tr>
+            <th>Equipo</th>
+            <th>Nombre</th>
+            <th>Nº</th>
+            <th>Titular</th>
+            <th>Minutos</th>
+            <th>+/-</th>
+            <th>PTS</th>
+            <th>T2A</th>
+            <th>T2%</th>
+            <th>T3A</th>
+            <th>T3%</th>
+            <th>TCA</th>
+            <th>TC%</th>
+            <th>TLA</th>
+            <th>TL%</th>
+            <th>FLH</th>
+            <th>FLR</th>
+            <th>TEC</th>
+            <th>RBO</th>
+            <th>RBD</th>
+            <th>RBT</th>
+            <th>ROB</th>
+            <th>TAP</th>
+            <th>PRD</th>
+            <th>AST</th>
+            <th>PTQ1</th>
+            <th>PTQ2</th>
+            <th>PTQ3</th>
+            <th>PTQ4</th>
+            <th>PTQE</th>
+            <th>T2%Us</th>
+            <th>T3%Us</th>
+            <th>TL%Us</th>
+            <th>eFG%</th>
+            <th>TS%</th>
+            <th>AS%</th>
+            <th>GS</th>
+            <th>VAL</th>            
+            </tr>";
+
+        foreach ($estadisticas as $equipoStats) {
+            $html .= "
+            <tr>
+                <td>{$equipoStats['equipo']}</td>
+                <td>{$equipoStats['nombrejugador']}</td>
+                <td>{$equipoStats['numero']}</td>
+                <td>{$equipoStats['TIT']}</td>
+                <td>{$equipoStats['MTT']}</td>
+                <td>{$equipoStats['MSMS']}</td>
+                <td>{$equipoStats['PTS']}</td>
+                <td>{$equipoStats['T2A']}</td>
+                <td>{$equipoStats['T2P']}</td>
+                <td>{$equipoStats['T3A']}</td>
+                <td>{$equipoStats['T3P']}</td>
+                <td>{$equipoStats['TCA']}</td>
+                <td>{$equipoStats['TCP']}</td>
+                <td>{$equipoStats['TLA']}</td>
+                <td>{$equipoStats['TLP']}</td>
+                <td>{$equipoStats['FLH']}</td>
+                <td>{$equipoStats['FLR']}</td>
+                <td>{$equipoStats['TEC']}</td>
+                <td>{$equipoStats['RBO']}</td>
+                <td>{$equipoStats['RBD']}</td>
+                <td>{$equipoStats['REB']}</td>
+                <td>{$equipoStats['ROB']}</td>
+                <td>{$equipoStats['TAP']}</td>
+                <td>{$equipoStats['PRD']}</td>
+                <td>{$equipoStats['AST']}</td>
+                <td>{$equipoStats['PTQ1']}</td>
+                <td>{$equipoStats['PTQ2']}</td>
+                <td>{$equipoStats['PTQ3']}</td>
+                <td>{$equipoStats['PTQ4']}</td>
+                <td>{$equipoStats['PTQE']}</td>
+                <td>{$equipoStats['T2PU']}</td>
+                <td>{$equipoStats['T3PU']}</td>
+                <td>{$equipoStats['T1PU']}</td>
+                <td>{$equipoStats['eFGP']}</td>
+                <td>{$equipoStats['TSP']}</td>
+                <td>{$equipoStats['ASP']}</td>
+                <td>{$equipoStats['GS']}</td>
+                <td>{$equipoStats['VAL']}</td>          
+            </tr>";
+        }
+
+        $html .= "</table>";
+        return $html;
+    }
+
+    //Obtener las estadisticas de dichos partidos:
+    public static function mostrarUltimosPartidosEquipo($equipo){
+
+        $html = "";
+
+        //Para cada equipo al que pertenezca quiero mostrar los partidos.
+        //Tengo que obtener el id de cada partido de ese equipo
+        
+        $partidos = Partido::getpartidosfromEquipo($equipo);
+
+        // Ordenar los partidos por fecha en orden descendente (los más recientes primero)
+        usort($partidos, function($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
+        //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+        $html .="
+        <table>
+        <tr>
+            <th>Rival</th>
+            <th>Fecha</th>
+            <th>Marcador</th>
+            <th>Timeouts</th>
+            <th>Faltas Banquillo</th>
+            <th>Alternancias</th>
+            <th>Veces Empatados</th>
+            <th>Veces Líder</th>
+            <th>Mayor Ventaja</th>
+            <th>Tiempo Líder</th>
+            <th>PTQ1</th>
+            <th>PTQ2</th>
+            <th>PTQ3</th>
+            <th>PTQ4</th>
+            <th>PTQE</th>
+        </tr>";
+
+        foreach($partidos as $partido){
+
+            //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+            
+            $estadisticas = Partido::getstatsPartidoEquipos($partido['id']);
+        
+            //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+            //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+            $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas[0],$partido['id']);
+        
+        }
+        $html .="</table>";
+
         return $html;
     }
 
@@ -718,196 +1135,6 @@ class Equipo{
                 </a>
             </div>
         EOS;
-
-        return $html;
-    }
-
-    public static function mostrarStatsPartidoEquipo($partido, $estadisticas,$partidoId) {
-
-        $html = "";
-        $html .= "
-            <tr>
-                <td>
-                    <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
-                        {$partido['visitante']}
-                    </a>
-                </td>
-                <td>{$partido['fecha']}</td>
-                <td>{$estadisticas['timeouts']}</td>
-                <td>{$estadisticas['faltasbanquillo']}</td>
-                <td>{$estadisticas['puntos']}</td>
-                <td>{$estadisticas['lider']}</td>
-                <td>{$estadisticas['empate']}</td>
-                <td>{$estadisticas['alternancias']}</td>
-                <td>{$estadisticas['vecesempatados']}</td>
-                <td>{$estadisticas['veceslider']}</td>
-                <td>{$estadisticas['PTQ1']}</td>
-                <td>{$estadisticas['PTQ2']}</td>
-                <td>{$estadisticas['PTQ3']}</td>
-                <td>{$estadisticas['PTQ4']}</td>
-                <td>{$estadisticas['PTQE']}</td>
-            </tr>";
-        return $html;
-    }
-
-    public static function mostrarStatsPartidoporEquipos($estadisticas) {
-
-        $html = "";
-        $html .= "
-        <table>
-            <tr>
-                <th>Equipo</th>
-                <th>Puntos</th>
-                <th>Timeouts</th>
-                <th>Faltas Banquillo</th>
-                <th>Puntos</th>
-                <th>Líder</th>
-                <th>Empate</th>
-                <th>Alternancias</th>
-                <th>Veces Empatados</th>
-                <th>Veces Líder</th>
-                <th>PTQ1</th>
-                <th>PTQ2</th>
-                <th>PTQ3</th>
-                <th>PTQ4</th>
-                <th>PTQE</th>
-            </tr>";
-
-        foreach ($estadisticas as $equipoStats) {
-            $puntos = $equipoStats['PTQ1'] + $equipoStats['PTQ2'] + $equipoStats['PTQ3'] + $equipoStats['PTQ4'] + $equipoStats['PTQE'];
-            $html .= "
-            <tr>
-                <td>{$equipoStats['equipo']}</td>
-                <td>{$puntos}</td>
-                <td>{$equipoStats['timeouts']}</td>
-                <td>{$equipoStats['faltasbanquillo']}</td>
-                <td>{$equipoStats['puntos']}</td>
-                <td>{$equipoStats['lider']}</td>
-                <td>{$equipoStats['empate']}</td>
-                <td>{$equipoStats['alternancias']}</td>
-                <td>{$equipoStats['vecesempatados']}</td>
-                <td>{$equipoStats['veceslider']}</td>
-                <td>{$equipoStats['PTQ1']}</td>
-                <td>{$equipoStats['PTQ2']}</td>
-                <td>{$equipoStats['PTQ3']}</td>
-                <td>{$equipoStats['PTQ4']}</td>
-                <td>{$equipoStats['PTQE']}</td>
-            </tr>";
-        }
-
-        $html .= "</table>";
-        return $html;
-    }
-
-    public static function mostrarStatsPartidoporJugadores($estadisticas) {
-        $html = "";
-        $html .= "
-        <table>
-            <tr>
-            <th>EQUIPO</th>
-            <th>USER</th>
-            <th>NOMBRE</th>
-            <th>NUMERO</th>
-            <th>TITULAR</th>
-            <th>MT</th>
-            <th>MSMS</th>
-            <th>T2A</th>
-            <th>T2F</th>
-            <th>T3A</th>
-            <th>T3F</th>
-            <th>TLA</th>
-            <th>TLF</th>
-            <th>FLH</th>
-            <th>FLR</th>
-            <th>RBO</th>
-            <th>RBD</th>
-            <th>ROB</th>
-            <th>TAP</th>
-            <th>PRD</th>
-            <th>AST</th>
-            </tr>";
-
-        foreach ($estadisticas as $equipoStats) {
-            $html .= "
-            <tr>
-                <td>{$equipoStats['equipo']}</td>
-                <td>{$equipoStats['jugador']}</td>
-                <td>{$equipoStats['nombrejugador']}</td>
-                <td>{$equipoStats['numero']}</td>
-                <td>{$equipoStats['titular']}</td>
-                <td>{$equipoStats['MT']}</td>
-                <td>{$equipoStats['MSMS']}</td>
-                <td>{$equipoStats['T2A']}</td>
-                <td>{$equipoStats['T2F']}</td>
-                <td>{$equipoStats['T3A']}</td>
-                <td>{$equipoStats['T3F']}</td>
-                <td>{$equipoStats['TLA']}</td>
-                <td>{$equipoStats['TLF']}</td>
-                <td>{$equipoStats['FLH']}</td>
-                <td>{$equipoStats['FLR']}</td>
-                <td>{$equipoStats['RBO']}</td>
-                <td>{$equipoStats['RBD']}</td>
-                <td>{$equipoStats['ROB']}</td>
-                <td>{$equipoStats['TAP']}</td>
-                <td>{$equipoStats['PRD']}</td>
-                <td>{$equipoStats['AST']}</td>
-            </tr>";
-        }
-
-        $html .= "</table>";
-        return $html;
-    }
-
-    //Obtener las estadisticas de dichos partidos:
-    public static function mostrarUltimosPartidosEquipo($equipo){
-
-        $html = "";
-
-        //Para cada equipo al que pertenezca quiero mostrar los partidos.
-        //Tengo que obtener el id de cada partido de ese equipo
-        
-        $partidos = Partido::getpartidosfromEquipo($equipo);
-
-            // Ordenar los partidos por fecha en orden descendente (los más recientes primero)
-            usort($partidos, function($a, $b) {
-                return strtotime($b['fecha']) - strtotime($a['fecha']);
-            });
-
-        //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
-        $html .="
-        <table>
-        <tr>
-            <th>Rival</th>
-            <th>Fecha</th>
-            <th>Timeouts</th>
-            <th>Faltas Banquillo</th>
-            <th>Puntos</th>
-            <th>Líder</th>
-            <th>Empate</th>
-            <th>Alternancias</th>
-            <th>Veces Empatados</th>
-            <th>Veces Líder</th>
-            <th>PTQ1</th>
-            <th>PTQ2</th>
-            <th>PTQ3</th>
-            <th>PTQ4</th>
-            <th>PTQE</th>
-        </tr>";
-
-        foreach($partidos as $partido){
-
-            //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-            
-            $estadisticas = Partido::getstatsPartidoEquipos($partido['id']);
-        
-            //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
-
-            //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
-
-            $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas[0],$partido['id']);
-        
-        }
-        $html .="</table>";
 
         return $html;
     }

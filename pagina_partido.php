@@ -6,34 +6,48 @@
     $fecha = $_GET['fecha'];
     $partidoId = $_GET['id'];
 
-    $tituloPagina = 'Perfil';
+    $tituloPagina = 'Partido' . $partidoId;
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
     $rutaImgs=RUTA_IMGS;
-    $htmlstatsPartidoEquipo = '';
+    $htmlstatsPartidoEquipos = '';
     $htmlstatsPartidoJugadores = '';
 
     $statsPartidoEquipos = es\ucm\fdi\Partido::getstatsPartidoEquipos($partidoId);
 
-    $htmlstatsPartidoEquipos = es\ucm\fdi\Equipo:: mostrarStatsPartidoporEquipos($statsPartidoEquipos);
-    
-    $statsPartidoJugadores = es\ucm\fdi\Partido:: getstatsPartidoJugadores($partidoId);
+    $htmldetallesPartidoEquipos = es\ucm\fdi\Equipo:: mostrarDetallesPartidoporEquipos($statsPartidoEquipos);
 
-    $htmlstatsPartidoJugadores .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporJugadores($statsPartidoJugadores);
+    //    
+    
+    $statsPartidoJugadores = es\ucm\fdi\Partido::getstatsPartidoJugadores($partidoId);
+
+    foreach ($statsPartidoJugadores as $statsPartidoJugador){
+        $statsJugadores[] = es\ucm\fdi\Jugador::statsfromJugadorEnPartido($statsPartidoJugador);
+    }
+    
+
+    $htmlstatsPartidoJugadores .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporJugadores($statsJugadores);
+
+    //
+
+    $statsPartidoEquipos = es\ucm\fdi\Partido:: getstatsPartidoEquipos($partidoId);
+
+    $htmlstatsPartidoEquipos .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporEquipos($statsPartidoEquipos);
+
 
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
-            <h1>Detalles del Partido #$partidoId vs '$partido' el '$fecha'</h1>
             <div>
-                <h1> Datos sobre los equipos </h1>
-                $htmlstatsPartidoEquipos
+            <h1>Detalles del Partido #$partidoId vs '$partido' el '$fecha'</h1>
+                $htmldetallesPartidoEquipos
             </div>
             <div>
-                <h1> Datos sobre los jugadores </h1>
+                <h1> Datos sobre los Jugadores </h1>
                 $htmlstatsPartidoJugadores
             </div>
             <div>
-                <h1> Datos sobre la estadistica avanzada </h1>
+                <h1> Datos sobre los Equipos </h1>
+                $htmlstatsPartidoEquipos
             </div>
         </div>
     EOS;

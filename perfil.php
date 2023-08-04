@@ -29,7 +29,7 @@ if (in_array('J', $roles)) {
     $jugador = es\ucm\fdi\Jugador::statsfromJugador($usuario);
     
     $htmlfrommostrarStatsJugador = es\ucm\fdi\Jugador::mostrarStatsJugador($jugador);
-    $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejora($jugador);
+    $htmlfrommostrarAreasdeMejora = es\ucm\fdi\Jugador::mostrarStatsAreasdeMejoraJugador($jugador);
     $htmlfrommostrarStatsAvanzadasJugador = es\ucm\fdi\Jugador::mostrarStatsAvanzadasJugador($jugador);
 
     $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);

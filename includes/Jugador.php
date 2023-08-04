@@ -138,13 +138,6 @@ class Jugador{
         // Partidos de Suplente
         $jugador['SUP'] = $usuario['SUP'];
     
-        // Promedio Partidos Titular
-        // if ($usuario['PJ'] > 0) {
-        //    $jugador['TITP'] = number_format(($usuario['TIT'] ?? 0) / ($usuario['PJ'] ?? 0), 2);
-        // } else {
-        //     $jugador['TITP'] = 0;
-        // }
-
         $jugador['MSMS'] = $usuario['MSMS'];
     
         // Más Menos Promedio
@@ -344,6 +337,14 @@ class Jugador{
         } else {
             $jugador['eFGP'] = 0;
         }
+        
+        //PORCENTAJE DE PÉRDIDAS (TO%)
+        //TO% = TO / (FGA + 0.44 * FTA + TO)
+        $jugador['TOP'] = (($jugador['PRD'])/(($jugador['TCA'] + $jugador['TCF'])+ (0.44*($jugador['TLA'] + $jugador['TLF'])) + $jugador['PRD']))*100;
+
+        //PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA). 
+        //La fórmula es: FTM/FGA
+        $jugador['TLP'] = ($jugador['TCA']/($jugador['TCA'] + $jugador['TCF']))*100;
 
         // TRUE SHOOTING (TS%).
         // Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44.
@@ -390,6 +391,12 @@ class Jugador{
     public static function statsfromJugadorEnPartido($usuario){
 
         $jugador = array();
+
+        $jugador['equipo'] = $usuario['equipo'];
+
+        $jugador['nombrejugador'] = $usuario['nombrejugador'];
+
+        $jugador['numero'] = $usuario['numero'];
     
         // Minutos
         $jugador['MT'] = $usuario['MT'];
@@ -630,7 +637,7 @@ class Jugador{
         return $html;
     }
 
-    public static function mostrarStatsAreasdeMejora($jugador){
+    public static function mostrarStatsAreasdeMejoraJugador($jugador){
 
         $html = "<div class='stats'>";
 
@@ -701,6 +708,8 @@ class Jugador{
             <p>PORCENTAJE DE TIRO EFECTIVO: {$jugadorAvanzado['eFGP']}%</p>
             <p>TRUE SHOOTING: {$jugadorAvanzado['TSP']}%</p>
             <p>PORCENTAJE DE ASISTENCIAS: {$jugadorAvanzado['ASP']}%</p>
+            <p>PORCENTAJE DE PERDIDAS: {$jugadorAvanzado['TOP']}%</p>
+            <p>PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO: {$jugadorAvanzado['TLP']}%</p>
             <p>GAME SCORE: {$jugadorAvanzado['GS']}%</p>
 
         ";
