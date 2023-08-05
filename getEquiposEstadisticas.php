@@ -8,7 +8,14 @@ $rutaApp = RUTA_APP;
 
 $equipos = es\ucm\fdi\Partido::getEquipos();
 
+foreach($equipos as $equipo){
+
+    $equiposEstadisticas[] = es\ucm\fdi\Equipo::statsfromEquipoEnPartido($equipo);
+
+}
+
+
 // Devolver la lista de jugadores en formato JSON
 header('Content-Type: application/json');
-echo json_encode($equipos[0]);
+echo json_encode($equiposEstadisticas);
 ?>

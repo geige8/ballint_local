@@ -6,9 +6,11 @@ $tituloPagina = '';
 
 $rutaApp = RUTA_APP;
 
-$equipos = es\ucm\fdi\Partido::getEquipos();
+$equipo = $_GET['equipo'];
+
+$evaluacion = es\ucm\fdi\Partido::getEvaluacionEquipo($equipo);
 
 // Devolver la lista de jugadores en formato JSON
 header('Content-Type: application/json');
-echo json_encode($equipos[0]);
+echo json_encode($evaluacion);
 ?>

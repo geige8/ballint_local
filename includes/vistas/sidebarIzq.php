@@ -11,7 +11,7 @@
 			</div>
             <!-- Si es de Tipo Admin -->
 			<?php if (in_array('A', $roles)) { ?>
-                <li><a href="perfil.php">MI PERFIL</a></li>
+                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
@@ -19,7 +19,7 @@
 
             <!-- Si es de Tipo DT -->
 			<?php if (in_array('DT', $roles)) { ?>
-                <li><a href="perfil.php">MI PERFIL</a></li>
+                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
@@ -27,7 +27,7 @@
 
             <!-- Si es de Tipo E -->
 			<?php if (in_array('E', $roles)) { ?>
-                <li><a href="perfil.php">MI PERFIL</a></li>
+                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
@@ -35,7 +35,7 @@
 			
             <!-- Si es de Tipo J -->
 			<?php if (in_array('J', $roles)) { ?>
-                <li><a href="perfil.php">MI PERFIL</a></li>
+                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>

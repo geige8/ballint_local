@@ -171,7 +171,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ganador = saberganador();
             var idMatch = idpartidoElement.textContent;
             saveplayers(ganador,idMatch);
-            header('Location: index.php');
 
         }
     });
@@ -198,9 +197,9 @@ document.getElementById("start-timer").addEventListener("click", () => {
         }
         };
 
-        // Hacer la solicitud AJAX
-        xhttp.open("GET", "saveplayers.php?equipo=" + idlocal,"&ganador=" + $ganador,"&idPartido=" + $id, true);
+        xhttp.open("GET", "saveplayers.php?equipo=" + idlocal + "&ganador=" + $ganador + "&idPartido=" + $id, true);
         xhttp.send();
+        
     }
 
     function renametables(){
@@ -254,7 +253,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
             overlay.parentNode.removeChild(overlay);
         });
 
-        //Botón 0: Guardar PDF con todo
+        //Botón 0: Guardar PDF con todo.
 
             var pdfcompleto = document.createElement('button');
             pdfcompleto.classList.add('pdfcompleto');
@@ -268,7 +267,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
             });
 
-        //Botón 1: Mostrar EstadisticaCompleta.
+        //Botón 1: Mostrar Estadistica Completa (CORRECTO)
 
             var mostrarstats = document.createElement('button');
             mostrarstats.classList.add('mostrarstats');
@@ -279,11 +278,10 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 //generarPDF();
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
-                getJugadores(function(jugadores) {
+                getJugadoresEstadisticas(function(jugadores) {
                     if (jugadores) {
-                        getEquipos(function(equipos) {
+                        getEquiposEstadisticas(function(equipos) {
                             if (equipos) {
-                            // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
                             mostrarEstadisticaCompleta(jugadores,equipos);
                             } else {
                             console.log("Error al obtener los jugadores");
@@ -295,8 +293,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 });
             });
 
-
-        //Botón 2: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTA)
+        //Botón 2: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTO)
 
             var fullboxscore = document.createElement('button');
             fullboxscore.classList.add('fullboxscore');
@@ -316,37 +313,22 @@ document.getElementById("start-timer").addEventListener("click", () => {
                     }
                 });
             });
+  
+        //Botón 3: Mostrar PDF Con todo el JUGADA A JUGADA (CORRECTO)
 
-        //Botón 3: Mostrar PDF Con todos los índices de Estatística Avanzada.
-
-            var estadisticaavanzada = document.createElement('button');
-            estadisticaavanzada.classList.add('estadisticaavanzada');
-            estadisticaavanzada.innerHTML = 'Estadistica Avanzada';
-            ventana.appendChild(estadisticaavanzada);
-
-            estadisticaavanzada.addEventListener('click', function() {
-            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            var playbyplay = document.createElement('button');
+            playbyplay.classList.add('playbyplay');
+            playbyplay.innerHTML = 'Jugada a Jugada';
+            ventana.appendChild(playbyplay);
+            
+            playbyplay.addEventListener('click', function() {
+                generarPDFplaybyplay();
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
-
             });
 
-            
-        //Botón 4: Mostrar PDF Con todo el JUGADA A JUGADA OK
-
-        var playbyplay = document.createElement('button');
-        playbyplay.classList.add('playbyplay');
-        playbyplay.innerHTML = 'Jugada a Jugada';
-        ventana.appendChild(playbyplay);
-        
-        playbyplay.addEventListener('click', function() {
-            generarPDFplaybyplay();
-            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-        });
-
-        //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTA)
+        //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTO)
 
             var impactoTimeOut = document.createElement('button');
             impactoTimeOut.classList.add('impactoTimeOut');
@@ -368,7 +350,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
             });
 
 
-        //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTA)
+        //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTO)
             var impactoCambio = document.createElement('button');
             impactoCambio.classList.add('impactoCambio');
             impactoCambio.innerHTML = 'Impacto Cambios';
@@ -388,7 +370,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 });
             });
 
-        //Botón 7: Mostrar PDF con Evaluación X Jugador.
+        //Botón 7: Mostrar PDF con Evaluación X Jugador (CORRECTO)
 
             var evaluacionplayer = document.createElement('button');
             evaluacionplayer.classList.add('evaluacionplayer');
@@ -411,7 +393,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 });
             });
 
-        //Botón 8: Mostrar PDF con Evaluación X Equipo.
+        //Botón 8: Mostrar PDF con Evaluación X Equipo (CORRECTO)
 
             var evaluacionequipo = document.createElement('button');
             evaluacionequipo.classList.add('evaluacionequipo');
@@ -419,12 +401,27 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ventana.appendChild(evaluacionequipo);
 
             evaluacionequipo.addEventListener('click', function() {
-            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
+
+                getEquipos(function(equipo) {
+                    if (equipo) {
+                        getEvaluacionEquipo(function(evaluacion) {
+                            if (evaluacion) {
+                                mostrarEvaluacionEquipo(evaluacion);
+                            } else {
+                                console.log("Error al obtener la evaluacion");
+                            }
+                        }, equipo);   
+            
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
             });
 
-            //Botón 9: CAMBIOS SUGERIDOS
+        //Botón 9: CAMBIOS SUGERIDOS
 
             var cambiossugeridos = document.createElement('button');
             cambiossugeridos.classList.add('cambiossugeridos');
@@ -438,9 +435,9 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 cambiossugeridosporfactor(idlocal);
             });
 
+
         // Mostrar la ventana emergente
         ventana.classList.add("mostrar");
-
     });
 
 
@@ -470,24 +467,320 @@ document.getElementById("start-timer").addEventListener("click", () => {
     
         var localfullTable = document.createElement('table');
         var visitfullTable = document.createElement('table');
+
+        //EQUIPOS
+
+        // Crear la  fila para las cabeceras
+        var localfullTeamHeaderRow = localfullTable.insertRow();
+        var visitfullTeameaderRow = visitfullTable.insertRow();
     
-        // Crear la primera fila para el nombre del equipo
-        var localfullTeamRow = localfullTable.insertRow();
-        var visitfullTeamRow = visitfullTable.insertRow();
+
+        var headersTeam = [
+            'Equipo',
+            'Time', 
+            '+/-', 
+            'PTS',
+            'T2A',
+            'T2%',
+            'T3A',
+            'T3%',
+            'TCA',
+            'TC%',
+            'TLA',
+            'TL%',
+            'FLH',
+            'FLR',
+            'TEC',
+            'RBO',
+            'RBD',
+            'RBT',
+            'ROB',
+            'TAP',
+            'PRD',
+            'AST',
+            'PTQ1',
+            'PTQ2',
+            'PTQ3',
+            'PTQ4',
+            'PTQE',
+            'T2%Us',
+            'T3%Us',
+            'TL%Us',
+            'eFG%',
+            'TO%',
+            'TL%',
+            'TS%',
+            'AS%',
+            'POS',
+            'OER',
+            'DER',
+            'PACE'
+        ];
+          
+        for (var i = 0; i < headersTeam.length; i++) {
+            var localfullTeamHeaderCell = localfullTeamHeaderRow.insertCell();
+            localfullTeamHeaderCell.innerHTML = headersTeam[i];
+    
+            var visitfullTeameaderCell = visitfullTeameaderRow.insertCell();
+            visitfullTeameaderCell.innerHTML = headersTeam[i];
+        }
 
         var equipoLocal = equipos[0];
 
         var equipovisitante = equipos[1];
 
+        var localTeamfullRow = document.createElement('tr');
 
-        var localfullTeamCell = localfullTeamRow.insertCell();
-        localfullTeamCell.colSpan = 12;
-        localfullTeamCell.innerHTML = 'Equipo Local:' + equipoLocal.equipo;
-    
-        var visitfullTeamCell = visitfullTeamRow.insertCell();
-        visitfullTeamCell.colSpan =12;
-        visitfullTeamCell.innerHTML = 'Equipo Visitante ' + equipovisitante.equipo;
-    
+        var visitTeamfullRow = document.createElement('tr');
+
+        //Celdas:
+
+        //Local:
+        // Crear las celdas para los datos del equipo
+        var localfullTeamCell = localTeamfullRow.insertCell();
+        localfullTeamCell.innerHTML = equipoLocal.equipo;
+
+        var MTT = localTeamfullRow.insertCell();
+        MTT.innerHTML = equipoLocal.MTT;
+
+        var MSMS = localTeamfullRow.insertCell();
+        MSMS.innerHTML = equipoLocal.MSMS;
+
+        var PPP = localTeamfullRow.insertCell();
+        PPP.innerHTML = equipoLocal.PPP;
+
+        var T2A = localTeamfullRow.insertCell();
+        T2A.innerHTML = equipoLocal.T2A;
+
+        var T2P = localTeamfullRow.insertCell();
+        T2P.innerHTML = '(' + equipoLocal.T2A + ':' + equipoLocal.T2F + ') - ' + equipoLocal.T2P + '%';
+
+        var T3A = localTeamfullRow.insertCell();
+        T3A.innerHTML = equipoLocal.T3A;
+
+        var T3P = localTeamfullRow.insertCell();
+        T3P.innerHTML = '(' + equipoLocal.T3A + ':' + equipoLocal.T3F + ') - ' + equipoLocal.T3P + '%';
+        
+        var TCA = localTeamfullRow.insertCell();
+        TCA.innerHTML = equipoLocal.TCA;
+
+        var TCP = localTeamfullRow.insertCell();
+        TCP.innerHTML = '(' + equipoLocal.TCA + ':' + equipoLocal.TCF + ') - ' + equipoLocal.TCP + '%';
+
+        var TLA = localTeamfullRow.insertCell();
+        TLA.innerHTML = equipoLocal.TLA;
+
+        var TLP = localTeamfullRow.insertCell();
+        TLP.innerHTML = '(' + equipoLocal.TLA + ':' + equipoLocal.TLF + ') - ' + equipoLocal.TLP + '%';
+
+        var FLH = localTeamfullRow.insertCell();
+        FLH.innerHTML = equipoLocal.FLH;
+
+        var FLR = localTeamfullRow.insertCell();
+        FLR.innerHTML = equipoLocal.FLR;
+
+        var TEC = localTeamfullRow.insertCell();
+        TEC.innerHTML = equipoLocal.TEC;
+
+        var REB = localTeamfullRow.insertCell();
+        REB.innerHTML = equipoLocal.REB;
+
+        var RBO = localTeamfullRow.insertCell();
+        RBO.innerHTML = equipoLocal.RBO;
+
+        var RBD = localTeamfullRow.insertCell();
+        RBD.innerHTML = equipoLocal.RBD;
+
+        var ROB = localTeamfullRow.insertCell();
+        ROB.innerHTML = equipoLocal.ROB;
+
+        var TAP = localTeamfullRow.insertCell();
+        TAP.innerHTML = equipoLocal.TAP;
+
+        var PRD = localTeamfullRow.insertCell();
+        PRD.innerHTML = equipoLocal.PRD;
+
+        var AST = localTeamfullRow.insertCell();
+        AST.innerHTML = equipoLocal.AST;
+
+        var PTQ1 = localTeamfullRow.insertCell();
+        PTQ1.innerHTML = equipoLocal.PTQ1;
+
+        var PTQ2 = localTeamfullRow.insertCell();
+        PTQ2.innerHTML = equipoLocal.PTQ2;
+
+        var PTQ3 = localTeamfullRow.insertCell();
+        PTQ3.innerHTML = equipoLocal.PTQ3;
+
+        var PTQ4 = localTeamfullRow.insertCell();
+        PTQ4.innerHTML = equipoLocal.PTQ4;
+
+        var PTQE = localTeamfullRow.insertCell();
+        PTQE.innerHTML = equipoLocal.PTQE;
+
+        var T2PU = localTeamfullRow.insertCell();
+        T2PU.innerHTML = equipoLocal.T2PU;
+
+        var T3PU = localTeamfullRow.insertCell();
+        T3PU.innerHTML = equipoLocal.T3PU;
+
+        var T1PU = localTeamfullRow.insertCell();
+        T1PU.innerHTML = equipoLocal.T1PU;
+
+        var eFGP = localTeamfullRow.insertCell();
+        eFGP.innerHTML = equipoLocal.eFGP;
+
+        var TOP = localTeamfullRow.insertCell();
+        TOP.innerHTML = equipoLocal.TOP;
+
+        var TLP = localTeamfullRow.insertCell();
+        TLP.innerHTML = equipoLocal.TLP;
+
+        var TSP = localTeamfullRow.insertCell();
+        TSP.innerHTML = equipoLocal.TSP;
+
+        var ASP = localTeamfullRow.insertCell();
+        ASP.innerHTML = equipoLocal.ASP;
+
+        var POS = localTeamfullRow.insertCell();
+        POS.innerHTML = equipoLocal.POS;
+
+        var OER = localTeamfullRow.insertCell();
+        OER.innerHTML = equipoLocal.OER;
+
+        var DER = localTeamfullRow.insertCell();
+        DER.innerHTML = equipoLocal.DER;
+
+        var PACE = localTeamfullRow.insertCell();
+        PACE.innerHTML = equipoLocal.PACE;
+
+        //Visitante
+        var visitfullTeamCell = visitTeamfullRow.insertCell();
+        visitfullTeamCell.innerHTML = equipovisitante.equipo;
+
+        var MTT = visitTeamfullRow.insertCell();
+        MTT.innerHTML = equipovisitante.MTT;
+
+        var MSMS = visitTeamfullRow.insertCell();
+        MSMS.innerHTML = equipovisitante.MSMS;
+
+        var PPP = visitTeamfullRow.insertCell();
+        PPP.innerHTML = equipovisitante.PPP;
+
+        var T2A = visitTeamfullRow.insertCell();
+        T2A.innerHTML = equipovisitante.T2A;
+
+        var T2P = visitTeamfullRow.insertCell();
+        T2P.innerHTML = '(' + equipovisitante.T2A + ':' + equipovisitante.T2F + ') - ' + equipovisitante.T2P + '%';
+
+        var T3A = visitTeamfullRow.insertCell();
+        T3A.innerHTML = equipovisitante.T3A;
+
+        var T3P = visitTeamfullRow.insertCell();
+        T3P.innerHTML = '(' + equipovisitante.T3A + ':' + equipovisitante.T3F + ') - ' + equipovisitante.T3P + '%';
+        
+        var TCA = visitTeamfullRow.insertCell();
+        TCA.innerHTML = equipovisitante.TCA;
+
+        var TCP = visitTeamfullRow.insertCell();
+        TCP.innerHTML = '(' + equipovisitante.TCA + ':' + equipovisitante.TCF + ') - ' + equipovisitante.TCP + '%';
+
+        var TLA = visitTeamfullRow.insertCell();
+        TLA.innerHTML = equipovisitante.TLA;
+
+        var TLP = visitTeamfullRow.insertCell();
+        TLP.innerHTML = '(' + equipovisitante.TLA + ':' + equipovisitante.TLF + ') - ' + equipovisitante.TLP + '%';
+
+        var FLH = visitTeamfullRow.insertCell();
+        FLH.innerHTML = equipovisitante.FLH;
+
+        var FLR = visitTeamfullRow.insertCell();
+        FLR.innerHTML = equipovisitante.FLR;
+
+        var TEC = visitTeamfullRow.insertCell();
+        TEC.innerHTML = equipovisitante.TEC;
+
+        var REB = visitTeamfullRow.insertCell();
+        REB.innerHTML = equipovisitante.REB;
+
+        var RBO = visitTeamfullRow.insertCell();
+        RBO.innerHTML = equipovisitante.RBO;
+
+        var RBD = visitTeamfullRow.insertCell();
+        RBD.innerHTML = equipovisitante.RBD;
+
+        var ROB = visitTeamfullRow.insertCell();
+        ROB.innerHTML = equipovisitante.ROB;
+
+        var TAP = visitTeamfullRow.insertCell();
+        TAP.innerHTML = equipovisitante.TAP;
+
+        var PRD = visitTeamfullRow.insertCell();
+        PRD.innerHTML = equipovisitante.PRD;
+
+        var AST = visitTeamfullRow.insertCell();
+        AST.innerHTML = equipovisitante.AST;
+
+        var PTQ1 = visitTeamfullRow.insertCell();
+        PTQ1.innerHTML = equipovisitante.PTQ1;
+
+        var PTQ2 = visitTeamfullRow.insertCell();
+        PTQ2.innerHTML = equipovisitante.PTQ2;
+
+        var PTQ3 = visitTeamfullRow.insertCell();
+        PTQ3.innerHTML = equipovisitante.PTQ3;
+
+        var PTQ4 = visitTeamfullRow.insertCell();
+        PTQ4.innerHTML = equipovisitante.PTQ4;
+
+        var PTQE = visitTeamfullRow.insertCell();
+        PTQE.innerHTML = equipovisitante.PTQE;
+
+        var T2PU = visitTeamfullRow.insertCell();
+        T2PU.innerHTML = equipovisitante.T2PU;
+
+        var T3PU = visitTeamfullRow.insertCell();
+        T3PU.innerHTML = equipovisitante.T3PU;
+
+        var T1PU = visitTeamfullRow.insertCell();
+        T1PU.innerHTML = equipovisitante.T1PU;
+
+        var eFGP = visitTeamfullRow.insertCell();
+        eFGP.innerHTML = equipovisitante.eFGP;
+
+        var TOP = visitTeamfullRow.insertCell();
+        TOP.innerHTML = equipovisitante.TOP;
+
+        var TLP = visitTeamfullRow.insertCell();
+        TLP.innerHTML = equipovisitante.TLP;
+
+        var TSP = visitTeamfullRow.insertCell();
+        TSP.innerHTML = equipovisitante.TSP;
+
+        var ASP = visitTeamfullRow.insertCell();
+        ASP.innerHTML = equipovisitante.ASP;
+
+        var POS = visitTeamfullRow.insertCell();
+        POS.innerHTML = equipovisitante.POS;
+
+        var OER = visitTeamfullRow.insertCell();
+        OER.innerHTML = equipovisitante.OER;
+
+        var DER = visitTeamfullRow.insertCell();
+        DER.innerHTML = equipovisitante.DER;
+
+        var PACE = visitTeamfullRow.insertCell();
+        PACE.innerHTML = equipovisitante.PACE;
+
+
+        localfullTable.appendChild(localTeamfullRow);
+
+        visitfullTable.appendChild(visitTeamfullRow);
+        
+
+
+        //JUGADORES
+
         // Crear la segunda fila para las cabeceras
         var localfullHeaderRow = localfullTable.insertRow();
         var visitfullHeaderRow = visitfullTable.insertRow();
@@ -498,13 +791,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             'Titular', 
             'Time', 
             '+/-', 
-            'T2A', 
-            'T2P', 
-            'Ptos.', 
-            'Faltas', 
-            'Time', 
-            'Minutos',
-            '+/-',
             'PTS',
             'T2A',
             'T2%',
@@ -537,9 +823,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
             'AS%',
             'GS',
             'VAL'
-          ];
+        ];
           
-    
         for (var i = 0; i < headers.length; i++) {
             var localfullHeaderCell = localfullHeaderRow.insertCell();
             localfullHeaderCell.innerHTML = headers[i];
@@ -547,6 +832,9 @@ document.getElementById("start-timer").addEventListener("click", () => {
             var visitfullHeaderCell = visitfullHeaderRow.insertCell();
             visitfullHeaderCell.innerHTML = headers[i];
         }
+
+
+
     
         //Ordeno para obtener primero a los titulares.
         jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
@@ -555,32 +843,122 @@ document.getElementById("start-timer").addEventListener("click", () => {
         // Recorrer los jugadores y agregarlos a las tablas
         for (var i = 0; i < jugadores.length; i++) {
             var jugador = jugadores[i];
-    
-            // Cálculo de puntos, faltas y tiempo
-            var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
-            var faltasPlayer = jugador.FLH;
-            var minutosjugador = Math.floor(jugador.MT / 60);
-            var segundosjugador = jugador.MT % 60;
-            var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
-    
+
+            //Creo la línea
             var playerfullRow = document.createElement('tr');
     
             // Crear las celdas para los datos del jugador
-            var numberfullCell = playerfullRow.insertCell();
-            numberfullCell.innerHTML = jugador.numero;
-    
-            var namefullCell = playerfullRow.insertCell();
-            namefullCell.innerHTML = jugador.nombrejugador;
-    
-            var pointsfullCell = playerfullRow.insertCell();
-            pointsfullCell.innerHTML = puntosPlayer;
-    
-            var foulsfullCell = playerfullRow.insertCell();
-            foulsfullCell.innerHTML = faltasPlayer;
-    
-            var timefullCell = playerfullRow.insertCell();
-            timefullCell.innerHTML = minutosPlayer;
-    
+            var numero = playerfullRow.insertCell();
+            numero.innerHTML = jugador.numero;
+
+            var nombrejugador = playerfullRow.insertCell();
+            nombrejugador.innerHTML = jugador.nombrejugador;
+
+            var TIT = playerfullRow.insertCell();
+            TIT.innerHTML = jugador.TIT;
+
+            var MTT = playerfullRow.insertCell();
+            MTT.innerHTML = jugador.MTT;
+
+            var MSMS = playerfullRow.insertCell();
+            MSMS.innerHTML = jugador.MSMS;
+
+            var PTS = playerfullRow.insertCell();
+            PTS.innerHTML = jugador.PTS;
+
+            var T2A = playerfullRow.insertCell();
+            T2A.innerHTML = jugador.T2A;
+
+            var T2P = playerfullRow.insertCell();
+            T2P.innerHTML = '(' + jugador.T2A + ':' + jugador.T2F + ') - ' + jugador.T2P + '%';
+
+            var T3A = playerfullRow.insertCell();
+            T3A.innerHTML = jugador.T3A;
+
+            var T3P = playerfullRow.insertCell();
+            T3P.innerHTML = '(' + jugador.T3A + ':' + jugador.T3F + ') - ' + jugador.T3P + '%';
+            
+            var TCA = playerfullRow.insertCell();
+            TCA.innerHTML = jugador.TCA;
+
+            var TCP = playerfullRow.insertCell();
+            TCP.innerHTML = '(' + jugador.TCA + ':' + jugador.TCF + ') - ' + jugador.TCP + '%';
+
+            var TLA = playerfullRow.insertCell();
+            TLA.innerHTML = jugador.TLA;
+
+            var TLP = playerfullRow.insertCell();
+            TLP.innerHTML = '(' + jugador.TLA + ':' + jugador.TLF + ') - ' + jugador.TLP + '%';
+
+            var FLH = playerfullRow.insertCell();
+            FLH.innerHTML = jugador.FLH;
+
+            var FLR = playerfullRow.insertCell();
+            FLR.innerHTML = jugador.FLR;
+
+            var TEC = playerfullRow.insertCell();
+            TEC.innerHTML = jugador.TEC;
+
+            var REB = playerfullRow.insertCell();
+            REB.innerHTML = jugador.REB;
+
+            var RBO = playerfullRow.insertCell();
+            RBO.innerHTML = jugador.RBO;
+
+            var RBD = playerfullRow.insertCell();
+            RBD.innerHTML = jugador.RBD;
+
+            var ROB = playerfullRow.insertCell();
+            ROB.innerHTML = jugador.ROB;
+
+            var TAP = playerfullRow.insertCell();
+            TAP.innerHTML = jugador.TAP;
+
+            var PRD = playerfullRow.insertCell();
+            PRD.innerHTML = jugador.PRD;
+
+            var AST = playerfullRow.insertCell();
+            AST.innerHTML = jugador.AST;
+
+            var PTQ1 = playerfullRow.insertCell();
+            PTQ1.innerHTML = jugador.PTQ1;
+
+            var PTQ2 = playerfullRow.insertCell();
+            PTQ2.innerHTML = jugador.PTQ2;
+
+            var PTQ3 = playerfullRow.insertCell();
+            PTQ3.innerHTML = jugador.PTQ3;
+
+            var PTQ4 = playerfullRow.insertCell();
+            PTQ4.innerHTML = jugador.PTQ4;
+
+            var PTQE = playerfullRow.insertCell();
+            PTQE.innerHTML = jugador.PTQE;
+
+            var T2PU = playerfullRow.insertCell();
+            T2PU.innerHTML = jugador.T2PU;
+
+            var T3PU = playerfullRow.insertCell();
+            T3PU.innerHTML = jugador.T3PU;
+
+            var T1PU = playerfullRow.insertCell();
+            T1PU.innerHTML = jugador.T1PU;
+
+            var eFGP = playerfullRow.insertCell();
+            eFGP.innerHTML = jugador.eFGP;
+
+            var TSP = playerfullRow.insertCell();
+            TSP.innerHTML = jugador.TSP;
+
+            var ASP = playerfullRow.insertCell();
+            ASP.innerHTML = jugador.ASP;
+
+            var GS = playerfullRow.insertCell();
+            GS.innerHTML = jugador.GS;
+
+            var VAL = playerfullRow.insertCell();
+            VAL.innerHTML = jugador.VAL;
+
             if (isLocal(jugador.equipo)) {
                 localfullTable.appendChild(playerfullRow);
             } else {
@@ -773,7 +1151,35 @@ document.getElementById("start-timer").addEventListener("click", () => {
     xhttp.open("GET", "getEvaluacionJugador.php?jugador=" + encodeURIComponent(jugadorJSON), true);
     xhttp.send();
     }
-  
+
+    function getEvaluacionEquipo(callback,equipo) {
+
+        var equipoJSON = JSON.stringify(equipo);
+    
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var evaluaciones = JSON.parse(this.responseText);
+                console.log(evaluaciones);
+                callback(evaluaciones); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getEvaluacionEquipo.php?equipo=" + encodeURIComponent(equipoJSON), true);
+        xhttp.send();
+    }
+      
     function getJugadores(callback) {
     // Crear una solicitud AJAX
     var xhttp = new XMLHttpRequest();
@@ -798,6 +1204,30 @@ document.getElementById("start-timer").addEventListener("click", () => {
     xhttp.send();
     }
 
+    function getJugadoresEstadisticas(callback) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var jugadores = JSON.parse(this.responseText);
+                callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getJugadoresEstadisticas.php", true);
+        xhttp.send();
+        }
+
     function getEquipos(callback) {
         // Crear una solicitud AJAX
         var xhttp = new XMLHttpRequest();
@@ -820,7 +1250,31 @@ document.getElementById("start-timer").addEventListener("click", () => {
         // Hacer la solicitud AJAX
         xhttp.open("GET", "getEquipos.php", true);
         xhttp.send();
-        }
+    }
+
+    function getEquiposEstadisticas(callback) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var equipos = JSON.parse(this.responseText);
+                callback(equipos); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getEquiposEstadisticas.php", true);
+        xhttp.send();
+    }
 
     function getJugadoresLocal(callback) {
     // Crear una solicitud AJAX
@@ -1149,6 +1603,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         
     }
 
+
     function mostrarEvaluacionJugador(evaluacion,jugador){
         // Crear la capa de fondo oscuro y agregarla al DOM
         var overlay = document.createElement('div');
@@ -1167,6 +1622,51 @@ document.getElementById("start-timer").addEventListener("click", () => {
         // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('p');
         mensaje.textContent = `La evaluación de ${jugador['nombrejugador']} es:`;
+        contenido.appendChild(mensaje);
+
+        // Agregar el contenido a la ventana emergente
+        for (var clave in evaluacion) {
+            var mensaje = document.createElement('p');
+            mensaje.textContent = `Su ${clave} es ${evaluacion[clave] === "1" ? 'mayor o igual' : 'menor'} al habitual.`;
+            mensaje.style.color = evaluacion[clave] === "1" ? 'green' : 'red';
+            contenido.appendChild(mensaje);
+        }
+     
+        ventana.appendChild(contenido);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+
+
+    }
+
+    function mostrarEvaluacionEquipo(evaluacion){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('p');
+        mensaje.textContent = `La evaluación del equipo es:`;
         contenido.appendChild(mensaje);
 
         // Agregar el contenido a la ventana emergente
@@ -1715,7 +2215,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         };
     
         // Hacer la solicitud AJAX
-        xhttp.open("GET", "timeout.php?equipo=" + equipo, true);
+        xhttp.open("GET", "addtimeout.php?equipo=" + equipo, true);
         xhttp.send();
 
     }
@@ -1733,7 +2233,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         };
     
         // Hacer la solicitud AJAX
-        xhttp.open("GET", "faltabanquillo.php?equipo=" + equipo, true);
+        xhttp.open("GET", "addfaltabanquillo.php?equipo=" + equipo, true);
         xhttp.send();
 
     }
@@ -1936,7 +2436,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(listaJugadoresJSON);
     }
-
 
     function mostrarListaJugadoresSub(jugadores,equipo){
         // Crear la capa de fondo oscuro y agregarla al DOM

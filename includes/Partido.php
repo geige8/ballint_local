@@ -198,6 +198,8 @@ class Partido{
             TLF INT DEFAULT 0, 
             FLH INT DEFAULT 0,
             FLR INT DEFAULT 0,
+            RBO INT DEFAULT 0,
+            RBD INT DEFAULT 0,
             TEC INT DEFAULT 0, 
             ROB INT DEFAULT 0,
             TAP INT DEFAULT 0,
@@ -330,6 +332,25 @@ class Partido{
         return $result;
     }
 
+    //ACTUALIZAR Tabla tmp_partido CON LA ACCION
+    public static function actualizarTablaPartidoE($equipo,$accion){
+
+        $result = true;
+
+        //Obtengo la conexión realizada
+            
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partidoe SET $accion = $accion + 1 WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
     //Actualizar el campo +/-
     public static function actualizarMSMS($puntos,$equipo){
 
@@ -345,6 +366,20 @@ class Partido{
         }
 
         $query = sprintf("UPDATE tmp_partido SET MSMS = MSMS - $puntos WHERE equipo <> '$equipo' AND en_juego = '1'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        $query = sprintf("UPDATE tmp_partidoe SET MSMS = MSMS + $puntos WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        $query = sprintf("UPDATE tmp_partidoe SET MSMS = MSMS - $puntos WHERE equipo <> '$equipo'");
 
         if ($conn->query($query) === false) {
             $result = false;
@@ -683,7 +718,7 @@ class Partido{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
 
-        $query = sprintf("UPDATE tmp_partidoE SET PPR = $puntosvisitante WHERE equipo <> '$local'");
+        $query = sprintf("UPDATE tmp_partidoE SET PPR = $puntosvisitante WHERE equipo = '$local'");
 
         if ($conn->query($query) === false) {
             $result = false;
@@ -697,7 +732,7 @@ class Partido{
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
 
-        $query = sprintf("UPDATE tmp_partidoE SET PPR = $puntoslocal WHERE equipo <> '$visitante'");
+        $query = sprintf("UPDATE tmp_partidoE SET PPR = $puntoslocal WHERE equipo = '$visitante'");
 
         if ($conn->query($query) === false) {
             $result = false;
@@ -1130,6 +1165,8 @@ class Partido{
 
         $listajugadores = Partido::getJugadores();
 
+        $equipos = Partido::getEquipos();
+
         $resultado = Equipo::addpartidojugado($equipo);
 
         if($ganador){
@@ -1144,14 +1181,16 @@ class Partido{
 
             // Llamar a la función guardaDatosJugador y almacenar el resultado en una variable
             $resultado = Jugador::guardaDatosJugador($jugador);
-            $resultado = Equipo::guardaDatosJugadorenEquipo($jugador);
 
-            // Controlar el resultado
-            if ($resultado) {
-                echo "El jugador {$jugador['id']} se ha guardado correctamente.";
-            } else {
-                echo "Error al guardar el jugador.";
-            }
+        }
+
+        $resultado = Equipo::guardaDatosEquipo($equipos[0]);
+
+        // Controlar el resultado
+        if ($resultado) {
+            echo "El jugador {$jugador['id']} se ha guardado correctamente.";
+        } else {
+            echo "Error al guardar el jugador.";
         }
     }
 
@@ -1460,6 +1499,41 @@ class Partido{
         return  $evaluaciones;
     }
 
+    public static function getEvaluacionEquipo($equipo){
+
+        $evaluaciones = array();
+
+        $equipoArray = json_decode($equipo, true);
+
+        $team = Equipo::datosfromEquipo($equipoArray['equipo']);
+
+        $historico = Equipo::statsfromEquipo($team);
+
+        //Tengo por un lado la fila de la tabla tmp_partido.
+
+        //Tengo por otro lado las stats del jugador 
+
+        $variables = array(
+            'MT', 'MSMS', 'T2A', 'T2F', 'T3A', 'T3F', 'TLA', 'TLF', 'FLH', 'FLR',
+            'TEC', 'RBO', 'RBD', 'ROB', 'TAP', 'PRD', 'AST', 'PTQ1', 'PTQ2', 'PTQ3', 'PTQ4', 'PTQE'
+        );
+        
+        foreach ($variables as $variable) {
+            if ($historico['PJ'] != 0) {
+                if ($equipoArray[$variable] >= ($historico[$variable] / $historico['PJ'])) {
+                    $evaluaciones[$variable] = "1";
+                } else {
+                    $evaluaciones[$variable] = "0";
+                }
+            } else {
+                $evaluaciones[$variable] = "1"; 
+            }
+        }
+        
+
+        return  $evaluaciones;
+    }
+
     public static function getHistoricoJugador($jugador, $factor){
 
         $historico = 0;
@@ -1485,6 +1559,8 @@ class Partido{
 
     
     public static function addsecondplayed(){
+
+        $result = true;
             
         $conn = Aplicacion::getInstance()->getConexionBd();
     
@@ -1494,6 +1570,15 @@ class Partido{
             $result = false;
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
+
+        $query = sprintf("UPDATE tmp_partidoe SET MT = MT + 1");
+    
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
     
     }
 

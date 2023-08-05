@@ -6,7 +6,7 @@ class FormularioCambiarPassword extends Formulario
 {
 
     public function __construct() {
-        parent::__construct('formCambioContraseña', ['urlRedireccion' => 'perfil.php']);
+        parent::__construct('formCambioContraseña', ['urlRedireccion' => 'pagina_perfil.php']);
      }
      
      protected function generaCamposFormulario(&$datos)

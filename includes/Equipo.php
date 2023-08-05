@@ -184,29 +184,37 @@ class Equipo{
 //////////////////////////////////////////////////////////////////////////////////
 //MANEJO TABLA EQUIPOS
 
-    public static function guardaDatosJugadorenEquipo($jugador){
+    public static function guardaDatosEquipo($equipo){
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
         $sql = "UPDATE equipos
-        SET 
-        MT = MT + {$jugador['MT']},
-        MSMS = MSMS + ({$jugador['MSMS']}/5),
-        T2A = T2A + {$jugador['T2A']},
-        T2F = T2F + {$jugador['T2F']},
-        T3A = T3A + {$jugador['T3A']},
-        T3F = T3F + {$jugador['T3F']},
-        TLA = TLA + {$jugador['TLA']},
-        TLF = TLF + {$jugador['TLF']},
-        FLH = FLH + {$jugador['FLH']} + {$jugador['TEC']},
-        FLR = FLR + {$jugador['FLR']},
-        RBO = RBO + {$jugador['RBO']},
-        RBD = RBD + {$jugador['RBD']},
-        ROB = ROB + {$jugador['ROB']},
-        TAP = TAP + {$jugador['TAP']},
-        PRD = PRD + {$jugador['PRD']},
-        AST = AST + {$jugador['AST']}
-        WHERE id_equipo = '{$jugador['equipo']}'";
+        SET
+        PPP = PPP + {$equipo['PPP']},
+        PPR = PPR + {$equipo['PPR']},
+        MT = MT + ({$equipo['MT']}),
+        MSMS = MSMS + ({$equipo['MSMS']}),
+        T2A = T2A + {$equipo['T2A']},
+        T2F = T2F + {$equipo['T2F']},
+        T3A = T3A + {$equipo['T3A']},
+        T3F = T3F + {$equipo['T3F']},
+        TLA = TLA + {$equipo['TLA']},
+        TLF = TLF + {$equipo['TLF']},
+        FLH = FLH + {$equipo['FLH']} + {$equipo['TEC']},
+        FLR = FLR + {$equipo['FLR']},
+        TEC = TEC + {$equipo['TEC']},
+        RBO = RBO + {$equipo['RBO']},
+        RBD = RBD + {$equipo['RBD']},
+        ROB = ROB + {$equipo['ROB']},
+        TAP = TAP + {$equipo['TAP']},
+        PRD = PRD + {$equipo['PRD']},
+        AST = AST + {$equipo['AST']},
+        PTQ1 = PTQ1 + {$equipo['PTQ1']},
+        PTQ2 = PTQ2 + {$equipo['PTQ2']},
+        PTQ3 = PTQ3 + {$equipo['PTQ3']},
+        PTQ4 = PTQ4 + {$equipo['PTQ4']},
+        PTQE = PTQE + {$equipo['PTQE']}
+        WHERE id_equipo = '{$equipo['equipo']}'";
 
         $resultado = $conn->query($sql);
 
@@ -577,31 +585,62 @@ class Equipo{
         }
 
         //PORCENTAJES DE USO DE TIRO
-        $equipo['T2PU'] = number_format((($equipo['T2A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
-        $equipo['T3PU'] = number_format((($equipo['T3A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
-        $equipo['T1PU'] = number_format((($equipo['TLA']*0.44)/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
-
+        $total_shots = $equipo['T2A'] + $equipo['T3A'] + ($equipo['TLA'] * 0.44);
+        if ($total_shots > 0) {
+            $equipo['T2PU'] = number_format(($equipo['T2A'] / $total_shots), 2) * 100;
+            $equipo['T3PU'] = number_format(($equipo['T3A'] / $total_shots), 2) * 100;
+            $equipo['T1PU'] = number_format((($equipo['TLA'] * 0.44) / $total_shots), 2) * 100;
+        } else {
+            $equipo['T2PU'] = 0;
+            $equipo['T3PU'] = 0;
+            $equipo['T1PU'] = 0;
+        }
         //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
-        $equipo['eFGP'] = ((($equipo['T2A']+$equipo['T3A'])+0.5*$equipo['T3A'])/($equipo['TCA']+$equipo['TCF']))*100;
-
+        $total_attempts = $equipo['TCA'] + $equipo['TCF'];
+        if ($total_attempts > 0) {
+            $equipo['eFGP'] = (($equipo['T2A'] + $equipo['T3A'] + 0.5 * $equipo['T3A']) / $total_attempts) * 100;
+        } else {
+            $equipo['eFGP'] = 0;
+        }
         //PORCENTAJE DE PÉRDIDAS (TO%)
         //TO% = TO / (FGA + 0.44 * FTA + TO)
-        $equipo['TOP'] = (($equipo['PRD'])/(($equipo['TCA'] + $equipo['TCF'])+ (0.44*($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD']))*100;
+        $denominator_TO = ($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD'];
 
+        if ($denominator_TO > 0) {
+            $equipo['TOP'] = (($equipo['PRD']) / $denominator_TO) * 100;
+        }
+        else{
+            $equipo['TOP'] = 0;
+        }
         //PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA). 
         //La fórmula es: FTM/FGA
-        $equipo['TLP'] = ($equipo['TCA']/($equipo['TCA'] + $equipo['TCF']))*100;
+        $denominator_TLP = $equipo['TCA'] + $equipo['TCF'];
 
+        if ($denominator_TLP > 0) {
+            $equipo['TLP'] = ($equipo['TCA'] / $denominator_TLP) * 100;
+        } else {
+            $equipo['TLP'] = 0;
+        }
         //TRUE SHOOTING (TS%). 
         //Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44. 
         //TS% = PTS / 2(FGA + 0.44 * FTA)
-        $equipo['TSP'] = ($equipo['PPP'])/(2*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))))*100;
+        $total_field_attempts = $equipo['TCA'] + $equipo['TCF'];
+        $total_free_attempts = $equipo['TLA'] + $equipo['TLF'];
+        if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
+            $equipo['TSP'] = ($equipo['PPP']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)) * 100;
+        } else {
+            $equipo['TSP'] = 0;
+        }
 
         //PORCENTAJE DE ASISTENCIAS (AS%). 
         //Porcentaje de asistencias respecto a los tiros de campo anotados. 
         //La fórmula es: AS% = AS / (2PM + 3PM)
-        $equipo['ASP'] = ($equipo['AST'])/(($equipo['T2A'])+($equipo['T3A']))*100;
-
+        $total_field_made = $equipo['T2A'] + $equipo['T3A'];
+        if ($total_field_made > 0) {
+            $equipo['ASP'] = ($equipo['AST']) / $total_field_made * 100;
+        } else {
+            $equipo['ASP'] = 0;
+        }
         //Posesiones
         //Pos = FGA + TO - OR + (FTA*0.44)
         $equipo['POS'] = 0.96*(($equipo['TCA'] + $equipo['TCF']) + $equipo['PRD'] - $equipo['RBO'] + (($team['TLA'] + $team['TLF'])*0.44));
@@ -611,10 +650,9 @@ class Equipo{
         } else {
             $equipo['POSP'] = 0;
         }
-        //OER (OFFENSIVE EFFICIENCY RATING): 
-        //La fórmula es: OER  = PTS / POS
-        $equipo['OER'] = ($equipo['PPP']/$equipo['POS'])*100;
 
+        //OER (OFFENSIVE EFFICIENCY RATING): 
+        // La fórmula es: OER = PTS / POS
         if ($team['PJ'] > 0) {
             $equipo['OERP'] = number_format(($equipo['OER'] ?? 0) / ($team['PJ'] ?? 0), 2);
         } else {
@@ -622,9 +660,12 @@ class Equipo{
         }
 
         //DER (DEFENSIVE EFFICIENCY RATING)
-        //La fórmula es: DER = PTS / POS
-        $equipo['DER'] = ($equipo['PPR']/$equipo['POS'])*100;
-
+        // La fórmula es: DER = PTS / POS
+        if($equipo['POS'] > 0){
+            $equipo['DER'] = ($equipo['PPR'] / $equipo['POS']) * 100;
+        } else {
+            $equipo['DER'] = 0;
+        }
         if ($team['PJ'] > 0) {
             $equipo['DERP'] = number_format(($equipo['DER'] ?? 0) / ($team['PJ'] ?? 0), 2);
         } else {
@@ -632,7 +673,11 @@ class Equipo{
         }
 
         //Ritmo
-        $equipo['PACE']=($equipo['PPP']/$equipo['POS']);
+        if($equipo['POS'] > 0){
+            $equipo['PACE'] = ($equipo['PPP'] / $equipo['POS']);
+        } else {
+            $equipo['PACE'] = 0;
+        }
 
         if ($team['PJ'] > 0) {
             $equipo['PACEP'] = number_format(($equipo['PACE'] ?? 0) / ($team['PJ'] ?? 0), 2);
@@ -645,6 +690,212 @@ class Equipo{
         return $equipo;
     }  
 
+    public static function statsfromEquipoenPartido($team){
+
+        $equipo = array();
+
+        $equipo['equipo'] = $team['equipo'];
+    
+        // Minutos
+        $equipo['MT'] = $team['MT'];
+
+        $minutosjugados = floor($team['MT'] / 60) ?? 0;
+        $segundosRestantes = $team['MT'] % 60 ?? 0;
+        $tiempoFormato = sprintf("%02d'%02d''", $minutosjugados, $segundosRestantes);
+        $equipo['MTT'] = $tiempoFormato;
+    
+        //Mas Menos
+        $equipo['MSMS'] = $team['MSMS'];
+        
+        // Puntos
+        $equipo['PPP'] = $team['PPP'];
+        $equipo['PPR'] = $team['PPR'];
+
+        // Tiros de dos
+        $equipo['T2A'] = $team['T2A'];
+        $equipo['T2F'] = $team['T2F'];
+        if (($team['T2A'] + $team['T2F']) > 0) {
+            $equipo['T2P'] = number_format(($team['T2A'] / ($team['T2A'] + $team['T2F'])) * 100, 2);
+        } else {
+            $equipo['T2P'] = 0;
+        }
+    
+        // Tiros de tres
+        $equipo['T3A'] = $team['T3A'];
+        $equipo['T3F'] = $team['T3F'];
+        if (($team['T3A'] + $team['T3F']) > 0) {
+            $equipo['T3P'] = number_format(($team['T3A'] / ($team['T3A'] + $team['T3F'])) * 100, 2);
+        } else {
+            $equipo['T3P'] = 0;
+        }
+    
+        // Tiros Libres
+        $equipo['TLA'] = $team['TLA'];
+        $equipo['TLF'] = $team['TLF'];
+        if (($team['TLA'] + $team['TLF']) > 0) {
+            $equipo['TLP'] = number_format(($team['TLA'] / ($team['TLA'] + $team['TLF'])) * 100, 2);
+        } else {
+            $equipo['TLP'] = 0;
+        }
+    
+        // Tiros de Campo
+        $equipo['TCA'] = $team['T2A'] + $team['T3A'];
+        $equipo['TCF'] = $team['T2F'] + $team['T3F'];
+        if (($equipo['TCA'] + $equipo['TCF']) > 0) {
+            $equipo['TCP'] = number_format(($equipo['TCA'] / ($equipo['TCA'] + $equipo['TCF'])) * 100, 2);
+        } else {
+            $equipo['TCP'] = 0;
+        }
+    
+        // Faltas Hechas
+        $equipo['FLH'] = $team['FLH'];
+    
+        // Faltas Recibidas
+        $equipo['FLR'] = $team['FLR'];
+
+        // TECNICAS
+        $equipo['TEC'] = $team['TEC'];
+    
+        // Rebotes Partido
+        $equipo['REB'] = $team['RBO'] + $team['RBD'];
+    
+        // Rebotes Ofensivos
+        $equipo['RBO'] = $team['RBO'];
+    
+        // Rebotes Defensivos
+        $equipo['RBD'] = $team['RBD'];
+    
+        // Robos Partido
+        $equipo['ROB'] = $team['ROB'];
+    
+        // Tapones Partido
+        $equipo['TAP'] = $team['TAP'];
+    
+        // Pérdida Partido
+        $equipo['PRD'] = $team['PRD'];
+    
+        // Asistencias Partido
+        $equipo['AST'] = $team['AST'];
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //ESTADISTICA AVANZADA
+
+        // // Puntos de Titular
+        // $equipo['TIT'] = $team['TIT']; //Llamar a función que obtenga eso
+
+        // //Puntos de Suplente
+        // $equipo['SUP'] = $team['SUP']; //Llamar a función que obtenga eso
+    
+        // // Promedio Puntos Titular
+        // if ($team['PJ'] > 0) {
+        //     $equipo['TITP'] = number_format(($team['TIT'] ?? 0) / ($team['PJ'] ?? 0), 2);
+        // } else {
+        //     $equipo['TITP'] = 0;
+        // }
+
+        //Puntos Por Cuartos
+        $equipo['PTQ1'] = $team['PTQ1'];
+        $equipo['PTQ2'] = $team['PTQ2'];
+        $equipo['PTQ3'] = $team['PTQ3'];
+        $equipo['PTQ4'] = $team['PTQ4'];
+        $equipo['PTQE'] = $team['PTQE'];
+
+        //PORCENTAJES DE USO DE TIRO
+        if($equipo['T2A'] > 0){
+            $equipo['T2PU'] = number_format((($equipo['T2A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+        }else{
+            $equipo['T2PU'] = 0;
+        }
+
+        if($equipo['T3A'] > 0){
+            $equipo['T3PU'] = number_format((($equipo['T3A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+        }else{
+            $equipo['T3PU'] = 0;
+        }
+
+        if($equipo['TLA'] > 0){
+            $equipo['T1PU'] = number_format((($equipo['TLA']*0.44)/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+        }else{
+            $equipo['T1PU'] = 0;
+        }
+
+     // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
+        if(($equipo['TCA'] + $equipo['TCF']) > 0){
+            $equipo['eFGP'] = ((($equipo['T2A'] + $equipo['T3A']) + 0.5 * $equipo['T3A']) / ($equipo['TCA'] + $equipo['TCF'])) * 100;
+        } else {
+            $equipo['eFGP'] = 0;
+        }
+
+        // PORCENTAJE DE PÉRDIDAS (TO%)
+        // TO% = TO / (FGA + 0.44 * FTA + TO)
+        if(($equipo['TCA'] + $equipo['TCF'] + 0.44 * ($equipo['TLA'] + $equipo['TLF']) + $equipo['PRD']) > 0){
+            $equipo['TOP'] = ($equipo['PRD']) / (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD']) * 100;
+        } else {
+            $equipo['TOP'] = 0;
+        }
+
+        // PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA)
+        // La fórmula es: FTM / (FGA + FTM)
+        if(($equipo['TCA'] + $equipo['TCF']) > 0){
+            $equipo['TLP'] = ($equipo['TCA']) / ($equipo['TCA'] + $equipo['TCF']) * 100;
+        } else {
+            $equipo['TLP'] = 0;
+        }
+
+        // TRUE SHOOTING (TS%)
+        // Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44.
+        // TS% = PTS / 2(FGA + 0.44 * FTA)
+        if(($equipo['TCA'] + $equipo['TCF'] + 0.44 * ($equipo['TLA'] + $equipo['TLF'])) > 0){
+            $equipo['TSP'] = ($equipo['PPP']) / (2 * (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])))) * 100;
+        } else {
+            $equipo['TSP'] = 0;
+        }
+
+        // PORCENTAJE DE ASISTENCIAS (AS%)
+        // Porcentaje de asistencias respecto a los tiros de campo anotados.
+        // La fórmula es: AS% = AS / (2PM + 3PM)
+        if(($equipo['T2A'] + $equipo['T3A']) > 0){
+            $equipo['ASP'] = ($equipo['AST']) / (($equipo['T2A']) + ($equipo['T3A'])) * 100;
+        } else {
+            $equipo['ASP'] = 0;
+        }
+
+        // Posesiones
+        // Pos = FGA + TO - OR + (FTA*0.44)
+        if(($equipo['TCA'] + $equipo['TCF'] + $equipo['PRD'] - $equipo['RBO'] + (($equipo['TLA'] + $equipo['TLF']) * 0.44)) > 0){
+            $equipo['POS'] = 0.96 * (($equipo['TCA'] + $equipo['TCF']) + $equipo['PRD'] - $equipo['RBO'] + (($equipo['TLA'] + $equipo['TLF']) * 0.44));
+        } else {
+            $equipo['POS'] = 0;
+        }
+
+        // OER (OFFENSIVE EFFICIENCY RATING)
+        // La fórmula es: OER = PTS / POS
+        if($equipo['POS'] > 0){
+            $equipo['OER'] = ($equipo['PPP'] / $equipo['POS']) * 100;
+        } else {
+            $equipo['OER'] = 0;
+        }
+
+        // DER (DEFENSIVE EFFICIENCY RATING)
+        // La fórmula es: DER = PTS / POS
+        if($equipo['POS'] > 0){
+            $equipo['DER'] = ($equipo['PPR'] / $equipo['POS']) * 100;
+        } else {
+            $equipo['DER'] = 0;
+        }
+
+        // Ritmo
+        if($equipo['POS'] > 0){
+            $equipo['PACE'] = ($equipo['PPP'] / $equipo['POS']);
+        } else {
+            $equipo['PACE'] = 0;
+        }
+
+
+
+        return $equipo;
+    }  
 
 ///////////////////////////////////////////////////////////////
 //MOSTRAR:
@@ -839,6 +1090,60 @@ class Equipo{
         return $html;
     }
 
+    public static function mostrarUltimosPartidosEquipo($equipo){
+
+        $html = "";
+
+        //Para cada equipo al que pertenezca quiero mostrar los partidos.
+        //Tengo que obtener el id de cada partido de ese equipo
+        
+        $partidos = Partido::getpartidosfromEquipo($equipo);
+
+        // Ordenar los partidos por fecha en orden descendente (los más recientes primero)
+        usort($partidos, function($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
+        //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+        $html .="
+        <table>
+        <tr>
+            <th>Rival</th>
+            <th>Fecha</th>
+            <th>Marcador</th>
+            <th>Timeouts</th>
+            <th>Faltas Banquillo</th>
+            <th>Alternancias</th>
+            <th>Veces Empatados</th>
+            <th>Veces Líder</th>
+            <th>Mayor Ventaja</th>
+            <th>Tiempo Líder</th>
+            <th>PTQ1</th>
+            <th>PTQ2</th>
+            <th>PTQ3</th>
+            <th>PTQ4</th>
+            <th>PTQE</th>
+        </tr>";
+
+        foreach($partidos as $partido){
+
+            //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+            
+            $estadisticas = Partido::getstatsPartidoEquipos($partido['id']);
+        
+            //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+
+            //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+            $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas[0],$partido['id']);
+        
+        }
+        $html .="</table>";
+
+        return $html;
+    }
+
+    //Paina de Partido
     public static function mostrarDetallesPartidoporEquipos($estadisticas) {
 
         $html = "";
@@ -893,18 +1198,38 @@ class Equipo{
             <tr>
                 <th>Equipo</th>
                 <th>Marcador</th>
-                <th>Timeouts</th>
-                <th>Faltas Banquillo</th>
-                <th>Alternancias</th>
-                <th>Veces Empatados</th>
-                <th>Veces Líder</th>
-                <th>Mayor Ventaja</th>
-                <th>Tiempo Líder</th>
-                <th>PTQ1</th>
-                <th>PTQ2</th>
-                <th>PTQ3</th>
-                <th>PTQ4</th>
-                <th>PTQE</th>
+                <th>MTT</th>
+                <th>MSMS</th>
+                <th>T2A</th>
+                <th>T2P</th>
+                <th>T3A</th>
+                <th>T3P</th>
+                <th>TCA</th>
+                <th>TCP</th>
+                <th>TLA</th>
+                <th>TLP</th>
+                <th>FLH</th>
+                <th>FLR</th>
+                <th>TEC</th>
+                <th>RBO</th>
+                <th>RBD</th>
+                <th>REB</th>
+                <th>ROB</th>
+                <th>TAP</th>
+                <th>PRD</th>
+                <th>AST</th>
+                <th>T2PU</th>
+                <th>T3PU</th>
+                <th>T1PU</th>
+                <th>eFGP</th>
+                <th>TOP</th>
+                <th>TLP</th>
+                <th>TSP</th>
+                <th>ASP</th>
+                <th>POS</th>
+                <th>OER</th>
+                <th>DER</th>
+                <th>PACE</th>
             </tr>";
 
         foreach ($estadisticas as $equipoStats) {
@@ -912,24 +1237,45 @@ class Equipo{
             <tr>
                 <td>{$equipoStats['equipo']}</td>
                 <td>{$equipoStats['PPP']}-{$equipoStats['PPR']}</td>
-                <td>{$equipoStats['timeouts']}</td>
-                <td>{$equipoStats['faltasbanquillo']}</td>
-                <td>{$equipoStats['alternancias']}</td>
-                <td>{$equipoStats['vecesempatados']}</td>
-                <td>{$equipoStats['veceslider']}</td>
-                <td>{$equipoStats['mayorventaja']}</td>
-                <td>{$equipoStats['tiempolider']}</td>
-                <td>{$equipoStats['PTQ1']}</td>
-                <td>{$equipoStats['PTQ2']}</td>
-                <td>{$equipoStats['PTQ3']}</td>
-                <td>{$equipoStats['PTQ4']}</td>
-                <td>{$equipoStats['PTQE']}</td>
+                <td>{$equipoStats['MTT']}</td>
+                <td>{$equipoStats['MSMS']}</td>
+                <td>{$equipoStats['T2A']}</td>
+                <td>{$equipoStats['T2P']}</td>
+                <td>{$equipoStats['T3A']}</td>
+                <td>{$equipoStats['T3P']}</td>
+                <td>{$equipoStats['TCA']}</td>
+                <td>{$equipoStats['TCP']}</td>
+                <td>{$equipoStats['TLA']}</td>
+                <td>{$equipoStats['TLP']}</td>
+                <td>{$equipoStats['FLH']}</td>
+                <td>{$equipoStats['FLR']}</td>
+                <td>{$equipoStats['TEC']}</td>
+                <td>{$equipoStats['RBO']}</td>
+                <td>{$equipoStats['RBD']}</td>
+                <td>{$equipoStats['REB']}</td>
+                <td>{$equipoStats['ROB']}</td>
+                <td>{$equipoStats['TAP']}</td>
+                <td>{$equipoStats['PRD']}</td>
+                <td>{$equipoStats['AST']}</td>
+                <td>{$equipoStats['T2PU']}</td>
+                <td>{$equipoStats['T3PU']}</td>
+                <td>{$equipoStats['T1PU']}</td>
+                <td>{$equipoStats['eFGP']}</td>
+                <td>{$equipoStats['TOP']}</td>
+                <td>{$equipoStats['TLP']}</td>
+                <td>{$equipoStats['TSP']}</td>
+                <td>{$equipoStats['ASP']}</td>
+                <td>{$equipoStats['POS']}</td>
+                <td>{$equipoStats['OER']}</td>
+                <td>{$equipoStats['DER']}</td>
+                <td>{$equipoStats['PACE']}</td>
             </tr>";
         }
 
         $html .= "</table>";
         return $html;
     }
+
     public static function mostrarStatsPartidoporJugadores($estadisticas) {
         $html = "";
         $html .= "
@@ -1020,60 +1366,6 @@ class Equipo{
         }
 
         $html .= "</table>";
-        return $html;
-    }
-
-    //Obtener las estadisticas de dichos partidos:
-    public static function mostrarUltimosPartidosEquipo($equipo){
-
-        $html = "";
-
-        //Para cada equipo al que pertenezca quiero mostrar los partidos.
-        //Tengo que obtener el id de cada partido de ese equipo
-        
-        $partidos = Partido::getpartidosfromEquipo($equipo);
-
-        // Ordenar los partidos por fecha en orden descendente (los más recientes primero)
-        usort($partidos, function($a, $b) {
-            return strtotime($b['fecha']) - strtotime($a['fecha']);
-        });
-
-        //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
-        $html .="
-        <table>
-        <tr>
-            <th>Rival</th>
-            <th>Fecha</th>
-            <th>Marcador</th>
-            <th>Timeouts</th>
-            <th>Faltas Banquillo</th>
-            <th>Alternancias</th>
-            <th>Veces Empatados</th>
-            <th>Veces Líder</th>
-            <th>Mayor Ventaja</th>
-            <th>Tiempo Líder</th>
-            <th>PTQ1</th>
-            <th>PTQ2</th>
-            <th>PTQ3</th>
-            <th>PTQ4</th>
-            <th>PTQE</th>
-        </tr>";
-
-        foreach($partidos as $partido){
-
-            //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-            
-            $estadisticas = Partido::getstatsPartidoEquipos($partido['id']);
-        
-            //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
-
-            //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
-
-            $html .= self::mostrarStatsPartidoEquipo($partido,$estadisticas[0],$partido['id']);
-        
-        }
-        $html .="</table>";
-
         return $html;
     }
 

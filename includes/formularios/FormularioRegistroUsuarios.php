@@ -7,7 +7,7 @@ class FormularioRegistroUsuarios extends Formulario{
     
 
     public function __construct() {
-        parent::__construct('formRegisterUser', ['urlRedireccion' => 'paneldeControl.php']);
+        parent::__construct('formRegisterUser', ['urlRedireccion' => 'pagina_admin.php']);
     }
     
     protected function generaCamposFormulario(&$datos){

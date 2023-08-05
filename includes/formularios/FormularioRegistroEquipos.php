@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioRegistroEquipos extends Formulario{
 
     public function __construct() {
-        parent::__construct('formRegisterTeam', ['urlRedireccion' => 'paneldeControl.php']);
+        parent::__construct('formRegisterTeam', ['urlRedireccion' => 'pagina_admin.php']);
     }
     
     protected function generaCamposFormulario(&$datos){

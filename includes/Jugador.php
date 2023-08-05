@@ -338,13 +338,27 @@ class Jugador{
             $jugador['eFGP'] = 0;
         }
         
-        //PORCENTAJE DE PÉRDIDAS (TO%)
-        //TO% = TO / (FGA + 0.44 * FTA + TO)
-        $jugador['TOP'] = (($jugador['PRD'])/(($jugador['TCA'] + $jugador['TCF'])+ (0.44*($jugador['TLA'] + $jugador['TLF'])) + $jugador['PRD']))*100;
+        // PORCENTAJE DE PÉRDIDAS (TO%)
+        // TO% = TO / (FGA + 0.44 * FTA + TO)
+        $denominator_TO = ($jugador['TCA'] + $jugador['TCF']) + (0.44 * ($jugador['TLA'] + $jugador['TLF'])) + $jugador['PRD'];
 
-        //PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA). 
-        //La fórmula es: FTM/FGA
-        $jugador['TLP'] = ($jugador['TCA']/($jugador['TCA'] + $jugador['TCF']))*100;
+        if ($denominator_TO > 0) {
+            $jugador['TOP'] = (($jugador['PRD']) / $denominator_TO) * 100;
+        }
+        else{
+            $jugador['TOP'] = 0;
+        }
+
+        // PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA).
+        // La fórmula es: FTM/FGA
+        $denominator_TLP = $jugador['TCA'] + $jugador['TCF'];
+
+        if ($denominator_TLP > 0) {
+            $jugador['TLP'] = ($jugador['TCA'] / $denominator_TLP) * 100;
+        } else {
+            $jugador['TLP'] = 0;
+        }
+
 
         // TRUE SHOOTING (TS%).
         // Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44.
@@ -829,19 +843,18 @@ class Jugador{
             foreach($partidos as $partido){
 
                 //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-                
                 $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
 
-                $estadisticasPartido = self::statsfromJugadorEnPartido($estadisticas);
-            
-                //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+                if($estadisticas){
 
-                //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+                    $estadisticasPartido = self::statsfromJugadorEnPartido($estadisticas);
+                
+                    //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+    
+                    //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
 
-                if($estadisticasPartido){
                     $html .= self::mostrarStatsPartidoJugador($partido,$estadisticasPartido,$partido['id']);
                 }
-            
             }
         }
         

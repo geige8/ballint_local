@@ -25,14 +25,17 @@
         $statsJugadores[] = es\ucm\fdi\Jugador::statsfromJugadorEnPartido($statsPartidoJugador);
     }
     
-
     $htmlstatsPartidoJugadores .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporJugadores($statsJugadores);
 
     //
 
     $statsPartidoEquipos = es\ucm\fdi\Partido:: getstatsPartidoEquipos($partidoId);
 
-    $htmlstatsPartidoEquipos .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporEquipos($statsPartidoEquipos);
+    foreach ($statsPartidoEquipos as $statsPartidoEquipo){
+        $statsEquipos[] = es\ucm\fdi\Equipo::statsfromEquipoenPartido($statsPartidoEquipo);
+    }
+
+    $htmlstatsPartidoEquipos .= es\ucm\fdi\Equipo:: mostrarStatsPartidoporEquipos($statsEquipos);
 
 
     $contenidoPrincipal .= <<<EOS

@@ -19,7 +19,7 @@ if (isset($_SESSION["login"])) {
     // Verificar si el conjunto de roles contiene un rol específico
     if (in_array('A', $roles)){ //Es administrador
 
-        header('Location: paneldeControl.php');
+        header('Location: pagina_admin.php');
 
     }else{
         $contenidoPrincipal .= <<<EOS

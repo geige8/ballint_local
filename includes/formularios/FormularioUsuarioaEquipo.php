@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioUsuarioaEquipo extends Formulario{
 
     public function __construct() {
-        parent::__construct('formadduserTeam', ['urlRedireccion' => 'paneldeControl.php']);
+        parent::__construct('formadduserTeam', ['urlRedireccion' => 'pagina_admin.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
