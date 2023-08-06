@@ -16,16 +16,9 @@ if (isset($_SESSION["login"])) {
 
     $roles = es\ucm\fdi\Usuario::getRoles($_SESSION['nombre']);
 
-    // Verificar si el conjunto de roles contiene un rol específico
-    if (in_array('A', $roles)){ //Es administrador
-
-        header('Location: pagina_admin.php');
-
-    }else{
-        $contenidoPrincipal .= <<<EOS
-        $htmlEquiposClub        
-        EOS;  
-    }
+    $contenidoPrincipal .= <<<EOS
+    $htmlEquiposClub        
+    EOS;  
 
 } else {
     header('Location: login.php');

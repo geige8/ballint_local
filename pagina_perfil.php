@@ -101,8 +101,8 @@ if (in_array('J', $roles)) {
             </div>
         </div>
         <div class="perfilEquipos">
-        <h2>Mis Equipos</h2>
-        $htmlEquiposfromUser
+            <h2>Mis Equipos</h2>
+            $htmlEquiposfromUser
         </div>
 
     EOS;
@@ -110,15 +110,18 @@ if (in_array('J', $roles)) {
     //2º Estadisticas del Equipo:
     foreach($equipos as $equipo){
 
-            $htmlUltimosPartidos .= es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
-            $contenidoPrincipal .= <<<EOS
-            <div class="lastgames">
-                <h2>Ultimos Partidos de {$equipo}: </h2>
-                $htmlUltimosPartidos
-            </div>
+        $htmlUltimosPartidos = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
+        $contenidoPrincipal .= <<<EOS
+        <div class="lastgames">
+            <h2>Ultimos Partidos de {$equipo}: </h2>
+            $htmlUltimosPartidos
         </div>
         EOS;
     }
+
+    $contenidoPrincipal .= <<<EOS
+        </div>
+    EOS;
 }
 
 require __DIR__.'/includes/vistas/plantilla.php';

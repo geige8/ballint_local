@@ -36,6 +36,25 @@ class Equipo{
         return $result;
     }
 
+    public static function eliminarEquipo($equipoEliminar){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+    
+        // Preparar la consulta SQL
+        $query = "DELETE FROM equipos WHERE id_equipo = '$equipoEliminar'";
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GETTERS
 
@@ -315,11 +334,16 @@ class Equipo{
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $query = sprintf("SELECT user,nombre,apellido1,apellido2,numero
+        $query = sprintf("
+        SELECT jugadores.id AS jugador_id, user, nombre, apellido1, apellido2, numero
         FROM jugadores 
-        INNER JOIN usuarios_equipos 
-        ON jugadores.id = usuarios_equipos.usuario_id  
-        WHERE usuarios_equipos.equipo_id = '$id_equipo'");
+        WHERE jugadores.user IN (
+            SELECT user FROM credenciales WHERE id IN (
+                SELECT usuario_id FROM usuarios_equipos WHERE equipo_id = '%s'
+            )
+            )
+        ", $id_equipo);
+    
 
         $rs = $conn->query($query);
 
@@ -339,6 +363,46 @@ class Equipo{
                     $i++;
                 }
                 $result = $jugadores;
+                $rs->free();
+            } else {
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+        return $result;
+    }
+
+    public static function getEntrenadoresEquipo($equipo_id){
+
+        $id_equipo = self::getidEquipo($equipo_id);
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("
+        SELECT entrenadores.id AS jugador_id, user, nombre, apellido1, apellido2
+        FROM entrenadores 
+        WHERE entrenadores.user IN (
+            SELECT user FROM credenciales WHERE id IN (
+                SELECT usuario_id FROM usuarios_equipos WHERE equipo_id = '%s'
+            )
+            )
+        ", $id_equipo);
+    
+
+        $rs = $conn->query($query);
+
+        $result = false;
+        $entrenadores = array();
+            if ($rs) {
+                $i = 0;
+                while ($row = $rs->fetch_assoc()) {
+                    $entrenadores[$i] = array(
+                        'user' => $row['user'],
+                        'nombre' => $row['nombre'],
+                        'apellido1' => $row['apellido1'],
+                        'apellido2' => $row['apellido2'],
+                    );
+                    $i++;
+                }
+                $result = $entrenadores;
                 $rs->free();
             } else {
                 error_log("Error BD ({$conn->errno}): {$conn->error}");
@@ -803,26 +867,26 @@ class Equipo{
 
         //PORCENTAJES DE USO DE TIRO
         if($equipo['T2A'] > 0){
-            $equipo['T2PU'] = number_format((($equipo['T2A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+            $equipo['T2PU'] = number_format((($equipo['T2A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44)))*100,2);
         }else{
             $equipo['T2PU'] = 0;
         }
 
         if($equipo['T3A'] > 0){
-            $equipo['T3PU'] = number_format((($equipo['T3A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+            $equipo['T3PU'] = number_format((($equipo['T3A'])/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44)))*100,2);
         }else{
             $equipo['T3PU'] = 0;
         }
 
         if($equipo['TLA'] > 0){
-            $equipo['T1PU'] = number_format((($equipo['TLA']*0.44)/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44))),2)*100;
+            $equipo['T1PU'] = number_format((($equipo['TLA']*0.44)/($equipo['T2A']+$equipo['T3A']+($equipo['TLA']*0.44)))*100,2);
         }else{
             $equipo['T1PU'] = 0;
         }
 
      // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         if(($equipo['TCA'] + $equipo['TCF']) > 0){
-            $equipo['eFGP'] = ((($equipo['T2A'] + $equipo['T3A']) + 0.5 * $equipo['T3A']) / ($equipo['TCA'] + $equipo['TCF'])) * 100;
+            $equipo['eFGP'] = number_format(((($equipo['T2A'] + $equipo['T3A']) + 0.5 * $equipo['T3A']) / ($equipo['TCA'] + $equipo['TCF'])) * 100, 2);
         } else {
             $equipo['eFGP'] = 0;
         }
@@ -830,7 +894,7 @@ class Equipo{
         // PORCENTAJE DE PÉRDIDAS (TO%)
         // TO% = TO / (FGA + 0.44 * FTA + TO)
         if(($equipo['TCA'] + $equipo['TCF'] + 0.44 * ($equipo['TLA'] + $equipo['TLF']) + $equipo['PRD']) > 0){
-            $equipo['TOP'] = ($equipo['PRD']) / (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD']) * 100;
+            $equipo['TOP'] = number_format(($equipo['PRD']) / (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD']) * 100, 2);
         } else {
             $equipo['TOP'] = 0;
         }
@@ -838,7 +902,7 @@ class Equipo{
         // PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO (FTM/FGA)
         // La fórmula es: FTM / (FGA + FTM)
         if(($equipo['TCA'] + $equipo['TCF']) > 0){
-            $equipo['TLP'] = ($equipo['TCA']) / ($equipo['TCA'] + $equipo['TCF']) * 100;
+            $equipo['TLP'] = number_format(($equipo['TCA']) / ($equipo['TCA'] + $equipo['TCF']) * 100, 2);
         } else {
             $equipo['TLP'] = 0;
         }
@@ -847,7 +911,7 @@ class Equipo{
         // Porcentaje de tiros de campo para un equipo ponderando el tiro de 3 puntos por 1,5 y añadiendo los tiros libres por 0,44.
         // TS% = PTS / 2(FGA + 0.44 * FTA)
         if(($equipo['TCA'] + $equipo['TCF'] + 0.44 * ($equipo['TLA'] + $equipo['TLF'])) > 0){
-            $equipo['TSP'] = ($equipo['PPP']) / (2 * (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])))) * 100;
+            $equipo['TSP'] = number_format(($equipo['PPP']) / (2 * (($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])))) * 100, 2);
         } else {
             $equipo['TSP'] = 0;
         }
@@ -856,7 +920,7 @@ class Equipo{
         // Porcentaje de asistencias respecto a los tiros de campo anotados.
         // La fórmula es: AS% = AS / (2PM + 3PM)
         if(($equipo['T2A'] + $equipo['T3A']) > 0){
-            $equipo['ASP'] = ($equipo['AST']) / (($equipo['T2A']) + ($equipo['T3A'])) * 100;
+            $equipo['ASP'] = number_format(($equipo['AST']) / (($equipo['T2A']) + ($equipo['T3A'])) * 100, 2);
         } else {
             $equipo['ASP'] = 0;
         }
@@ -864,7 +928,7 @@ class Equipo{
         // Posesiones
         // Pos = FGA + TO - OR + (FTA*0.44)
         if(($equipo['TCA'] + $equipo['TCF'] + $equipo['PRD'] - $equipo['RBO'] + (($equipo['TLA'] + $equipo['TLF']) * 0.44)) > 0){
-            $equipo['POS'] = 0.96 * (($equipo['TCA'] + $equipo['TCF']) + $equipo['PRD'] - $equipo['RBO'] + (($equipo['TLA'] + $equipo['TLF']) * 0.44));
+            $equipo['POS'] = number_format(0.96 * (($equipo['TCA'] + $equipo['TCF']) + $equipo['PRD'] - $equipo['RBO'] + (($equipo['TLA'] + $equipo['TLF']) * 0.44)),2);
         } else {
             $equipo['POS'] = 0;
         }
@@ -872,7 +936,7 @@ class Equipo{
         // OER (OFFENSIVE EFFICIENCY RATING)
         // La fórmula es: OER = PTS / POS
         if($equipo['POS'] > 0){
-            $equipo['OER'] = ($equipo['PPP'] / $equipo['POS']) * 100;
+            $equipo['OER'] = number_format(($equipo['PPP'] / $equipo['POS'])  * 100, 2);
         } else {
             $equipo['OER'] = 0;
         }
@@ -880,14 +944,14 @@ class Equipo{
         // DER (DEFENSIVE EFFICIENCY RATING)
         // La fórmula es: DER = PTS / POS
         if($equipo['POS'] > 0){
-            $equipo['DER'] = ($equipo['PPR'] / $equipo['POS']) * 100;
+            $equipo['DER'] = number_format(($equipo['PPR'] / $equipo['POS'])  * 100, 2);
         } else {
             $equipo['DER'] = 0;
         }
 
         // Ritmo
         if($equipo['POS'] > 0){
-            $equipo['PACE'] = ($equipo['PPP'] / $equipo['POS']);
+            $equipo['PACE'] = number_format(($equipo['PPP'] / $equipo['POS']), 2);
         } else {
             $equipo['PACE'] = 0;
         }
@@ -1397,6 +1461,42 @@ class Equipo{
                     <td>{$jugador['nombre']}</td>
                     <td>{$jugador['apellido1']}</td>
                     <td>{$jugador['apellido2']}</td>
+                </tr>";
+            $i++;
+        }
+        
+        $html .= "</table>";
+        return $html;
+    }
+
+    public static function mostrarlistaEntrenadoresEquipo($equipo) {
+
+        $listaEntrenadores = self::getEntrenadoresEquipo($equipo);
+
+        $html = "";
+        $i = 1;
+        $html .= "
+            <table>
+                <tr>
+                    <th> </th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellido 1</th>
+                    <th>Apellido 2</th>
+                </tr>";
+
+        foreach ($listaEntrenadores as $entrenador) {
+            $html .= "
+                <tr>
+                    <td>{$i}</td>
+                    <td>
+                        <a href='pagina_perfilentrenador.php?entrenador={$entrenador['user']}'>
+                            {$entrenador['user']}
+                        </a>
+                    </td>
+                    <td>{$entrenador['nombre']}</td>
+                    <td>{$entrenador['apellido1']}</td>
+                    <td>{$entrenador['apellido2']}</td>
                 </tr>";
             $i++;
         }

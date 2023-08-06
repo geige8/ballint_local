@@ -520,7 +520,7 @@ class Jugador{
         // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         $total_attempts = $jugador['TCA'] + $jugador['TCF'];
         if ($total_attempts > 0) {
-            $jugador['eFGP'] = (($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100;
+            $jugador['eFGP'] = number_format((($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100, 2);
         } else {
             $jugador['eFGP'] = 0;
         }
@@ -531,7 +531,7 @@ class Jugador{
         $total_field_attempts = $jugador['TCA'] + $jugador['TCF'];
         $total_free_attempts = $jugador['TLA'] + $jugador['TLF'];
         if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
-            $jugador['TSP'] = ($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)) * 100;
+            $jugador['TSP'] = number_format(($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts))  * 100, 2);
         } else {
             $jugador['TSP'] = 0;
         }
@@ -541,7 +541,7 @@ class Jugador{
         // La fórmula es: AS% = AS / (2PM + 3PM)
         $total_field_made = $jugador['T2A'] + $jugador['T3A'];
         if ($total_field_made > 0) {
-            $jugador['ASP'] = ($jugador['AST']) / $total_field_made * 100;
+            $jugador['ASP'] = number_format(($jugador['AST']) / $total_field_made  * 100, 2);
         } else {
             $jugador['ASP'] = 0;
         }
@@ -552,7 +552,7 @@ class Jugador{
         // GmSc - Game Score; the formula is PTS + 0.4 * FG - 0.7 * FGA - 0.4*(FTA - FT) + 0.7 * ORB + 0.3 * DRB + STL + 0.7 * AST + 0.7 * BLK - 0.4 * PF - TOV. 
         // Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. 
         // The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.).
-        $jugador['GS'] = ($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD']);
+        $jugador['GS'] = number_format($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD'],2);
 
         //VALORACION
 

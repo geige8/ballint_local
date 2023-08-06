@@ -172,7 +172,7 @@ class Usuario{
 ///////////////////////////////////////////////////////////////
 //Registro
 
-    public static function registrarUsuario($usuarionombre,$nombre,$apellido1,$apellido2,$tipoUsuario,$equipoUsuario){
+    public static function registrarUsuario($usuarionombre,$nombre,$apellido1,$apellido2,$tipoUsuario,$equipoUsuario,$numero){
         $result = true;
 
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -203,13 +203,13 @@ class Usuario{
                 case 'J':
                     $insertedId = $conn->insert_id;
                     $result = self::insertarUsuarioEquipo($insertedId, $equipoUsuario);
-                    $result = self::insertarJugadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
+                    $result = self::insertarJugadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2,$numero);
                 break;
 
                 case 'DT':
                     $insertedId = $conn->insert_id;
                     $result = self::insertarDTEquipo($insertedId);
-                    $result = self::insertaEntrenadorEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
+                    $result = self::insertaDirectorTecnicoEquipo($usuarionombre,$nombre,$apellido1,$apellido2);
                 break;
 
                 default:
@@ -220,6 +220,27 @@ class Usuario{
 
         return $result;
     }
+
+    public static function eliminarUsuario($usuarioEliminar) {
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+    
+        // Preparar la consulta SQL
+        $query = "DELETE FROM credenciales WHERE user = '$usuarioEliminar'";
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+
+    }
+    
 
     public static function insertaEntrenadorEquipo($usuarionombre,$nombreent,$apellidoent1,$apellidoent2){
 
@@ -239,13 +260,31 @@ class Usuario{
         return $result;
     }
 
-    public static function insertarJugadorEquipo($usuarionombre,$nombrej,$apellido1j,$apellido2j){
+    public static function insertaDirectorTecnicoEquipo($usuarionombre,$nombreent,$apellidoent1,$apellidoent2){
 
         $result = true;
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $query = "INSERT INTO jugadores (user,nombre,apellido1,apellido2) VALUES ('$usuarionombre','$nombrej','$apellido1j','$apellido2j')"; 
+        $query = "INSERT INTO directorestecnicos (user,nombre,apellido1,apellido2) VALUES ('$usuarionombre','$nombreent','$apellidoent1','$apellidoent2')"; 
+
+        $rs = $conn->query($query);
+
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+
+        return $result;
+    }
+
+    public static function insertarJugadorEquipo($usuarionombre,$nombrej,$apellido1j,$apellido2j,$numero){
+
+        $result = true;
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = "INSERT INTO jugadores (user,nombre,apellido1,apellido2,numero) VALUES ('$usuarionombre','$nombrej','$apellido1j','$apellido2j','$numero')"; 
 
         $rs = $conn->query($query);
 
@@ -306,7 +345,6 @@ class Usuario{
 
     public static function addUsuarioaEquipo($usuarioaequipo,$equipoausuario){
 
-        
         $result = true;
 
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -315,6 +353,8 @@ class Usuario{
 
         $idEquipoUsuario = Equipo::getidEquipo($equipoausuario);
 
+        echo $idUsuario;
+        
         $query = "INSERT INTO usuarios_equipos (equipo_id,usuario_id)  VALUES ($idEquipoUsuario,$idUsuario)"; 
 
         $rs = $conn->query($query);
@@ -326,6 +366,28 @@ class Usuario{
 
         return $result;
     }
+
+    public static function eliminarUsuarioEquipo($usuarioaequipo, $equipoausuario){
+        $result = true;
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $idUsuario = self::getidNombreUser($usuarioaequipo);
+        $idEquipoUsuario = Equipo::getidEquipo($equipoausuario);
+    
+        echo $idUsuario;
+        
+        // Modificamos la consulta para eliminar la fila que coincide con los valores proporcionados
+        $query = "DELETE FROM usuarios_equipos WHERE equipo_id = $idEquipoUsuario AND usuario_id = $idUsuario"; 
+    
+        $rs = $conn->query($query);
+    
+        if (!$rs) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+    
+        return $result;
+    }
+    
 
     public static function getidNombreUser($usuario){
 

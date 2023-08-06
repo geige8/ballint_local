@@ -9,17 +9,16 @@
             <div class="infoCabecera">
 				<?= mostrarSaludo(); ?>
 			</div>
+            
             <!-- Si es de Tipo Admin -->
 			<?php if (in_array('A', $roles)) { ?>
-                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
-                <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
+                <li><a href="pagina_admin.php">PANEL DE CONTROL</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
             <?php } ?>
 
             <!-- Si es de Tipo DT -->
 			<?php if (in_array('DT', $roles)) { ?>
-                <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
                 <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
@@ -37,7 +36,6 @@
 			<?php if (in_array('J', $roles)) { ?>
                 <li><a href="pagina_perfil.php">MI PERFIL</a></li>
                 <li><a href="pagina_misequipos.php">MIS EQUIPOS</a></li>
-                <li><a href="seleccion_equipo.php">MY LICEO</a></li>
                 <li><a href="pagina_glosario.php">GLOSARIO</a></li>
             <?php } ?>
 		<?php } ?>

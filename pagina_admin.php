@@ -14,14 +14,29 @@ $contenidoPrincipal .= <<<EOS
   <button>Registrar Usuarios</button>
 </a>
 
+<!-- Botón para Eliminar Usuarios -->
+<a href="eliminar_usuarios.php">
+  <button>Eliminar Usuarios</button>
+</a>
+
 <!-- Botón para Registrar Equipos -->
 <a href="registrar_equipos.php">
   <button>Registrar Equipos</button>
 </a>
 
+<!-- Botón para Eliminar Equipos -->
+<a href="eliminar_equipos.php">
+  <button>Eliminar Equipos</button>
+</a>
+
 <!-- Botón para Añadir Jugadores/Entrenadores a Equipos -->
 <a href="addUsuarioTeam.php">
   <button>Añadir Jugadores/Entrenadores a Equipos</button>
+</a>
+
+<!-- Botón para Eliminar Jugadores/Entrenadores a Equipos -->
+<a href="eliminar_UsuarioTeam.php">
+  <button>Eliminar Jugadores/Entrenadores a Equipos</button>
 </a>
 
 EOS;

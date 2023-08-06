@@ -17,6 +17,7 @@ $statsEquipo = es\ucm\fdi\Equipo::statsfromEquipo($datosEquipo);
 $htmlfrommostrarStatsEquipo = es\ucm\fdi\Equipo::mostrarStatsEquipo($statsEquipo);
 $htmlfrommostrarStatsAvanzadasJugadorEquipo = es\ucm\fdi\Equipo::mostrarStatsAvanzadasEquipo($statsEquipo);
 $htmllistajugadoresEquipo = es\ucm\fdi\Equipo::mostrarlistajugadoresEquipo($equipo);
+$htmllistaentrenadoresEquipo = es\ucm\fdi\Equipo::mostrarlistaEntrenadoresEquipo($equipo);
 $htmlUltimosPartidosEquipo = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($equipo);
 
 
@@ -30,6 +31,10 @@ $htmlUltimosPartidosEquipo = es\ucm\fdi\Equipo::mostrarUltimosPartidosEquipo($eq
             <div>
                 <h1>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h1>
                 $htmlfrommostrarStatsAvanzadasJugadorEquipo
+            </div>
+            <div>
+                <h1>Entrenadores del  '$equipo'</h1>
+                $htmllistaentrenadoresEquipo
             </div>
             <div>
                 <h1>Jugadores del  '$equipo'</h1>

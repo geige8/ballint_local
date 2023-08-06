@@ -22,7 +22,7 @@ class FormularioRegistroUsuarios extends Formulario{
  
             // Se generan los mensajes de error si existen.
             $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
-            $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2'], $this->errores, 'span', array('class' => 'error'));
+            $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2','numero'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
             $htmlErroresGlobales
@@ -49,6 +49,9 @@ class FormularioRegistroUsuarios extends Formulario{
                         <label for="apellido2">2do Apellido</label>
                             <input type="text" id="apellido2" name="apellido2" required>
                             {$erroresCampos['apellido2']}
+                        <label for="numero">Número (0-99)</label>
+                            <input type="number" id="numero" name="numero" min="0" max="99" required>
+                            {$erroresCampos['numero']}                            
                         <button type="submit" name="registro">RegistrarUsuario</button>
                     </fieldset>
                 </div>            
@@ -91,6 +94,23 @@ class FormularioRegistroUsuarios extends Formulario{
             $this->errores['equipo_usuario'] = 'Debes seleccionar el equipo para el jugador';
         }
 
+        // Validar campo "numero" para cada jugador
+        $numero = trim($datos['numero'] ?? '');
+
+        // Verificar si el campo está vacío o no es un número
+        if (!$numero || !is_numeric($numero)) {
+            $this->errores['numero'] = 'Debes seleccionar un número válido entre 0 y 99.';
+        } else {
+            // Convertir el valor del campo a un entero
+            $numero = intval($numero);
+
+            // Verificar si el número está dentro del rango permitido (0-99)
+            if ($numero < 0 || $numero > 99) {
+                $this->errores['numero'] = 'El número debe estar entre 0 y 99.';
+            }
+        }
+
+
         if (count($this->errores) === 0) {
 
             //Si no hay errores, quiero que añada todos los usuarios creados
@@ -102,9 +122,9 @@ class FormularioRegistroUsuarios extends Formulario{
             $ultimas_letras_apellido2 = substr($apellido2Jugador, -2);
 
             // Combinar todas las partes para formar el nombre de usuario
-            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario;
+            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario . $numero;
 
-            $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario);
+            $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
         
             if (!$usuarioregistrado) {
                 $this->errores[] = "El usuario no se ha creado correctamente";

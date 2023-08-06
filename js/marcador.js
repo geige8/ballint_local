@@ -171,6 +171,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ganador = saberganador();
             var idMatch = idpartidoElement.textContent;
             saveplayers(ganador,idMatch);
+            generarPDFS();
+            header('Location: index.php');
 
         }
     });
@@ -188,7 +190,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             
             // Guardar la información de las tablas para futuras consultas y redirigir al index
             renametables();
-            window.location.href = "index.php";
 
         }
         else{
@@ -223,6 +224,39 @@ document.getElementById("start-timer").addEventListener("click", () => {
         // Hacer la solicitud AJAX
         xhttp.open("GET", "renombrartablas.php?id=" + parseInt(idpartidoElement.textContent), true);
         xhttp.send();
+    }
+
+    function generarPDFS(){
+
+        //const doc1 = generarPDFEstadisticaCompleta();
+        getJugadoresEstadisticas(function(jugadores) {
+            if (jugadores) {
+                getEquiposEstadisticas(function(equipos) {
+                    if (equipos) {
+                        const doc1 = generarPDFestadisticaCompleta(jugadores);
+                        doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            } else {
+            console.log("Error al obtener los jugadores");
+            }
+        });
+        
+        //const doc2 = generarPDFFullBoxScore(jugadores);
+        getJugadores(function(jugadores) {
+            if (jugadores) {
+                const doc2 = generarPDFFullBoxScore(jugadores);
+                doc2.save(idlocal + '.' + idvisitante + '(FullBoxScore).pdf');
+            } else {
+            console.log("Error al obtener los jugadores");
+            }
+        });
+
+        //const doc3 = generarPDFplaybyplay();
+        const doc3 = generarPDFplaybyplay();
+        doc3.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
     }
 
 /////////////////////////////////////////////////////////////
@@ -262,9 +296,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
             pdfcompleto.addEventListener('click', function() {
             // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-                ventana.parentNode.removeChild(ventana);
-                overlay.parentNode.removeChild(overlay);
-
+                generarPDFS();
             });
 
         //Botón 1: Mostrar Estadistica Completa (CORRECTO)
@@ -275,7 +307,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ventana.appendChild(mostrarstats);
             
             mostrarstats.addEventListener('click', function() {
-                //generarPDF();
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
                 getJugadoresEstadisticas(function(jugadores) {
@@ -283,6 +314,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
                         getEquiposEstadisticas(function(equipos) {
                             if (equipos) {
                             mostrarEstadisticaCompleta(jugadores,equipos);
+                            const doc1 = generarPDFestadisticaCompleta(jugadores,equipos);
+                            doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
                             } else {
                             console.log("Error al obtener los jugadores");
                             }
@@ -293,7 +326,33 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 });
             });
 
-        //Botón 2: Mostrar Box Score (NO PDF) completo de los 12 jugadores (CORRECTO)
+
+            //Botón 2: Mostrar Estadistica Completa PDF(CORRECTO)
+
+            var mostrarstatsPDF = document.createElement('button');
+            mostrarstatsPDF.classList.add('mostrarstatsPDF');
+            mostrarstatsPDF.innerHTML = 'Estadisticas Completas PDF';
+            ventana.appendChild(mostrarstatsPDF);
+            
+            mostrarstatsPDF.addEventListener('click', function() {
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getJugadoresEstadisticas(function(jugadores) {
+                    if (jugadores) {
+                        getEquiposEstadisticas(function(equipos) {
+                            if (equipos) {
+                            const doc1 = generarPDFestadisticaCompleta(jugadores,equipos);
+                            doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
+                            } else {
+                            console.log("Error al obtener los jugadores");
+                            }
+                        });
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            });
+        //Botón 2: Mostrar Box Score  completo de los 12 jugadores (CORRECTO)
 
             var fullboxscore = document.createElement('button');
             fullboxscore.classList.add('fullboxscore');
@@ -313,22 +372,50 @@ document.getElementById("start-timer").addEventListener("click", () => {
                     }
                 });
             });
+
+        //Botón 2: Mostrar Box Score PDF completo de los 12 jugadores (CORRECTO)
+
+            var fullboxscorePDF = document.createElement('button');
+            fullboxscorePDF.classList.add('fullboxscorePDF');
+            fullboxscorePDF.innerHTML = 'Full Box Score PDF';
+            ventana.appendChild(fullboxscorePDF);
+
+            fullboxscorePDF.addEventListener('click', function() {
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+                getJugadores(function(jugadores) {
+                    if (jugadores) {
+                        // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
+                        const doc2 = generarPDFFullBoxScore(jugadores);
+                        doc2.save(idlocal + '.' + idvisitante + '(FullBoxScore).pdf');
+
+                    } else {
+                    console.log("Error al obtener los jugadores");
+                    }
+                });
+            });
+
+
   
         //Botón 3: Mostrar PDF Con todo el JUGADA A JUGADA (CORRECTO)
 
             var playbyplay = document.createElement('button');
             playbyplay.classList.add('playbyplay');
-            playbyplay.innerHTML = 'Jugada a Jugada';
+            playbyplay.innerHTML = 'Jugada a Jugada PDF';
             ventana.appendChild(playbyplay);
             
             playbyplay.addEventListener('click', function() {
-                generarPDFplaybyplay();
+                const doc3 = generarPDFplaybyplay();
+                // Guardar o mostrar el PDF
+                doc3.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+
                 // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
             });
 
-        //Botón 5: Mostrar PDF con Impacto TimeOuts (CORRECTO)
+        //Botón 5: Mostrar Impacto TimeOut (CORRECTO)
 
             var impactoTimeOut = document.createElement('button');
             impactoTimeOut.classList.add('impactoTimeOut');
@@ -349,8 +436,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 });
             });
 
+        //Botón 6: Mostrar Impacto Cambio (CORRECTO)
 
-        //Botón 6: Mostrar PDF con Impacto Cambios (CORRECTO)
             var impactoCambio = document.createElement('button');
             impactoCambio.classList.add('impactoCambio');
             impactoCambio.innerHTML = 'Impacto Cambios';
@@ -986,115 +1073,252 @@ document.getElementById("start-timer").addEventListener("click", () => {
         displaytablas.appendChild(visitfullPlayersDisplay);
     }
 
-    function generarPDFcompleto() {
+    function generarPDFestadisticaCompleta(jugadores, equipos) {
 
+        console.log(jugadores);
+        console.log(equipos);
+        // Crear una nueva instancia de jsPDF
+        const doc = new jsPDF({
+            orientation: 'landscape'
+        });
+    
+        // Definir las posiciones iniciales para el contenido
+        let xPosition = 15;
+        let yPosition = 15;
 
-        //Llamar a las funciones que devuelvan el html.
-
-        //1º Llamar a la función de estadisticas.
-
-
-        // Definir el contenido del documento PDF
-
-        var contenidoPDF = {
-            content: [
-            { text: 'Estadísitca Completa: ' +  getNombreEquipo(idlocal) + ' vs ' + getNombreEquipo(idvisitante), style: 'header' },
-            { text: playbyplay.innerHTML , style: 'body' },
-            { text: 'Resultado Final: ' +  getNombreEquipo(idlocal) + ' ' + parseInt(localpointsElement.textContent) + ' vs ' + parseInt(localpointsElement.textContent) + ' ' + getNombreEquipo(idvisitante), style: 'header' },
-            ],
-            styles: {
-            header: { fontSize: 18, bold: true },
-            body: { fontSize: 12 }
-            }
-        };
+        // Añadir el título del equipo local y visitante al PDF
+        doc.setFontSize(18);
+        doc.setFontStyle('bold');
+        doc.text(xPosition, yPosition, 'Partido: ' + idlocal + ' vs ' + idvisitante);
+        yPosition += 10;
+    
+        // Crear la cabecera de la tabla para los equipos
+        const headersTeam = [
+            'TEAM', 'MTS', 'MSMS', 'PTS', 'T2A', 'T2%', 'T3A', 'T3%', 'TCA', 'TC%',
+            'TLA', 'TL%', 'FLH', 'FLR', 'TEC', 'RBO', 'RBD', 'RBT', 'ROB', 'TAP',
+            'PRD', 'AST', 'PTQ1', 'PTQ2', 'PTQ3', 'PTQ4', 'PTQE', 'T2%Us', 'T3%Us',
+            'TL%Us', 'eFG%', 'TO%', 'TL%', 'TS%', 'AS%', 'POS', 'OER', 'DER', 'PACE'
+        ];
+    
+        doc.autoTable({
+            startY: yPosition,
+            head: [headersTeam],
+            body: [[
+                equipos[0].equipo, equipos[0].MTT, equipos[0].MSMS, equipos[0].PPP,
+                equipos[0].T2A, equipos[0].T2P + '%',
+                equipos[0].T3A, equipos[0].T3P + '%',
+                equipos[0].TCA, equipos[0].TCP + '%',
+                equipos[0].TLA, equipos[0].TLP + '%',
+                equipos[0].FLH, equipos[0].FLR, equipos[0].TEC, equipos[0].REB,
+                equipos[0].RBO, equipos[0].RBD, equipos[0].ROB, equipos[0].TAP,
+                equipos[0].PRD, equipos[0].AST, equipos[0].PTQ1, equipos[0].PTQ2,
+                equipos[0].PTQ3, equipos[0].PTQ4, equipos[0].PTQE, equipos[0].T2PU,
+                equipos[0].T3PU, equipos[0].T1PU, equipos[0].eFGP, equipos[0].TOP,
+                equipos[0].TLP, equipos[0].TSP, equipos[0].ASP, equipos[0].POS,
+                equipos[0].OER, equipos[0].DER, equipos[0].PACE
+            ], [
+                equipos[1].equipo, equipos[1].MTT, equipos[1].MSMS, equipos[1].PPP,
+                equipos[1].T2A, equipos[1].T2P + '%',
+                equipos[1].T3A, equipos[1].T3P + '%',
+                equipos[1].TCA, equipos[1].TCP + '%',
+                equipos[1].TLA, equipos[1].TLP + '%',
+                equipos[1].FLH, equipos[1].FLR, equipos[1].TEC, equipos[1].REB,
+                equipos[1].RBO, equipos[1].RBD, equipos[1].ROB, equipos[1].TAP,
+                equipos[1].PRD, equipos[1].AST, equipos[1].PTQ1, equipos[1].PTQ2,
+                equipos[1].PTQ3, equipos[1].PTQ4, equipos[1].PTQE, equipos[1].T2PU,
+                equipos[1].T3PU, equipos[1].T1PU, equipos[1].eFGP, equipos[1].TOP,
+                equipos[1].TLP, equipos[1].TSP, equipos[1].ASP, equipos[1].POS,
+                equipos[1].OER, equipos[1].DER, equipos[1].PACE
+            ]],
+            styles: { fontSize: 6, fontStyle: 'helvetica'},
+            headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+        });
+    
+        yPosition = doc.previousAutoTable.finalY + 10;
+    
+        // Crear la cabecera de la tabla para los jugadores
+        const headersJugadores = [
+            'NO', 'Nombre', 'TITL', 'MTS', 'MSMS', 'PTS', 'T2A', 'T2%', 'T3A', 'T3%',
+            'TCA', 'TC%', 'TLA', 'TL%', 'FLH', 'FLR', 'TEC', 'RBO', 'RBD', 'RBT', 'ROB',
+            'TAP', 'PRD', 'AST', 'PTQ1', 'PTQ2', 'PTQ3', 'PTQ4', 'PTQE', 'T2%Us', 'T3%Us',
+            'TL%Us', 'eFG%', 'TS%', 'AS%', 'GS', 'VAL'
+        ];
+    
+        doc.autoTable({
+            startY: yPosition,
+            head: [headersJugadores],
+            body: jugadores.map(jugador => [
+                jugador.numero, jugador.nombrejugador, jugador.TIT, jugador.MTT,
+                jugador.MSMS, jugador.PTS,
+                jugador.T2A, jugador.T2P + '%',
+                jugador.T3A, jugador.T3P + '%',
+                jugador.TCA, jugador.TCP + '%',
+                jugador.TLA, jugador.TLP + '%',
+                jugador.FLH, jugador.FLR, jugador.TEC, jugador.RBO,
+                jugador.RBD, jugador.RBT, jugador.ROB, jugador.TAP, jugador.PRD,
+                jugador.AST, jugador.PTQ1, jugador.PTQ2, jugador.PTQ3,
+                jugador.PTQ4, jugador.PTQE, jugador.T2PU, jugador.T3PU,
+                jugador.T1PU, jugador.eFGP, jugador.TSP, jugador.ASP,
+                jugador.GS, jugador.VAL
+            ]),
+            styles: { fontSize: 6, fontStyle: 'helvetica'},
+            headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+        });
         
-        // Generar el archivo PDF
-        var pdfDocGenerator = pdfMake.createPdf(contenidoPDF);
+        return doc;
+    }
+    
+    function generarPDFFullBoxScore(jugadores) {
+        // Crear una nueva instancia de jsPDF
+        const doc = new jsPDF();
+    
+        // Definir las posiciones iniciales para el contenido
+        let xPosition = 15;
+        let yPosition = 15;
+    
         
-        // Descargar el archivo PDF
-        pdfDocGenerator.download(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+        // Añadir el título del equipo local y visitante al PDF
+        doc.setFontSize(18);
+        doc.setFontStyle('bold');
+        doc.text(xPosition, yPosition, 'Partido: ' + idlocal + ' vs ' + idvisitante);
+        yPosition += 10;
+
+        // Añadir el título del equipo local y visitante al PDF
+        doc.setFontSize(18);
+        doc.setFontStyle('bold');
+        doc.text(xPosition, yPosition, idlocal);
+        yPosition += 10;
+    
+        // Añadir la tabla de jugadores del equipo local al PDF
+        doc.autoTable({
+            head: [['Nº', 'Nombre', 'Ptos.', 'Faltas', 'Time']],
+            body: getPlayersData(jugadores), // Obtener los datos de los jugadores del equipo local
+            startY: yPosition,
+        });
+    
+        // Añadir el título del equipo visitante al PDF
+        yPosition = doc.lastAutoTable.finalY + 10;
+        doc.text(xPosition, yPosition, idvisitante);
+        yPosition += 10;
+    
+        // Añadir la tabla de jugadores del equipo visitante al PDF
+        doc.autoTable({
+            head: [['Nº', 'Nombre', 'Ptos.', 'Faltas', 'Time']],
+            body: getPlayersDataV(jugadores), // Obtener los datos de los jugadores del equipo visitante
+            startY: yPosition,
+        });
+    
+        return doc;
+    }
+    
+    // Función auxiliar para obtener los datos de los jugadores según el equipo (local o visitante)
+    function getPlayersData(jugadores) {
+        return jugadores
+            .filter(jugador => isLocal(jugador.equipo))
+            .map(jugador => {
+                const puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
+                const faltasPlayer = jugador.FLH;
+                const minutosjugador = Math.floor(jugador.MT / 60);
+                const segundosjugador = jugador.MT % 60;
+                const minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
+    
+                return [jugador.numero, jugador.nombrejugador, puntosPlayer, faltasPlayer, minutosPlayer];
+            });
     }
 
-    function getplantillastats(){
-
-        var jugadores = null;
-        jugadores = getJugadores();+
-        jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
-
+    function getPlayersDataV(jugadores) {
+        return jugadores
+            .filter(jugador => !isLocal(jugador.equipo))
+            .map(jugador => {
+                const puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
+                const faltasPlayer = jugador.FLH;
+                const minutosjugador = Math.floor(jugador.MT / 60);
+                const segundosjugador = jugador.MT % 60;
+                const minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
+    
+                return [jugador.numero, jugador.nombrejugador, puntosPlayer, faltasPlayer, minutosPlayer];
+            });
     }
-
+    
     function generarPDFplaybyplay() {
-    // Obtener el contenido del div
-    const divContent = document.querySelector('.info-display');
+        // Obtener el contenido del div
+        const divContent = document.querySelector('.info-display');
 
-    // Crear una nueva instancia de jsPDF
-    const doc = new jsPDF();
+        // Obtener el contenido dividido por líneas
+        const lines = divContent.innerHTML.split('\n').map(line => line.trim()).filter(line => line !== '');
+        
+        // Crear una nueva instancia de jsPDF
+        const doc = new jsPDF();
 
+        // Definir las posiciones iniciales para el contenido
+        let xPosition = 15;
+        let yPosition = 15;
 
-    // Obtener el contenido dividido por líneas
-    const lines = divContent.innerHTML.split('\n');
+        // Calcular la altura total del contenido para ajustar la posición en "y"
+        const lineHeight = 6; // Altura de una línea (ajústala según tu preferencia)
+        const totalHeight = lines.length * lineHeight;
 
-    // Definir las posiciones iniciales para el contenido
-    let xPosition = 15;
-    let yPosition = 15;
+        // Verificar si el contenido se ajusta en una sola página o requiere varias páginas
 
-    // Calcular la altura total del contenido para ajustar la posición en "y"
-    const lineHeight = 10; // Altura de una línea (ajústala según tu preferencia)
-    const totalHeight = lines.length * lineHeight;
+        // Configurar el tamaño de página (A4 en este caso)
+        const pageWidth = 210; // Ancho de la página A4 en mm
+        const pageHeight = 297; // Altura de la página A4 en mm
 
-    // Verificar si el contenido se ajusta en una sola página o requiere varias páginas
+        // Configurar los márgenes
+        const pageMargin = 15; // Margen superior, inferior y derecho de la página en mm
+        
+        const availableWidth = pageWidth - pageMargin * 2;
+        const availableHeight = pageHeight - pageMargin * 2;
+        
+        const requireMultiplePages = totalHeight > availableHeight;
 
-    // Configurar el tamaño de página (A4 en este caso)
-    const pageWidth = 210; // Ancho de la página A4 en mm
-    const pageHeight = 297; // Altura de la página A4 en mm
+        // Función para agregar una página nueva al PDF y restablecer las coordenadas
 
-    // Configurar los márgenes
-    const pageMargin = 20; // Margen superior, inferior y derecho de la página en mm
-    const availableWidth = pageWidth - pageMargin * 2;
-    const availableHeight = pageHeight - pageMargin * 2;
+        function newPage() {
+            doc.addPage();
 
-    const requireMultiplePages = totalHeight > availableHeight;
+            doc.setFontSize(18); // Restaurar el tamaño de fuente para el título en nuevas páginas
+            doc.setFontStyle('bold'); // Restaurar el estilo de fuente para el título en nuevas páginas
 
-    // Función para agregar una página nueva al PDF y restablecer las coordenadas
+            // Definir las posiciones iniciales para el contenido
+            xPosition = 15;
+            yPosition = 15;
 
-    function newPage() {
-        doc.addPage();
+            doc.text(xPosition, yPosition, 'Partido: ' + idlocal + ' vs ' + idvisitante); // Agregar el título en la nueva página
 
-        doc.setFontSize(18); // Restaurar el tamaño de fuente para el título en nuevas páginas
-        doc.setFontStyle('bold'); // Restaurar el estilo de fuente para el título en nuevas páginas
+            // Restaurar el estilo de fuente por defecto (opcional)
+            doc.setFontSize(12); // Tamaño de fuente por defecto
+            doc.setFontStyle('normal'); // Estilo de fuente por defecto
 
-        doc.text(15, 15, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la nueva página
-
-        yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
-    }
-
-
-    // Añadir el título al PDF
-    doc.setFontSize(18); // Tamaño de fuente para el título
-    doc.setFontStyle('bold'); // Estilo de fuente para el título (negrita)
-    doc.text(xPosition, yPosition, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la posición (15, 15)
-
-    yPosition = 15 + lineHeight; // Restablecer la posición en "y" para el contenido
-
-    // Restaurar el estilo de fuente por defecto (opcional)
-    doc.setFontSize(12); // Tamaño de fuente por defecto
-    doc.setFontStyle('normal'); // Estilo de fuente por defecto
-
-    // Agregar cada línea al PDF con un salto de línea
-    lines.forEach((line, index) => {
-        if (requireMultiplePages && yPosition + lineHeight > pageHeight - pageMargin) {
-        // Si el contenido no cabe en la página actual, agregar una nueva página
-        newPage();
+            yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
         }
 
-        doc.text(15, yPosition, line);
-        yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
 
-    });
+        // Añadir el título al PDF
+        doc.setFontSize(18); // Tamaño de fuente para el título
+        doc.setFontStyle('bold'); // Estilo de fuente para el título (negrita)
+        doc.text(xPosition, yPosition, 'Partido: ' + idlocal + 'vs' + idvisitante); // Agregar el título en la posición (15, 15)
+
+        yPosition = 15 + lineHeight; // Restablecer la posición en "y" para el contenido
+
+        // Restaurar el estilo de fuente por defecto (opcional)
+        doc.setFontSize(12); // Tamaño de fuente por defecto
+        doc.setFontStyle('normal'); // Estilo de fuente por defecto
+
+        // Agregar cada línea al PDF con un salto de línea
+        lines.forEach((line, index) => {
+            if (requireMultiplePages && yPosition + lineHeight > pageHeight - pageMargin) {
+            // Si el contenido no cabe en la página actual, agregar una nueva página
+            newPage();
+            }
+
+            doc.text(15, yPosition, line);
+            yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
+
+        });
 
 
-    // Guardar o mostrar el PDF
-    doc.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
+        return doc;
 
     }
 
@@ -1603,7 +1827,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
         
     }
 
-
     function mostrarEvaluacionJugador(evaluacion,jugador){
         // Crear la capa de fondo oscuro y agregarla al DOM
         var overlay = document.createElement('div');
@@ -1816,138 +2039,117 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
     function mostrarBoxScoreCompleto(jugadores) {
 
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
 
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement('div');
-    ventana.classList.add("ventana-graficos");
-    document.body.appendChild(ventana);
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
 
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
 
-    cerrar.addEventListener('click', function() {
-    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-        ventana.parentNode.removeChild(ventana);
-        overlay.parentNode.removeChild(overlay);
-    });
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
 
-    var localfullTable = document.createElement('table');
-    var visitfullTable = document.createElement('table');
+        var localfullTable = document.createElement('table');
+        var visitfullTable = document.createElement('table');
 
-    // Crear la primera fila para el nombre del equipo
-    var localfullTeamRow = localfullTable.insertRow();
-    var visitfullTeamRow = visitfullTable.insertRow();
+        // Crear la primera fila para el nombre del equipo
+        var localfullTeamRow = localfullTable.insertRow();
+        var visitfullTeamRow = visitfullTable.insertRow();
 
-    var localfullTeamCell = localfullTeamRow.insertCell();
-    localfullTeamCell.colSpan = 12;
-    localfullTeamCell.innerHTML = 'Equipo Local';
+        var localfullTeamCell = localfullTeamRow.insertCell();
+        localfullTeamCell.colSpan = 12;
+        localfullTeamCell.innerHTML = 'Equipo Local';
 
-    var visitfullTeamCell = visitfullTeamRow.insertCell();
-    visitfullTeamCell.colSpan =12;
-    visitfullTeamCell.innerHTML = 'Equipo Visitante';
+        var visitfullTeamCell = visitfullTeamRow.insertCell();
+        visitfullTeamCell.colSpan =12;
+        visitfullTeamCell.innerHTML = 'Equipo Visitante';
 
-    // Crear la segunda fila para las cabeceras
-    var localfullHeaderRow = localfullTable.insertRow();
-    var visitfullHeaderRow = visitfullTable.insertRow();
+        // Crear la segunda fila para las cabeceras
+        var localfullHeaderRow = localfullTable.insertRow();
+        var visitfullHeaderRow = visitfullTable.insertRow();
 
-    var headers = ['Nº', 'Nombre', 'Ptos.', 'Faltas', 'Time'];
+        var headers = ['Nº', 'Nombre', 'Ptos.', 'Faltas', 'Time'];
 
-    for (var i = 0; i < headers.length; i++) {
-        var localfullHeaderCell = localfullHeaderRow.insertCell();
-        localfullHeaderCell.innerHTML = headers[i];
+        for (var i = 0; i < headers.length; i++) {
+            var localfullHeaderCell = localfullHeaderRow.insertCell();
+            localfullHeaderCell.innerHTML = headers[i];
 
-        var visitfullHeaderCell = visitfullHeaderRow.insertCell();
-        visitfullHeaderCell.innerHTML = headers[i];
-    }
-
-    //Ordeno para obtener primero a los titulares.
-    jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
-
-
-    // Recorrer los jugadores y agregarlos a las tablas
-    for (var i = 0; i < jugadores.length; i++) {
-        var jugador = jugadores[i];
-
-        // Cálculo de puntos, faltas y tiempo
-        var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
-        var faltasPlayer = jugador.FLH;
-        var minutosjugador = Math.floor(jugador.MT / 60);
-        var segundosjugador = jugador.MT % 60;
-        var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
-
-        var playerfullRow = document.createElement('tr');
-
-        // Crear las celdas para los datos del jugador
-        var numberfullCell = playerfullRow.insertCell();
-        numberfullCell.innerHTML = jugador.numero;
-
-        var namefullCell = playerfullRow.insertCell();
-        namefullCell.innerHTML = jugador.nombrejugador;
-
-        var pointsfullCell = playerfullRow.insertCell();
-        pointsfullCell.innerHTML = puntosPlayer;
-
-        var foulsfullCell = playerfullRow.insertCell();
-        foulsfullCell.innerHTML = faltasPlayer;
-
-        var timefullCell = playerfullRow.insertCell();
-        timefullCell.innerHTML = minutosPlayer;
-
-        if (isLocal(jugador.equipo)) {
-            localfullTable.appendChild(playerfullRow);
-        } else {
-            visitfullTable.appendChild(playerfullRow);
+            var visitfullHeaderCell = visitfullHeaderRow.insertCell();
+            visitfullHeaderCell.innerHTML = headers[i];
         }
+
+        //Ordeno para obtener primero a los titulares.
+        jugadores.sort((a, b) => b.titular - a.titular); // Ordenar por el campo 'titular' en orden descendente
+
+
+        // Recorrer los jugadores y agregarlos a las tablas
+        for (var i = 0; i < jugadores.length; i++) {
+            var jugador = jugadores[i];
+
+            // Cálculo de puntos, faltas y tiempo
+            var puntosPlayer = (jugador.T2A * 2) + (jugador.T3A * 3) + (jugador.TLA * 1);
+            var faltasPlayer = jugador.FLH;
+            var minutosjugador = Math.floor(jugador.MT / 60);
+            var segundosjugador = jugador.MT % 60;
+            var minutosPlayer = `${minutosjugador.toString().padStart(2, '0')}:${segundosjugador.toString().padStart(2, '0')}`;
+
+            var playerfullRow = document.createElement('tr');
+
+            // Crear las celdas para los datos del jugador
+            var numberfullCell = playerfullRow.insertCell();
+            numberfullCell.innerHTML = jugador.numero;
+
+            var namefullCell = playerfullRow.insertCell();
+            namefullCell.innerHTML = jugador.nombrejugador;
+
+            var pointsfullCell = playerfullRow.insertCell();
+            pointsfullCell.innerHTML = puntosPlayer;
+
+            var foulsfullCell = playerfullRow.insertCell();
+            foulsfullCell.innerHTML = faltasPlayer;
+
+            var timefullCell = playerfullRow.insertCell();
+            timefullCell.innerHTML = minutosPlayer;
+
+            if (isLocal(jugador.equipo)) {
+                localfullTable.appendChild(playerfullRow);
+            } else {
+                visitfullTable.appendChild(playerfullRow);
+            }
+        }
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var displaytablas = document.createElement("div");
+        displaytablas.classList.add("displaytablas");
+        ventana.appendChild(displaytablas);
+
+        // Obtener los elementos de anclaje para las tablas
+        var localfullPlayersDisplay = document.createElement('div');
+        var visitfullPlayersDisplay = document.createElement('div');
+
+        // Agregar las tablas al contenedor correspondiente
+        localfullPlayersDisplay.innerHTML = '';
+        localfullPlayersDisplay.appendChild(localfullTable);
+
+        visitfullPlayersDisplay.innerHTML = '';
+        visitfullPlayersDisplay.appendChild(visitfullTable);
+
+        displaytablas.appendChild(localfullPlayersDisplay);
+        displaytablas.appendChild(visitfullPlayersDisplay);
+    
     }
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var displaytablas = document.createElement("div");
-    displaytablas.classList.add("displaytablas");
-    ventana.appendChild(displaytablas);
-
-    // Obtener los elementos de anclaje para las tablas
-    var localfullPlayersDisplay = document.createElement('div');
-    var visitfullPlayersDisplay = document.createElement('div');
-
-    // Agregar las tablas al contenedor correspondiente
-    localfullPlayersDisplay.innerHTML = '';
-    localfullPlayersDisplay.appendChild(localfullTable);
-
-    visitfullPlayersDisplay.innerHTML = '';
-    visitfullPlayersDisplay.appendChild(visitfullTable);
-
-    displaytablas.appendChild(localfullPlayersDisplay);
-    displaytablas.appendChild(visitfullPlayersDisplay);
-
-    generarPDFStats(displaytablas);
-    }
-
-    function generarPDFStats(displaytablas) {
-    // Crear un nuevo documento jsPDF
-    var doc = new jsPDF();
-
-    // Obtener el contenido HTML del elemento displaytablas
-    var htmlContent = displaytablas.innerHTML;
-
-    // Definir las opciones de formato para el contenido HTML
-    var options = {
-        html2canvas: { scale: 2 },
-        margin: { top: 20, bottom: 20, left: 20, right: 20 },
-    };
-
-    // Generar el PDF a partir del contenido HTML
-    doc.html(htmlContent, options).then(function () {
-        // Descargar el archivo PDF
-        doc.save(idlocal + '.' + idvisitante + '(Stats).pdf');
-    });
-    } 
 
 
 /////////////////////////////////////////////////////////////
