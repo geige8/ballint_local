@@ -1,15 +1,12 @@
 <?php
     require_once __DIR__.'/includes/config.php';
 
-
     $entrenador = $_GET['entrenador'];
-
 
     $tituloPagina = 'Perfil';
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
     $rutaImgs=RUTA_IMGS;
-
 
     $usuario = es\ucm\fdi\Usuario::getDatosPerfilEntrenador($entrenador);
 
@@ -42,7 +39,6 @@
     $contenidoPrincipal .= <<<EOS
         </div>
     EOS;
-
 
     require __DIR__.'/includes/vistas/plantilla.php';
 ?>

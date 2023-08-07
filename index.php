@@ -2,12 +2,11 @@
 
 require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = 'BallInt';
+$tituloPagina = 'BALLINT';
 
 $rutaApp = RUTA_APP;
 $contenidoPrincipal = '';
 $rutaImgs=RUTA_IMGS;
-
 
 $htmlEquiposClub = es\ucm\fdi\Equipo::mostrarEquipos();  
 
@@ -24,7 +23,6 @@ if (isset($_SESSION["login"])) {
     header('Location: login.php');
 }
 
-
-
-
 require __DIR__.'/includes/vistas/plantilla.php';
+
+?>

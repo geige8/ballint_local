@@ -1,22 +1,23 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = 'Selección Jugadores';
+    $tituloPagina = 'Selección Jugadores';
 
-$contenidoPrincipal = '';
+    $contenidoPrincipal = '';
 
-$idEquipoLocal = $_GET['idEquipo'] ?? null;
+    $idEquipoLocal = $_GET['idEquipo'] ?? null;
 
-$equipoLocal = es\ucm\fdi\Equipo::getNombreEquipo($idEquipoLocal);
+    $equipoLocal = es\ucm\fdi\Equipo::getNombreEquipo($idEquipoLocal);
 
-$formulario = new es\ucm\fdi\FormularioSeleccionJugadores($idEquipoLocal);
+    $formulario = new es\ucm\fdi\FormularioSeleccionJugadores($idEquipoLocal);
 
-$FormularioSeleccionJugadores = $formulario->gestiona();
+    $FormularioSeleccionJugadores = $formulario->gestiona();
 
-$contenidoPrincipal .= <<<EOS
-    $FormularioSeleccionJugadores
-EOS;
+    $contenidoPrincipal .= <<<EOS
+        $FormularioSeleccionJugadores
+    EOS;
 
+    require __DIR__.'/includes/vistas/plantilla.php';
 
-require __DIR__.'/includes/vistas/plantilla.php';
+?>

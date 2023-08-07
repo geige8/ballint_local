@@ -1,14 +1,11 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = '';
+    $jugadores = es\ucm\fdi\Partido::getJugadores();
 
-$rutaApp = RUTA_APP;
+    // Devolver la lista de jugadores en formato JSON
+    header('Content-Type: application/json');
+    echo json_encode($jugadores);
 
-$jugadores = es\ucm\fdi\Partido::getJugadores();
-
-// Devolver la lista de jugadores en formato JSON
-header('Content-Type: application/json');
-echo json_encode($jugadores);
 ?>

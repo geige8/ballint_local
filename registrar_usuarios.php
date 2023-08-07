@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = 'Registrar Usuarios';
-$rutaApp = RUTA_APP;
-$contenidoPrincipal = '';
+    require_once __DIR__.'/includes/config.php';
 
-$formulario = new es\ucm\fdi\FormularioRegistroUsuarios();
-$contenidoPrincipal .= $formulario->gestiona();
+    $tituloPagina = 'Registrar Usuarios';
+    $rutaApp = RUTA_APP;
+    $contenidoPrincipal = '';
 
-require __DIR__.'/includes/vistas/plantilla.php';
+    $formulario = new es\ucm\fdi\FormularioRegistroUsuarios();
+    $contenidoPrincipal .= $formulario->gestiona();
+
+    require __DIR__.'/includes/vistas/plantilla.php';
+    
 ?>

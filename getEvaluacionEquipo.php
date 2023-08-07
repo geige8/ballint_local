@@ -1,16 +1,13 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = '';
+    $equipo = $_GET['equipo'];
 
-$rutaApp = RUTA_APP;
+    $evaluacion = es\ucm\fdi\Partido::getEvaluacionEquipo($equipo);
 
-$equipo = $_GET['equipo'];
+    // Devolver la lista de jugadores en formato JSON
+    header('Content-Type: application/json');
+    echo json_encode($evaluacion);
 
-$evaluacion = es\ucm\fdi\Partido::getEvaluacionEquipo($equipo);
-
-// Devolver la lista de jugadores en formato JSON
-header('Content-Type: application/json');
-echo json_encode($evaluacion);
 ?>

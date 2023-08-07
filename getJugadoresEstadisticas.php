@@ -1,20 +1,17 @@
 <?php
 
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = '';
+    $jugadores = es\ucm\fdi\Partido::getJugadores();
 
-$rutaApp = RUTA_APP;
+    foreach($jugadores as $jugador){
 
-$jugadores = es\ucm\fdi\Partido::getJugadores();
+        $jugadoresEstadisticas[] = es\ucm\fdi\Jugador::statsfromJugadorEnPartido($jugador);
 
-foreach($jugadores as $jugador){
+    }
 
-    $jugadoresEstadisticas[] = es\ucm\fdi\Jugador::statsfromJugadorEnPartido($jugador);
+    // Devolver la lista de jugadores en formato JSON
+    header('Content-Type: application/json');
+    echo json_encode($jugadoresEstadisticas);
 
-}
-
-// Devolver la lista de jugadores en formato JSON
-header('Content-Type: application/json');
-echo json_encode($jugadoresEstadisticas);
 ?>

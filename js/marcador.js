@@ -2607,7 +2607,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         };
     
         // Hacer la solicitud AJAX
-        xhttp.open("GET", "obtener_jugadoresSub.php?equipo=" + equipo, true);
+        xhttp.open("GET", "getJugadoresSub.php?equipo=" + equipo, true);
         xhttp.send();
 
     }
@@ -2794,7 +2794,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         };
     
         // Hacer la solicitud AJAX
-        xhttp.open("GET", "obtener_jugadores.php?equipo=" + equipo, true);
+        xhttp.open("GET", "getJugadoresJugando.php?equipo=" + equipo, true);
         xhttp.send();
     }
 

@@ -6,5 +6,4 @@
 
     $result = es\ucm\fdi\Partido::cambiojugador($listaJugadores);
 
-
 ?>

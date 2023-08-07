@@ -1,6 +1,6 @@
 <?php
-    require_once __DIR__.'/includes/config.php';
 
+    require_once __DIR__.'/includes/config.php';
 
     $partido = $_GET['partido'];
     $fecha = $_GET['fecha'];
@@ -56,4 +56,5 @@
     EOS;
     
     require __DIR__.'/includes/vistas/plantilla.php';
+    
 ?>

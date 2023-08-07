@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__.'/includes/config.php';
 
-$tituloPagina = 'Registrar Equipos';
-$rutaApp = RUTA_APP;
-$contenidoPrincipal = '';
+    require_once __DIR__.'/includes/config.php';
 
-$formulario = new es\ucm\fdi\FormularioRegistroEquipos();
-$contenidoPrincipal .= $formulario->gestiona();
+    $tituloPagina = 'Registrar Equipos';
+    $rutaApp = RUTA_APP;
+    $contenidoPrincipal = '';
 
-require __DIR__.'/includes/vistas/plantilla.php';
+    $formulario = new es\ucm\fdi\FormularioRegistroEquipos();
+    $contenidoPrincipal .= $formulario->gestiona();
+
+    require __DIR__.'/includes/vistas/plantilla.php';
+
 ?>

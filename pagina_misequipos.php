@@ -1,24 +1,22 @@
 <?php
-require_once __DIR__.'/includes/config.php';
+    require_once __DIR__.'/includes/config.php';
 
-/////////////////////////////////
-//Pagina Mis Equipos
-$tituloPagina = 'Mis Equipos';
-$rutaApp = RUTA_APP;
-$rutaImgs=RUTA_IMGS;
+    /////////////////////////////////
+    //Pagina Mis Equipos
+    $tituloPagina = 'Mis Equipos';
+    $rutaApp = RUTA_APP;
+    $rutaImgs=RUTA_IMGS;
 
-/////////////////////////////////
-//Variables
-$contenidoPrincipal = '';
-$htmlfrommostrarStatsEquipo = '';
-$htmlpartidos = '';
+    /////////////////////////////////
+    //Variables
+    $contenidoPrincipal = '';
+    $htmlfrommostrarStatsEquipo = '';
+    $htmlpartidos = '';
+    /////////////////////////////////
 
-/////////////////////////////////
-
-//1º Equipos a los que pertenece:
-$equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);
-$htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
-
+    //1º Equipos a los que pertenece:
+    $equipos = es\ucm\fdi\Equipo::getEquiposfromUserId($_SESSION['id']);
+    $htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
 
     $contenidoPrincipal .= <<<EOS
         <div class="equipos">
@@ -29,6 +27,7 @@ $htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
     EOS;
 
     foreach($equipos as $equipo){
+        
         $datosEquipo = es\ucm\fdi\Equipo::datosfromEquipo($equipo);
 
         $statsEquipo = es\ucm\fdi\Equipo::statsfromEquipo($datosEquipo);
@@ -64,4 +63,6 @@ $htmlEquiposfromUser = es\ucm\fdi\Equipo::mostrarListadoEquipos($equipos);
     EOS;
 
 
-require __DIR__.'/includes/vistas/plantilla.php';
+    require __DIR__.'/includes/vistas/plantilla.php';
+
+?>

@@ -1,15 +1,13 @@
 <?php
+
     require_once __DIR__.'/includes/config.php';
 
-
     $jugador = $_GET['jugador'];
-
 
     $tituloPagina = 'Perfil';
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
     $rutaImgs=RUTA_IMGS;
-
 
     $usuario = es\ucm\fdi\Usuario::getDatosPerfilJugador($jugador);
 

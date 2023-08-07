@@ -4,5 +4,4 @@
 
     $result = es\ucm\fdi\Partido::addsecondplayed();
     
-
 ?>
