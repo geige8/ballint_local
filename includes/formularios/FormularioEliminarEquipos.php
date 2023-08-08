@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioEliminarEquipos extends Formulario{
 
     public function __construct() {
-        parent::__construct('formEliminarTeam', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formEliminarTeam', ['urlRedireccion' => 'eliminar_equipos.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -49,13 +49,11 @@ class FormularioEliminarEquipos extends Formulario{
         }
 
         if (count($this->errores) === 0) {
-
-            $equipoEliminado = Equipo::eliminarEquipo($equipoUsuario);
-        
-            if (!$equipoEliminado) {
-                $this->errores[] = "El equipo no se ha eliminado correctamente";
-            } else {
-            }  
+            try {
+                $equipoEliminado = Equipo::eliminarEquipo($equipoUsuario);
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
+            }
         }
     }
 }

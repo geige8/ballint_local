@@ -2,10 +2,10 @@
 namespace es\ucm\fdi;
 
 
-class FormularioUsuarioaEquipo extends Formulario{
+class FormularioRegistroUsuarioaEquipo extends Formulario{
 
     public function __construct() {
-        parent::__construct('formadduserTeam', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formadduserTeam', ['urlRedireccion' => 'addUsuarioTeam.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -33,7 +33,7 @@ class FormularioUsuarioaEquipo extends Formulario{
                             $opcionesEquipos
                         </select>
                         {$erroresCampos['equipoausuario']}
-                        <button type="submit" name="registro">Registrar Equipo</button>
+                        <button type="submit" name="registro">Añadir Usuario a Equipo</button>
                     </fieldset>
                 </div>            
             EOF;
@@ -58,13 +58,11 @@ class FormularioUsuarioaEquipo extends Formulario{
         }
         
         if (count($this->errores) === 0) {
-
-            $equipoRegistrado = Usuario::addUsuarioaEquipo($usuarioaequipo,$equipoausuario);
-        
-            if (!$equipoRegistrado) {
-                $this->errores[] = "El usuario no se ha añadido correctamente correctamente";
-            } else {
-            }  
+            try {
+                $equipoRegistrado = Usuario::addUsuarioaEquipo($usuarioaequipo,$equipoausuario);
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage();
+            }
         }
     }
 }

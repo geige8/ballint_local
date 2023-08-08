@@ -9,7 +9,6 @@ class Partido{
         $this->id = $id;
     }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TABLA PARTIDOS Y ELEMENTO PARTIDO:
     
@@ -1331,6 +1330,28 @@ class Partido{
         return $jugadores;
     }
 
+    public static function getFecha($partido_id) {
+        $conn = Aplicacion::getInstance()->getConexionBd();
+    
+        $query = sprintf("SELECT fecha FROM partidos WHERE id = %d", $partido_id);
+    
+        $rs = $conn->query($query);
+    
+        $fecha = null;
+    
+        if ($rs) {
+            $row = $rs->fetch_assoc();
+            if ($row) {
+                $fecha = $row['fecha'];
+            }
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+    
+        return $fecha;
+    }
+    
     public static function getEquipos(){
            
         $conn = Aplicacion::getInstance()->getConexionBd();
@@ -1556,7 +1577,6 @@ class Partido{
 
 
     }
-
     
     public static function addsecondplayed(){
 

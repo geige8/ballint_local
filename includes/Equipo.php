@@ -31,7 +31,7 @@ class Equipo{
 
         if (!$rs) {
             $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            throw new \Exception('Ese Equipo ya existe. Intente de nuevo');
         }
         return $result;
     }
@@ -49,7 +49,10 @@ class Equipo{
 
         if (!$rs) {
             $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            throw new \Exception('El equipos no se puede eliminar');
+        }elseif ($conn->affected_rows === 0) {
+            $result = false;
+            throw new \Exception('No se encontraron equipos para eliminar');
         }
 
         return $result;

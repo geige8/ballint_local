@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioEliminarUsuarios extends Formulario{
 
     public function __construct() {
-        parent::__construct('formEliminarUser', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formEliminarUser', ['urlRedireccion' => 'eliminar_usuarios.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -38,13 +38,12 @@ class FormularioEliminarUsuarios extends Formulario{
             $this->errores['usuarioEliminar'] = 'El nombre del jugador no puede estar vacío';
         }
         if (count($this->errores) === 0) {
-
-            $usuarioEliminado = Usuario::eliminarUsuario($usuarioEliminar);
-        
-            if (!$usuarioEliminado) {
-                $this->errores[] = "El usuario no se ha eliminado correctamente correctamente";
-            } else {
-            }  
+            
+            try {
+                $usuarioEliminado = Usuario::eliminarUsuario($usuarioEliminar);
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
+            }
         }
     }
 }

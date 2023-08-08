@@ -7,7 +7,7 @@ class FormularioRegistroUsuarios extends Formulario{
     
 
     public function __construct() {
-        parent::__construct('formRegisterUser', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formRegisterUser', ['urlRedireccion' => 'registrar_usuarios.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -25,9 +25,9 @@ class FormularioRegistroUsuarios extends Formulario{
             $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2','numero'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-            $htmlErroresGlobales
                 <div id="camposJugadores">
                     <fieldset> 
+                    $htmlErroresGlobales
                         <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
                         <select id="tipo_usuario" name="tipo_usuario">
                             <option value="E">Entrenador</option>
@@ -40,7 +40,7 @@ class FormularioRegistroUsuarios extends Formulario{
                             $opcionesEquipos
                         </select>
                         {$erroresCampos['equipo_usuario']}
-                        <label for="nombre">Nombre Jugador:</label>
+                        <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
                             {$erroresCampos['nombre']}
                         <label for="apellido1">1er Apellido</label>
@@ -63,38 +63,45 @@ class FormularioRegistroUsuarios extends Formulario{
 
         $this->errores = [];
 
+        function quitarTildes($cadena) {
+            $acentos = array(
+                'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+                'Á' => 'A', 'É' => 'E', 'Í' => 'I', 'Ó' => 'O', 'Ú' => 'U'
+            );
+            return strtr($cadena, $acentos);
+        }
+        
         $nombreJugador = trim($datos['nombre'] ?? '');
-        $nombreJugador = filter_var($nombreJugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $nombreJugador = quitarTildes($nombreJugador);
         if (!$nombreJugador || empty($nombreJugador)) {
             $this->errores['nombre'] = 'El nombre del jugador no puede estar vacío';
         }
-
+        
         $apellido1Jugador = trim($datos['apellido1'] ?? '');
-        $apellido1Jugador = filter_var($apellido1Jugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellido1Jugador = quitarTildes($apellido1Jugador);
         if (!$apellido1Jugador || empty($apellido1Jugador)) {
             $this->errores['apellido1'] = 'El apellido 1 del jugador no puede estar vacío';
         }
-
+        
         $apellido2Jugador = trim($datos['apellido2'] ?? '');
-        $apellido2Jugador = filter_var($apellido2Jugador, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $apellido2Jugador = quitarTildes($apellido2Jugador);
         if (!$apellido2Jugador || empty($apellido2Jugador)) {
             $this->errores['apellido2'] = 'El apellido 2 del jugador no puede estar vacío';
         }
+        
 
-        // Validar campo "tipo_usuario" para cada jugador
         $tipoUsuario = trim($datos['tipo_usuario'] ?? '');
         $tipoUsuario = filter_var($tipoUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (!$tipoUsuario || empty($tipoUsuario)) {
             $this->errores['tipo_usuario'] = 'Debes seleccionar el tipo de usuario para el jugador';
         }
-        // Validar campo "tipo_usuario" para cada jugador
+
         $equipoUsuario = trim($datos['equipo_usuario'] ?? '');
         $equipoUsuario = filter_var($equipoUsuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (!$equipoUsuario || empty($equipoUsuario)){
             $this->errores['equipo_usuario'] = 'Debes seleccionar el equipo para el jugador';
         }
 
-        // Validar campo "numero" para cada jugador
         $numero = trim($datos['numero'] ?? '');
 
         // Verificar si el campo está vacío o no es un número
@@ -112,24 +119,25 @@ class FormularioRegistroUsuarios extends Formulario{
 
 
         if (count($this->errores) === 0) {
-
-            //Si no hay errores, quiero que añada todos los usuarios creados
-
             // Obtener las dos primeras letras de apellido1Jugador
             $primeras_letras_apellido1 = substr($apellido1Jugador, 0, 2);
-
+        
             // Obtener las dos últimas letras de apellido2Jugador
             $ultimas_letras_apellido2 = substr($apellido2Jugador, -2);
-
-            // Combinar todas las partes para formar el nombre de usuario
-            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario . $numero;
-
-            $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
         
-            if (!$usuarioregistrado) {
-                $this->errores[] = "El usuario no se ha creado correctamente";
-            } else {
-            }  
+            // Generar un número aleatorio de 1 a 999 (puedes ajustar el rango según tus necesidades)
+            $numero_aleatorio = mt_rand(1, 999);
+        
+            // Combinar todas las partes para formar el nombre de usuario, incluyendo el número aleatorio
+            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario . $numero . $numero_aleatorio;
+        
+            try {
+                $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
+                // Si no hay excepción, continúas con el flujo normal
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
+            }
         }
+        
     }
 }

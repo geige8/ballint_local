@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioRegistroEquipos extends Formulario{
 
     public function __construct() {
-        parent::__construct('formRegisterTeam', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formRegisterTeam', ['urlRedireccion' => 'registrar_equipos.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -66,13 +66,12 @@ class FormularioRegistroEquipos extends Formulario{
         }
         
         if (count($this->errores) === 0) {
-
-            $equipoRegistrado = Equipo::registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo);
-        
-            if (!$equipoRegistrado) {
-                $this->errores[] = "El equipo no se ha creado correctamente";
-            } else {
-            }  
+            try {
+                $equipoRegistrado = Equipo::registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo);
+                // Si no hay excepción, continuas con el flujo normal
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
+            }
         }
     }
 }

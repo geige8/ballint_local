@@ -27,49 +27,47 @@ function getNombreEquipo(equipo){
 }
 
 //////////////////////////////////////////////////////////////////////////
-  /*FUNCIONES*/
+/*FUNCIONES*/
 //////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////
 //APARTADADO DE RELOJ
 
-//VARIABLES
-let period = document.getElementById("periodSelect").value;
-let duration = document.getElementById("durationSelect").value;
+    //VARIABLES
+    let period = document.getElementById("periodSelect").value;
+    let duration = document.getElementById("durationSelect").value;
 
+    let periodselect = document.getElementById("periodSelect");
+    let durationselect = document.getElementById("durationSelect");
+    let starttimer = document.getElementById("start-timer");
+    let pausetimer = document.getElementById("pause-timer");
+    let resettimer = document.getElementById("reset-timer");
 
-let periodselect = document.getElementById("periodSelect");
-let durationselect = document.getElementById("durationSelect");
-let starttimer = document.getElementById("start-timer");
-let pausetimer = document.getElementById("pause-timer");
-let resettimer = document.getElementById("reset-timer");
+    starttimer.disabled = true;
+    pausetimer.disabled = true;
+    resettimer.disabled = false;
 
-starttimer.disabled = true;
-pausetimer.disabled = true;
-resettimer.disabled = false;
+    //RELOJ CRONOMETRO
+    let [seconds, minutes] = [0, 10];
+    let timeRef = document.querySelector(".timer-display");
+    let int = null;
 
-//RELOJ CRONOMETRO
-let [seconds, minutes] = [0, 10];
-let timeRef = document.querySelector(".timer-display");
-let int = null;
+    //BOTÓN DE START
+    document.getElementById("start-timer").addEventListener("click", () => {
 
-//BOTÓN DE START
-document.getElementById("start-timer").addEventListener("click", () => {
+        periodselect.disabled = true;
+        durationselect.disabled = true;
+        resettimer.disabled = true;
+        
+        if(int !== null) {
+            clearInterval(int);
+        }
 
-    periodselect.disabled = true;
-    durationselect.disabled = true;
-    resettimer.disabled = true;
-    
-    if(int !== null) {
-        clearInterval(int);
-    }
+        int = setInterval(displayTimer, 1000);
+    });
 
-    int = setInterval(displayTimer, 1000);
-});
+    //BOTÓN DE PAUSA
 
-//BOTÓN DE PAUSA
-
-// Definir la función de pausa del temporizador
+    // Definir la función de pausa del temporizador
     function pausarTemporizador() {
         resettimer.disabled = false;
         periodselect.disabled = false;
@@ -77,11 +75,11 @@ document.getElementById("start-timer").addEventListener("click", () => {
         clearInterval(int);
     }
 
-// Asignar la función al evento click del botón
+    // Asignar la función al evento click del botón
     document.getElementById("pause-timer").addEventListener("click", pausarTemporizador);
 
 
-//BOTÓN DE RESET/PONER TIEMPO
+    //BOTÓN DE RESET/PONER TIEMPO
     document.getElementById("reset-timer").addEventListener("click", () => {
 
         period = document.getElementById("periodSelect").value;
@@ -142,9 +140,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
     }
 
 /////////////////////////////////////////////////////////////
+/*APARTADO MARCADORES DE LOS EQUIPOS*/
 /////////////////////////////////////////////////////////////
-
-//APARTADO MARCADORES DE LOS EQUIPOS
 
     let idpartidoDisplay = document.querySelector('.idpartido-display');
     let idpartidoElement = idpartidoDisplay.querySelector('.id');
@@ -171,9 +168,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ganador = saberganador();
             var idMatch = idpartidoElement.textContent;
             saveplayers(ganador,idMatch);
-            generarPDFS();
-            header('Location: index.php');
-
         }
     });
 
@@ -190,7 +184,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
             
             // Guardar la información de las tablas para futuras consultas y redirigir al index
             renametables();
-
+            window.location.href("index.php");
         }
         else{
             console.log("La respuesta está  NO completa en save players.");
@@ -226,42 +220,11 @@ document.getElementById("start-timer").addEventListener("click", () => {
         xhttp.send();
     }
 
-    function generarPDFS(){
 
-        //const doc1 = generarPDFEstadisticaCompleta();
-        getJugadoresEstadisticas(function(jugadores) {
-            if (jugadores) {
-                getEquiposEstadisticas(function(equipos) {
-                    if (equipos) {
-                        const doc1 = generarPDFestadisticaCompleta(jugadores);
-                        doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
-                    } else {
-                    console.log("Error al obtener los jugadores");
-                    }
-                });
-            } else {
-            console.log("Error al obtener los jugadores");
-            }
-        });
-        
-        //const doc2 = generarPDFFullBoxScore(jugadores);
-        getJugadores(function(jugadores) {
-            if (jugadores) {
-                const doc2 = generarPDFFullBoxScore(jugadores);
-                doc2.save(idlocal + '.' + idvisitante + '(FullBoxScore).pdf');
-            } else {
-            console.log("Error al obtener los jugadores");
-            }
-        });
-
-        //const doc3 = generarPDFplaybyplay();
-        const doc3 = generarPDFplaybyplay();
-        doc3.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
-    }
-
+    
 /////////////////////////////////////////////////////////////
+/*BOTÓN DE GRÁFICOS Y TODA LA FUNCIONALIDAD*/
 /////////////////////////////////////////////////////////////
-    //BOTÓN DE GRÁFICOS Y TODA LA FUNCIONALIDAD:
 
     document.getElementById("graficos-button").addEventListener("click", () => {
 
@@ -291,11 +254,10 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
             var pdfcompleto = document.createElement('button');
             pdfcompleto.classList.add('pdfcompleto');
-            pdfcompleto.innerHTML = 'PDF COMPLETO';
+            pdfcompleto.innerHTML = 'GENERAR PDFS';
             ventana.appendChild(pdfcompleto);
 
             pdfcompleto.addEventListener('click', function() {
-            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
                 generarPDFS();
             });
 
@@ -341,8 +303,14 @@ document.getElementById("start-timer").addEventListener("click", () => {
                     if (jugadores) {
                         getEquiposEstadisticas(function(equipos) {
                             if (equipos) {
-                            const doc1 = generarPDFestadisticaCompleta(jugadores,equipos);
-                            doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
+                                getFecha(function (fecha) {
+                                    if (fecha) {
+                                        const doc1 = generarPDFestadisticaCompleta(jugadores,equipos);
+                                        doc1.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(Stats).pdf');
+                                    } else {
+                                        console.log("Error al obtener la fecha");
+                                    }
+                                });
                             } else {
                             console.log("Error al obtener los jugadores");
                             }
@@ -386,10 +354,14 @@ document.getElementById("start-timer").addEventListener("click", () => {
                 overlay.parentNode.removeChild(overlay);
                 getJugadores(function(jugadores) {
                     if (jugadores) {
-                        // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
-                        const doc2 = generarPDFFullBoxScore(jugadores);
-                        doc2.save(idlocal + '.' + idvisitante + '(FullBoxScore).pdf');
-
+                        getFecha(function (fecha) {
+                            if (fecha) {
+                                const doc2 = generarPDFFullBoxScore(jugadores);
+                                doc2.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(BoxScore).pdf');
+                            } else {
+                                console.log("Error al obtener la fecha");
+                            }
+                        });
                     } else {
                     console.log("Error al obtener los jugadores");
                     }
@@ -406,10 +378,14 @@ document.getElementById("start-timer").addEventListener("click", () => {
             ventana.appendChild(playbyplay);
             
             playbyplay.addEventListener('click', function() {
-                const doc3 = generarPDFplaybyplay();
-                // Guardar o mostrar el PDF
-                doc3.save(idlocal + '.' + idvisitante + '(PlayByPlay).pdf');
-
+                getFecha(function (fecha) {
+                    if (fecha) {
+                        const doc3 = generarPDFplaybyplay();
+                        doc3.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(PlayByPlay).pdf');
+                    } else {
+                        console.log("Error al obtener la fecha");
+                    }
+                });
                 // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
                 ventana.parentNode.removeChild(ventana);
                 overlay.parentNode.removeChild(overlay);
@@ -527,6 +503,61 @@ document.getElementById("start-timer").addEventListener("click", () => {
         ventana.classList.add("mostrar");
     });
 
+    async function generarPDFS() {
+    
+        try {
+            const jugadoresEstadisticas = await new Promise((resolve, reject) => {
+                getJugadoresEstadisticas(function (jugadores) {
+                    if (jugadores) {
+                        resolve(jugadores);
+                    } else {
+                        reject(new Error("Error al obtener los jugadores"));
+                    }
+                });
+            });
+    
+            const equiposEstadisticas = await new Promise((resolve, reject) => {
+                getEquiposEstadisticas(function (equipos) {
+                    if (equipos) {
+                        resolve(equipos);
+                    } else {
+                        reject(new Error("Error al obtener los equipos"));
+                    }
+                });
+            });
+    
+            const jugadores = await new Promise((resolve, reject) => {
+                getJugadores(function (jugadores) {
+                    if (jugadores) {
+                        resolve(jugadores);
+                    } else {
+                        reject(new Error("Error al obtener los jugadores"));
+                    }
+                });
+            });
+
+            const fecha = await new Promise((resolve, reject) => {
+                getFecha(function (fecha) {
+                    if (fecha) {
+                        resolve(fecha);
+                    } else {
+                        reject(new Error("Error al obtener la fecha"));
+                    }
+                });
+            });
+
+            const doc1 = generarPDFestadisticaCompleta(jugadoresEstadisticas,equiposEstadisticas);
+            const doc2 = generarPDFFullBoxScore(jugadores);    
+            const doc3 = generarPDFplaybyplay();
+    
+            doc1.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(Stats).pdf');
+            doc2.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(BoxScore).pdf');
+            doc3.save(idlocal + 'vs' + idvisitante +'(' + fecha + ')-(PlayByPlay).pdf');
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    } 
 
     function mostrarEstadisticaCompleta(jugadores,equipos) {
 
@@ -1075,8 +1106,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
     function generarPDFestadisticaCompleta(jugadores, equipos) {
 
-        console.log(jugadores);
-        console.log(equipos);
         // Crear una nueva instancia de jsPDF
         const doc = new jsPDF({
             orientation: 'landscape'
@@ -1164,11 +1193,12 @@ document.getElementById("start-timer").addEventListener("click", () => {
             styles: { fontSize: 6, fontStyle: 'helvetica'},
             headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
         });
-        
+
         return doc;
     }
     
     function generarPDFFullBoxScore(jugadores) {
+
         // Crear una nueva instancia de jsPDF
         const doc = new jsPDF();
     
@@ -1207,11 +1237,10 @@ document.getElementById("start-timer").addEventListener("click", () => {
             body: getPlayersDataV(jugadores), // Obtener los datos de los jugadores del equipo visitante
             startY: yPosition,
         });
-    
+
         return doc;
     }
     
-    // Función auxiliar para obtener los datos de los jugadores según el equipo (local o visitante)
     function getPlayersData(jugadores) {
         return jugadores
             .filter(jugador => isLocal(jugador.equipo))
@@ -1241,6 +1270,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
     }
     
     function generarPDFplaybyplay() {
+
         // Obtener el contenido del div
         const divContent = document.querySelector('.info-display');
 
@@ -1316,7 +1346,6 @@ document.getElementById("start-timer").addEventListener("click", () => {
             yPosition += lineHeight; // Aumentar la posición en "y" para la siguiente línea
 
         });
-
 
         return doc;
 
@@ -1450,7 +1479,7 @@ document.getElementById("start-timer").addEventListener("click", () => {
         // Hacer la solicitud AJAX
         xhttp.open("GET", "getJugadoresEstadisticas.php", true);
         xhttp.send();
-        }
+    }
 
     function getEquipos(callback) {
         // Crear una solicitud AJAX
@@ -1522,6 +1551,30 @@ document.getElementById("start-timer").addEventListener("click", () => {
     // Hacer la solicitud AJAX
     xhttp.open("GET", "getJugadoresLocal.php?equipo=" + idlocal, true);
     xhttp.send();
+    }
+
+    function getFecha(callback) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var fecha = JSON.parse(this.responseText);
+                callback(fecha); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getFecha.php?partido_id=" + parseInt(idpartidoElement.textContent), true);
+        xhttp.send();
     }
 
     function getParcialTO(callback) {
@@ -2151,10 +2204,9 @@ document.getElementById("start-timer").addEventListener("click", () => {
     
     }
 
-
 /////////////////////////////////////////////////////////////
+/*MARCADOR DE PUNTOS*/
 /////////////////////////////////////////////////////////////
-//MARCADOR DE PUNTOS
 
     // Obtener el elemento con la clase "localScore-display"
     let localScoreDisplay = document.querySelector('.localScore-display');
@@ -2347,8 +2399,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
 
 
 /////////////////////////////////////////////////////////////
+/*TIEMPOS MUERTOS y FALTAS BANQUILLO*/
 /////////////////////////////////////////////////////////////
-//TIEMPOS MUERTOS y FALTAS BANQUILLO
 
     let timeoutLocal = document.querySelector(".timeout-local .timeout");
     let timeoutVisit = document.querySelector(".timeout-visit .timeout");
@@ -2441,8 +2493,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
     }
 
 /////////////////////////////////////////////////////////////
+/*MINUTAJE JUGADORES*/
 /////////////////////////////////////////////////////////////
-//MINUTAJE JUGADORES
 
     function addsecondplayed(){
         // Crear una solicitud AJAX
@@ -2477,8 +2529,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
     }
 
 /////////////////////////////////////////////////////////////
+/*JUGADORES EN PISTA*/
 /////////////////////////////////////////////////////////////
-//JUGADORES EN PISTA
 
     // Obtener el elemento con la clase "localScore-display"
     let localPlayersDisplay = document.querySelector('.localPlayers-display');
@@ -2585,8 +2637,8 @@ document.getElementById("start-timer").addEventListener("click", () => {
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+/*SUSTITUCIONES*/
 ////////////////////////////////////////////////////////////////////////////////////////////
-//SUSTITUCIONES
 
     function mostrarVentanaSub(equipo){
 
@@ -3099,7 +3151,7 @@ window.addEventListener('beforeunload', function (e) {
     e.returnValue = '';
   
     // Muestra el mensaje de confirmación personalizado
-    var confirmationMessage = '¿Estás seguro de que deseas abandonar esta página?';
+    var confirmationMessage = '¿Estás seguro de que deseas abandonar esta página? Deberías guardar los PDFs';
   
     // Retorna el mensaje de confirmación
     return confirmationMessage;

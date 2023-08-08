@@ -1,18 +1,43 @@
 /* CABECERA */
-
 header {
-	position: relative; /* Asegura que los pseudo-elementos se posicionen correctamente */
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	min-height: 10vh;
-	background-color: #303030;
-	color: white;
-	overflow: hidden; /* Para ocultar las franjas que excedan el ancho */
-	border-bottom: 10px solid #ffffff;
-  }
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 10vh;
+    background-color: #00458a;
+    color: white;
+    border-bottom: 10px solid #ffffff;
+}
+
+
+header div.cabeza {
+    height: 100%;
+    display: flex;
+    flex-direction: row ;
+    justify-content: center;
+    align-items: center;
+    font-family: Perpetua;
+    font-size: 40px;
+	/* Asegúrate de que el ancho no sea mayor al ancho del header */
+	max-width: 50%; /* Puedes ajustar este valor según tus necesidades */
+	/* Utiliza flex para centrar el elemento en el medio */
+	flex: 1;
+	/* Ajusta los márgenes para centrar el elemento */
+	margin-left: auto;
+	margin-right: auto;
+}
+
+header div.cabeza div.tituloCabecera{
+    height: 100%;
+    display: flex;
+    flex-direction: row ;
+    justify-content: center;
+    align-items: center;
+}
+
   
 
 header img{ /* Las imágenes que aparezcan dentro de la Cabecera */
@@ -21,53 +46,37 @@ header img{ /* Las imágenes que aparezcan dentro de la Cabecera */
 	max-height: 100%;
 }
 
-header img:hover{ /* Las imágenes que aparezcan dentro de la Cabecera */
-	transform: translateY(-2px);
+header img:hover {
+    transform: scale(1.05); /* Amplía la imagen al 105% */
+    transition: transform 0.3s ease; /* Agrega una transición suave */
 }
 
-header div.cabeza{
-	padding: 2vh;
-    height: 100%;
-    width: 100%;
 
+
+header div.tituloCabecera h1{
+	margin:0;
+}
+
+#sidebarButtonContainer {
     display: flex;
-    flex-flow: row wrap;
-
-	justify-content: center;
-	align-items: center;
-}
-
-header div.cabeza div.tituloCabecera{
-	height: 100%;
-    display: flex;
-    flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-
-}
-
-header div.cabeza div.infoCabecera{
-    margin-left: auto;
-    height: 100%;
     align-items: center;
-	justify-content: center;
-    display: flex;
-    flex-flow:row wrap;
+    margin-left: 20px; /* Agrega el margen a la izquierda */
 }
-
 
 #toggleSidebar {
-	background: none;
-	border: none;
-	cursor: pointer;
-	font-size: 24px;
-	color: #000;
-	display: flex; /* Usa flexbox para ajustar el orden y alineación */
-	align-items: center; /* Alinea verticalmente el contenido en el centro */
-	color: aliceblue;
-  }
-  
-  #toggleSidebar i {
-	margin-left: 20px; /* Agrega un margen a la derecha para separar el icono del texto */
-  }
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    font-family: Helvetica;
+    transition: background-color 0.3s; /* Agrega una transición para el cambio de color */
+    padding: 10px 20px; /* Añade relleno para crear una caja alrededor del botón */
+}
+
+#toggleSidebar:hover {
+    background-color: #d30d1e; /* Cambia el color de fondo al pasar el mouse por encima */
+}
+
+
   

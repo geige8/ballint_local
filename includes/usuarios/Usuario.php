@@ -185,7 +185,7 @@ class Usuario{
 
         if (!$rs) {
             $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            throw new \Exception('El usuario ya existe');
         }
         else{
              // Obtener el ID de la fila insertada
@@ -234,11 +234,12 @@ class Usuario{
 
         if (!$rs) {
             $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            throw new \Exception('El usuario no se puede eliminar');
+        }elseif ($conn->affected_rows === 0) {
+        $result = false;
+        throw new \Exception('No se encontraron usuarios para eliminar');
         }
-
         return $result;
-
     }
     
 
@@ -361,7 +362,7 @@ class Usuario{
 
         if (!$rs) {
             $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
+            throw new \Exception('No se ha podido añadir el usuario al equipo');
         }
 
         return $result;
@@ -380,10 +381,13 @@ class Usuario{
     
         $rs = $conn->query($query);
     
-        if (!$rs) {
-            $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
+            if (!$rs) {
+                $result = false;
+                throw new \Exception('El usuario no se puede eliminar');
+            }elseif ($conn->affected_rows === 0) {
+                $result = false;
+                throw new \Exception('No se encontraron usuarios para eliminar');
+            }
     
         return $result;
     }

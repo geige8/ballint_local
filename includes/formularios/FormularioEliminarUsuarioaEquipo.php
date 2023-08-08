@@ -5,7 +5,7 @@ namespace es\ucm\fdi;
 class FormularioEliminarUsuarioaEquipo extends Formulario{
 
     public function __construct() {
-        parent::__construct('formeliminaruserTeam', ['urlRedireccion' => 'pagina_admin.php']);
+        parent::__construct('formeliminaruserTeam', ['urlRedireccion' => 'eliminar_UsuarioTeam.php']);
     }
     
     protected function generaCamposFormulario(&$datos){
@@ -59,12 +59,12 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
         
         if (count($this->errores) === 0) {
 
-            $equipoRegistrado = Usuario::eliminarUsuarioEquipo($usuarioaequipo,$equipoausuario);
         
-            if (!$equipoRegistrado) {
-                $this->errores[] = "El usuario no se ha añadido correctamente correctamente";
-            } else {
-            }  
+            try {
+                $equipoRegistrado = Usuario::eliminarUsuarioEquipo($usuarioaequipo,$equipoausuario);
+            } catch (\Exception $e) {
+                $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
+            }
         }
     }
 }
