@@ -24,16 +24,14 @@ class FormularioEliminarEquipos extends Formulario{
             
             $html = <<<EOF
             $htmlErroresGlobales
-                <div id="camposJugadores">
-                    <fieldset> 
+                <div class="accionAdmin"> 
                     <label for="equipo_usuario">Selecciona el equipo del usuario:</label>
                     <select id="equipo_usuario" name="equipo_usuario">
                         $opcionesEquipos
                     </select>
                     {$erroresCampos['equipo_usuario']}
-                        <button type="submit" name="registro">Eliminar Equipo</button>
-                    </fieldset>
-                </div>            
+                    <button type="submit" name="registro">Eliminar Equipo</button>
+                </div>
             EOF;
         return $html;
     }            

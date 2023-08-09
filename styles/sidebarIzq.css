@@ -1,5 +1,5 @@
 /* Estilos para el aside */
-aside#sidebarIzq {
+#sidebarIzq {
     width: 20%;
     height: 100%;
     display: block;
@@ -7,6 +7,11 @@ aside#sidebarIzq {
     float: left;
     font-weight: bold;
     transition: width 0.3s ease 0.3s;
+    background-color: #00458a;
+    color: white;
+    min-height: 80vh;
+    margin: 0;
+  
   }
 
   aside#sidebarIzq div.infoCabecera {
@@ -17,6 +22,10 @@ aside#sidebarIzq {
     margin: 0;
     overflow: hidden; /* Oculta todo el contenido que exceda el ancho máximo */
     max-width: 100%; /* Ajusta el ancho máximo inicial (mostrando todos los elementos) */
+    border-bottom: 1px solid white; /* Agrega un borde en la parte inferior de cada caja */
+    box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+    transition: background-color 0.3s ease;
+    background-color: #d30d1e;
   }
   
   aside#sidebarIzq div.infoCabecera h1,
@@ -25,29 +34,40 @@ aside#sidebarIzq {
     /* Aplica los mismos estilos a todos los elementos dentro de div.infoCabecera */
     display: block;
     font-weight: bold;
-    padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
+    padding:10px; /* Elimina el padding predeterminado de la lista <ul> */
     margin: 0;
   }
  
-  
-  aside#sidebarIzq ul.menu_box {
-    /* Elimina el float y flex-direction, no son necesarios aquí */
-    display: block;
-    font-weight: bold;
-    padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
-}
 
 aside#sidebarIzq ul.menu_box li {
-    list-style: none;
-    border-radius: 20px;
-    overflow-y: hidden;
-    overflow-x: hidden;
+  padding: 10px 0; /* Ajusta el espacio vertical entre cajas */
+  border-bottom: 1px solid white; /* Agrega un borde en la parte inferior de cada caja */
+}
+
+aside#sidebarIzq ul.menu_box{
+  /* Elimina el float y flex-direction, no son necesarios aquí */
+  display: block;
+  font-weight: bold;
+  padding: 0; /* Elimina el padding predeterminado de la lista <ul> */
+  margin: 0;
+  list-style: none;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 aside#sidebarIzq ul.menu_box li a {
-    display: block; /* Cambiamos a display block para asegurar que cada enlace ocupe su propio espacio vertical */
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px; /* Ajusta el espacio dentro de cada caja */
+  transition: background-color 0.3s ease;
+}
+aside#sidebarIzq ul.menu_box a:visited {
+  display: block; /* Cambiamos a display block para asegurar que cada enlace ocupe su propio espacio vertical */
+  color: white;
+
 }
 
 aside#sidebarIzq ul.menu_box li:hover {
-    background-color: #e4ecf0;
+    background-color: #d30d1e3f;
 }

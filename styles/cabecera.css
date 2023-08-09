@@ -10,6 +10,8 @@ header {
     background-color: #00458a;
     color: white;
     border-bottom: 10px solid #ffffff;
+	box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+
 }
 
 
@@ -21,11 +23,8 @@ header div.cabeza {
     align-items: center;
     font-family: Perpetua;
     font-size: 40px;
-	/* Asegúrate de que el ancho no sea mayor al ancho del header */
-	max-width: 50%; /* Puedes ajustar este valor según tus necesidades */
-	/* Utiliza flex para centrar el elemento en el medio */
+	max-width: 50%; 
 	flex: 1;
-	/* Ajusta los márgenes para centrar el elemento */
 	margin-left: auto;
 	margin-right: auto;
 }

@@ -24,8 +24,8 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
             $html = <<<EOF
             $htmlErroresGlobales
                 <div id="camposEquipos">
-                    <fieldset> 
-                        <label for="usuarioaequipo">Escribe el Usuario:</label>
+                <fieldset class="accionAdmin"> 
+                <label for="usuarioaequipo">Escribe el Usuario:</label>
                         <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
                         {$erroresCampos['usuarioaequipo']}
                         <label for="equipoausuario">Selecciona el equipo del usuario:</label>

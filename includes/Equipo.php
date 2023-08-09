@@ -22,8 +22,8 @@ class Equipo{
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $idEquipo = $categoria_equipo .  $seccion_equipo;
-        $nombreEquipo = 'Liceo Frances ' . $categoria_equipo . ' ' . $seccion_equipo;
+        $idEquipo = $categoria_equipo .  $seccion_equipo . $letra_equipo;
+        $nombreEquipo = 'LF ' . $categoria_equipo . ' ' . $seccion_equipo . ' ' . $letra_equipo;
 
         $query = "INSERT INTO equipos (id_equipo,categoria,nombre_equipo,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$nombreEquipo','$seccion_equipo','$letra_equipo')"; 
 
@@ -1512,9 +1512,16 @@ class Equipo{
 
         
         $html = '';
-        foreach ($equipos as $equipo) {
-            $html .= self::mostrarCajaEquipo($equipo);
-        }
+        $html .= <<<EOS
+        <div class="cajasEquipos">
+        EOS;
+
+            foreach ($equipos as $equipo) {
+                $html .= self::mostrarCajaEquipo($equipo);
+            }
+            $html .= <<<EOS
+        </div>
+        EOS;
 
         return $html;
     }
@@ -1537,6 +1544,10 @@ class Equipo{
     public static function mostrarEquipos(){
 
         $equiposClub = self::getListadoEquipos();
+
+        usort($equiposClub, function($a, $b) {
+            return strcmp($a, $b);
+        });
 
         $equiposMostrar = self::mostrarListadoEquipos($equiposClub);
 

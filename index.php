@@ -16,6 +16,7 @@ if (isset($_SESSION["login"])) {
     $roles = es\ucm\fdi\Usuario::getRoles($_SESSION['nombre']);
 
     $contenidoPrincipal .= <<<EOS
+    <h1>Bienvenido {$_SESSION['nombre']}, estos son todos los equipos del club:</h1>
     $htmlEquiposClub        
     EOS;  
 

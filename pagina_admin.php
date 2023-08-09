@@ -7,38 +7,38 @@
   $rutaImgs = RUTA_IMGS;
 
   $contenidoPrincipal .= <<<EOS
-    <h1> Bienvenido al panel de control del administrador </h1>
+    <h1> Panel de Control del Administrador</h1>
+    <div class="botonesAdmin">
+      <!-- Botón para Registrar Usuarios -->
+          <a class="adminButton" href="registrar_usuarios.php">
+            Registrar Usuarios
+          </a>
+      
+      <!-- Botón para Eliminar Usuarios -->
+          <a class="adminButton" href="eliminar_usuarios.php">
+            Eliminar Usuarios
+          </a>
 
-    <!-- Botón para Registrar Usuarios -->
-    <a href="registrar_usuarios.php">
-      <button>Registrar Usuarios</button>
-    </a>
+      <!-- Botón para Registrar Equipos -->
+          <a class="adminButton" href="registrar_equipos.php">
+            Registrar Equipos
+          </a>
 
-    <!-- Botón para Eliminar Usuarios -->
-    <a href="eliminar_usuarios.php">
-      <button>Eliminar Usuarios</button>
-    </a>
+      <!-- Botón para Eliminar Equipos -->
+          <a class="adminButton" href="eliminar_equipos.php">
+            Eliminar Equipos
+          </a>
 
-    <!-- Botón para Registrar Equipos -->
-    <a href="registrar_equipos.php">
-      <button>Registrar Equipos</button>
-    </a>
+      <!-- Botón para Añadir Jugadores/Entrenadores a Equipos -->
+          <a class="adminButton" href="addUsuarioTeam.php">
+              Añadir a Equipos
+          </a>
 
-    <!-- Botón para Eliminar Equipos -->
-    <a href="eliminar_equipos.php">
-      <button>Eliminar Equipos</button>
-    </a>
-
-    <!-- Botón para Añadir Jugadores/Entrenadores a Equipos -->
-    <a href="addUsuarioTeam.php">
-      <button>Añadir Jugadores/Entrenadores a Equipos</button>
-    </a>
-
-    <!-- Botón para Eliminar Jugadores/Entrenadores a Equipos -->
-    <a href="eliminar_UsuarioTeam.php">
-      <button>Eliminar Jugadores/Entrenadores a Equipos</button>
-    </a>
-
+      <!-- Botón para Eliminar Jugadores/Entrenadores a Equipos -->
+          <a class="adminButton" href="eliminar_UsuarioTeam.php">
+            Eliminar de Equipos        
+          </a>
+    </div>
   EOS;
 
   require __DIR__.'/includes/vistas/plantilla.php';

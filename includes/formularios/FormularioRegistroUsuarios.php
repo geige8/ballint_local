@@ -26,7 +26,7 @@ class FormularioRegistroUsuarios extends Formulario{
             
             $html = <<<EOF
                 <div id="camposJugadores">
-                    <fieldset> 
+                    <fieldset class="accionAdmin"> 
                     $htmlErroresGlobales
                         <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
                         <select id="tipo_usuario" name="tipo_usuario">

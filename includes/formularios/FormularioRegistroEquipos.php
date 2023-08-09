@@ -16,8 +16,8 @@ class FormularioRegistroEquipos extends Formulario{
             $html = <<<EOF
             $htmlErroresGlobales
                 <div id="camposEquipos">
-                    <fieldset> 
-                        <label for="categoria_equipo">Selecciona la categoria del equipo:</label>
+                <fieldset class="accionAdmin"> 
+                <label for="categoria_equipo">Selecciona la categoria del equipo:</label>
                         <select id="categoria_equipo" name="categoria_equipo">
                             <option value="Nacional">Nacional</option>
                             <option value="PrimeraAutonomica">Primera Autonómica</option>

@@ -16,6 +16,10 @@
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/misequipos.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/login.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/main.css" />
+        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/footer.css" />
+        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/body.css" />
+
+
 
         <script src="<?= RUTA_JS ?>/functions.js"> </script>
         <script src="<?= RUTA_JS ?>/ajax.js"> </script>

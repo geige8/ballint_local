@@ -24,7 +24,7 @@ class FormularioRegistroUsuarioaEquipo extends Formulario{
             $html = <<<EOF
             $htmlErroresGlobales
                 <div id="camposEquipos">
-                    <fieldset> 
+                    <fieldset class="accionAdmin"> 
                         <label for="usuarioaequipo">Escribe el Usuario:</label>
                         <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
                         {$erroresCampos['usuarioaequipo']}

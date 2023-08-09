@@ -17,8 +17,8 @@ class FormularioEliminarUsuarios extends Formulario{
             $html = <<<EOF
             $htmlErroresGlobales
                 <div id="camposJugadores">
-                    <fieldset> 
-                    <label for="usuarioEliminar">Escribe el Usuario:</label>
+                <fieldset class="accionAdmin"> 
+                <label for="usuarioEliminar">Escribe el Usuario:</label>
                     <input type="text" id="usuarioEliminar" name="usuarioEliminar" required>
                     {$erroresCampos['usuarioEliminar']}
                         <button type="submit" name="registro">Eliminar Usuario</button>

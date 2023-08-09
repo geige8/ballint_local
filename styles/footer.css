@@ -1,0 +1,16 @@
+/* FOOTER */
+footer {
+    min-height: 10vh;
+    clear: both;
+    background-color: #00458a; /* Cambia el fondo a rojo */
+    color: white;
+    text-align: center;
+    display: flex; /* Utiliza flexbox para centrar verticalmente el contenido */
+    align-items: center; /* Alinea verticalmente el contenido en el centro */
+    justify-content: center; /* Alinea horizontalmente el contenido en el centro */
+    font-family: Helvetica, sans-serif; /* Utiliza la fuente Helvetica y fallback a sans-serif */
+    border-top: 10px solid #ffffff;
+    box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+    margin: 0;
+    padding:0;
+}
