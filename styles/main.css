@@ -1,9 +1,6 @@
 
 /*PANEL PRINCIPAL*/
 
-
-
-
 main #NoLog{
     min-height: 80vh;
     height: 100%;
@@ -13,7 +10,6 @@ main #NoLog{
     flex-direction: column;
     font-size: 0.7em;
 }
-
 
 /*///////////////////////////////////////////////////////////////////////////////////////////////*/
 
@@ -26,7 +22,9 @@ main#Log{
     flex-direction: column;
     transition: width 0.3s ease 0.3s;
     border-left: 10px solid #ffffff;
+    border-right: 10px solid #ffffff;
     box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+
 }
 
 body main article{
@@ -34,16 +32,16 @@ body main article{
     flex-direction: column;
     width: 100%;
     min-height: 80vh;
-}
 
+}
 
 main#Log article{
     font-size: 20px;
-    background-color:  #00458a49;;
+    background-color:  #b9d4f0;
 }
 
 main#Log article h1{
-    font-size: 40px;
+    /*font-size: 40px;*/
     text-align: center; /* Centrar el texto horizontalmente */
 }
 
@@ -80,8 +78,6 @@ article div.equipo:hover {
 }
 
 
-
-
 /* PANEL DE CONTROL DEL ADMINISTRADOR*/
 div.botonesAdmin{
     display: flex;
@@ -96,7 +92,6 @@ a.adminButton {
     width: 30%;
     padding: 15px;
     margin: 5px;
-
     background-color: #00458a;
     border-radius: 10px;
     transition: background-color 0.3s ease;
@@ -112,16 +107,220 @@ a.adminButton:hover {
     background-color: #d30d1e;
 }
 
+article form{
+    display: flex;
+    flex: 1;
+}
+
 
 /*PAGINAS ACCIONES ADMIN*/
-form div.accionAdmin {
+form div.seleccion {
     display: flex;
     flex-direction: column;
     text-align: center; /* Centrar el contenido del fieldset horizontalmente */
     padding: 20px; /* Añadir espacio alrededor del fieldset */
-    border: 1px solid #ccc; /* Agregar un borde para visualización */
-    border-radius: 5px; /* Agregar bordes redondeados */
-    justify-content: center;
+    border: 1px solid #00458a; /* Agregar un borde para visualización */
     margin: auto; /* Centrar verticalmente el fieldset dentro del article */
+    width: 50%;
+    min-height: 30%;
+}
 
+form div.seleccion select {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px; /* Agregar espacio entre cada elemento */
+
+}
+
+form div.seleccion input {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px; /* Agregar espacio entre cada elemento */
+
+}
+
+
+form div.seleccion button {
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    background-color: #00458a;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    display: block; /* Convertir el enlace en un bloque */
+    text-decoration: none;
+    color: white;
+}
+
+div.seleccion label,
+div.seleccion select,
+div.seleccion button {
+    margin-bottom: 20px; /* Agregar espacio entre cada elemento */
+}
+
+form div.seleccion button:hover {
+    background-color: #d30d1e;
+}
+
+
+form#formseleccionequipos{
+    display: flex;
+    flex-direction: column;
+}
+
+.seleccionDatosPartido{
+
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Centrar el contenido del fieldset horizontalmente */
+    padding: 20px; /* Añadir espacio alrededor del fieldset */
+    border: 1px solid #00458a; /* Agregar un borde para visualización */
+    margin: auto; /* Centrar verticalmente el fieldset dentro del article */
+    width: 50%;
+}
+
+.seleccionDatosPartido div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.seleccionDatosPartido h1 {
+    text-decoration: underline;
+}
+
+.seleccionDatosPartido input {
+    width: auto;
+    margin: 0px 10px;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.seleccionDatosPartido{
+    margin-top:20px;
+    margin-bottom: 20px; /* Agregar espacio entre cada elemento */
+}
+
+.seleccionJugadores {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    border: 1px solid #00458a;
+    width: 50%;
+    margin: auto;
+    min-height: 30%;
+    margin-top: 20px;
+}
+/* Estilo para subrayar los títulos */
+.seleccionJugadores h1 {
+    width: 100%;
+    text-align: center;
+    text-decoration: underline;
+
+}
+
+.columna-izquierda,
+.columna-derecha {
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.columna-izquierda td, .columna-izquierda tr{
+padding: 0;
+margin:0;
+}
+
+.columna-izquierda table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.columna-derecha {
+    width: 100%;
+}
+
+.playerVisit {
+    border: 1px solid #00458a;
+    padding: 10px;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.jugador-caja{
+    border: 1px solid #00458a;
+    padding: 10px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.jugador-caja input[type="checkbox"] {
+    display: none;
+}
+
+.jugador-label,
+.playerVisit label {
+    cursor: pointer;
+}
+
+.jugador-caja input[type="checkbox"]:checked + .jugador-label {
+    background-color: #d30d1e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.jugador-caja:active{
+    background: #00458a;
+}
+
+.playerVisit {
+    display: flex;
+    align-items: center;
+
+}
+
+.input-block {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.input-block label {
+    margin-right: 10px; /* Espacio entre el label y el input */
+}
+
+.equipoRival{
+    margin: 24.9px 0px;
+    font-size: 30px;
+}
+
+
+.aceptarJugadores {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 50%;
+    padding: 15px;
+    background-color: #00458a;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+
+}
+.aceptarJugadores:hover {
+    background-color: #d30d1e;
 }

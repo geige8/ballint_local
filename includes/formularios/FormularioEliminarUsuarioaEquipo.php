@@ -22,19 +22,17 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
             $erroresCampos = self::generaErroresCampos(['usuarioaequipo', 'equipoausuario'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-            $htmlErroresGlobales
-                <div id="camposEquipos">
-                <fieldset class="accionAdmin"> 
-                <label for="usuarioaequipo">Escribe el Usuario:</label>
-                        <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
-                        {$erroresCampos['usuarioaequipo']}
-                        <label for="equipoausuario">Selecciona el equipo del usuario:</label>
-                        <select id="equipoausuario" name="equipoausuario">
-                            $opcionesEquipos
-                        </select>
-                        {$erroresCampos['equipoausuario']}
-                        <button type="submit" name="registro">Registrar Equipo</button>
-                    </fieldset>
+                <div class="seleccion"> 
+                    $htmlErroresGlobales
+                    <label for="usuarioaequipo">Escribe el Usuario:</label>
+                    <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
+                    {$erroresCampos['usuarioaequipo']}
+                    <label for="equipoausuario">Selecciona el equipo del usuario:</label>
+                    <select id="equipoausuario" name="equipoausuario">
+                        $opcionesEquipos
+                    </select>
+                    {$erroresCampos['equipoausuario']}
+                    <button type="submit" name="registro">Eliminar Usuario de Equipo</button>
                 </div>            
             EOF;
         return $html;
@@ -62,6 +60,7 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
         
             try {
                 $equipoRegistrado = Usuario::eliminarUsuarioEquipo($usuarioaequipo,$equipoausuario);
+                $this->errores['equipoausuario'] = '¡Jugador eliminado del equipo!';
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
             }

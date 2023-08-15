@@ -1,82 +1,213 @@
-/* Estilos para div.container */
 div.container {
-  display: flex; /* Establecer el contenedor como flexbox */
-  flex-direction: column; /* Alinear los elementos en una columna */
-  font-size: 14px; 
-
-}
-
-/* Estilos para div.cabecera-stats */
-div.cabecera-stats {
-  display: flex; /* Establecer el contenedor como flexbox */
-  justify-content: space-between; /* Distribuir los elementos de manera equitativa en el eje principal */
-  align-items: center; /* Centrar los elementos verticalmente en el eje transversal */
-  padding: 10px; /* Espaciado interno */
-  background-color: #f0f0f0; /* Color de fondo */
-}
-
-/* Estilos para los elementos dentro de div.cabecera-stats */
-div.cabecera-stats > div {
-  flex: 1; /* Hacer que todos los divs ocupen el mismo ancho */
-  padding: 10px; /* Espaciado interno */
-  border: 1px solid #ccc; /* Borde con color gris */
-  background-color: #fff; /* Color de fondo */
-  text-align: center; /* Alinear el contenido al centro */
-}
-
-/* Estilos para los botones dentro de div.cabecera-stats */
-div.cabecera-stats button {
-  display: block; /* Hacer que los botones ocupen todo el ancho disponible */
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
   width: 100%;
-  margin-bottom: 5px; /* Espaciado entre botones */
+  min-height: 10%;
 }
+
+div.container h1{
+  font-size: 21px;
+}
+
+div.container button{
+  width: 70%;
+  margin: 5px 0;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: white;
+}
+
+div.container button:hover {
+  background-color: #d30d1e;
+}
+
+div.cabecera-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* Todos los elementos se estirarán para tener la misma altura */
+  padding: 10px;
+  background-color: #b9d4f0;
+  border: 2px solid #00458a;
+  box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+  flex: 1; /* Hace que la cabecera ocupe todo el ancho disponible */
+}
+
+div.buttons-coach-local,
+div.buttons-coach-visit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  flex: 1; /* Ambos lados ocupan el mismo ancho */
+  box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+  border: 2px solid #00458a; /* Borde con color gris */
+  padding: 10px;
+
+}
+
+div.temporizador{
+
+  box-sizing: border-box; /* Asegura que el ancho total incluya el borde */
+  border: 2px solid #00458a; /* Borde con color gris */
+
+}
+
+div.temporizador,
+div.localScore-display,
+div.visitScore-display {
+  flex: 1; /* Todos los bloques en el centro ocupan el mismo ancho */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Estilos adicionales para mejorar la legibilidad de los números */
+div.cabecera-stats p,
+.timer-display {
+  font-size: 36px; /* Tamaño grande para el temporizador */
+  font-weight: bold;
+  margin:0;
+}
+
+div.localScore-display p,
+div.visitScore-display p{
+  font-size: 100px; /* Tamaño grande para el temporizador */
+  font-weight: bold;
+  margin:0;
+}
+
+div.buttons,div.endgame{
+  width: 100%;
+  flex: 1; /* Todos los bloques en el centro ocupan el mismo ancho */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+div.temporizador select{
+  width: 70%;
+  flex: 1; /* Todos los bloques en el centro ocupan el mismo ancho */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+}
+
+div.buttons button {
+  margin: 5px 0; /* Espaciado vertical y horizontal */
+}
+
+div.endgame button {
+  margin: 5px 0; /* Espaciado vertical y horizontal */
+  background-color: #d30d1e;
+
+}
+
+div.endgame button:hover {
+  background-color: #00458a;
+
+}
+
+/* Estilos para el temporizador */
+.timer-display {
+  font-size: 36px; /* Tamaño grande para el temporizador */
+  margin: 10px 0; /* Espaciado alrededor del temporizador */
+}
+
+div.localScore-display h1,
+div.visitScore-display h1 {
+  max-width: 100%; /* Establece la longitud máxima deseada */
+  overflow: hidden; /* Oculta cualquier parte del texto que desborde */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos (...) si el texto se corta */
+  font-size: 28px;
+}
+/***************************************************************************/
 
 /* Estilos para div.cuerpoAnalizador */
 div.cuerpoAnalizador {
   display: flex;
-  justify-content: space-between;
   align-items: stretch; /* Ajustar la altura de los divs al mismo tamaño */
   padding: 10px;
-  background-color: #f0f0f0;
-  height: 1000px;
+  background-color: #b9d4f0;
   font-size: 14px; 
-
 }
 
-/* Estilos para los divs de dentro de div.cuerpoAnalizador */
-div.cuerpoAnalizador > div {
-  flex: 1; /* Hacer que todos los divs ocupen la misma cantidad de espacio horizontal */
-  display: flex; /* Utilizar flexbox para el contenido dentro de cada div */
-  flex-direction: column; /* Alinear el contenido verticalmente */
-  justify-content: space-between; /* Espacio entre los elementos dentro de cada div */
+div.cuerpoAnalizador div.acciones h1{
+  max-width: 100%; /* Establece la longitud máxima deseada */
+  overflow: hidden; /* Oculta cualquier parte del texto que desborde */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos (...) si el texto se corta */
+  font-size: 28px;
+  margin: 0px 0px 10px;
+}
+
+div.cuerpoAnalizador div.acciones,  div#comparativaEquipos{
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 2px solid #00458a;
+  box-sizing: border-box;
   background-color: #fff;
 }
 
-/* Estilos para los elementos dentro de los divs de div.cuerpoAnalizador */
-div.cuerpoAnalizador > div > * {
-  display: block; /* Alinear el contenido en vertical */
-  margin-bottom: 10px; /* Espacio entre los elementos en vertical */
-  text-align: center; /* Alinear el contenido al centro */
+div.cuerpoAnalizador div.acciones{
+
+  background-color: #b9d4f0;
+
 }
 
-#comparativaEquipos {
-  display: flex;
-  flex-direction: column;
-}
 
-#comparativaEquipos div {
+#comparativaEquipos div.comparativa,#comparativaEquipos div.jugadoresPista{
   display: flex;
   justify-content: space-between;
   align-items: center;
+} 
+
+div.idpartido-display,div.graficos-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+div.graficos-button button{
+  width: 70%;
+  margin: 5px 0;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+
+
+div.graficos-button button:hover {
+  background-color: #d30d1e;
 }
 
 #comparativaEquipos h1 {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 5px 10px;
   font-size: 14px; 
+}
 
+#comparativaEquipos p {
+  margin: 5px 10px;
+  font-size: 14px; 
 }
 
 /* Estilos para div.accionesLocal */
@@ -90,106 +221,148 @@ div.cuerpoAnalizador > div > * {
 
 /* Estilos para los botones dentro de accionesLocal */
 .acciones button {
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
   flex-basis: 48%; /* Ancho de los botones (cada columna ocupará el 48% del espacio disponible) */
   margin: 0; /* Eliminamos los márgenes predeterminados para evitar espacios adicionales */
+  color: white;
+  font-size: 35px; 
+
+}
+
+#accionesVisitante button {
+  background-color: white;
+  transition: background-color 0.3s ease;
+  flex-basis: 48%; /* Ancho de los botones (cada columna ocupará el 48% del espacio disponible) */
+  margin: 0; /* Eliminamos los márgenes predeterminados para evitar espacios adicionales */
+  color: black;
+  font-size: 35px; 
+
+}
+
+.acciones button:hover {
+  background-color: #d30d1e;
+}
+#accionesVisitante button:hover {
+  background-color: #d30d1e;
 }
 
 /*-----------------------------------------*/
 
-/*Ventana emergente*/
+/*Ventana emergente NORMAL*/
 .ventana-emergente {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    z-index: 101;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .ventana-emergente ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .ventana-emergente li {
-    cursor: pointer;
-    padding: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .ventana-emergente li:hover {
-    background-color: #eee;
-  }
-  
-  .ventana-emergente li:last-child {
-    margin-bottom: 0;
-  }
-  
-
-  .ventana-quintetos {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    z-index: 101;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-flow: column;
-
-  }
-  
-  .ventana-quintetos ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .ventana-quintetos li {
-    cursor: pointer;
-    padding: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .ventana-quintetos li:hover {
-    background-color: #eee;
-  }
-  
-  .ventana-quintetos li:last-child {
-    margin-bottom: 0;
-  }
-
-  .contenedor-listas{
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
+  z-index: 101;
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
+  display: flex;
+  flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  align-items: center;
+  justify-content: center;
+}
+.ventana-emergente td{
+  padding: 0px;
+}
+.ventana-emergente button{
+  font-size: 20px;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  padding: 20px;
+  color: white;
+  width: 150px; /* Cambia este valor según sea necesario */
+  height: 120px;
 }
 
+.ventana-emergente button.cerrar{
+  background-color: rgba(255, 255, 255, 0);
+  transition: background-color 0.3s ease;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  padding: 20px;
+  color: #00458a;
+}
+.ventana-emergente button:hover {
+  background-color: #d30d1e;
+}
+
+.ventana-emergente button.cerrar:hover {
+  background-color: #d30d1e00;
+}
+
+.ventana-emergente h1{
+  text-decoration: underline;
+}
+
+/*****************************************/
+/*VENTANA SUSTITUCIONES*/
 
 .ventana-sustitucion {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
   z-index: 101;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
   display: flex;
   flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  align-items: center;
+  justify-content: center;
+}
 
+.ventana-sustitucion button{
+  width: 70%;
+  margin: 5px 0;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+.ventana-sustitucion button.cerrar{
+  width: auto;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0);
+  transition: none;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: #00458a;
+  padding: 10px;
+}
+
+.ventana-sustitucion h1{
+  text-decoration: underline;
+}
+
+.ventana-sustitucion button:hover {
+  background-color: #d30d1e;
+}
+
+.ventana-sustitucion button.cerrar:hover {
+  background-color: #d30d1e00;
 }
 
 .ventana-sustitucion ul {
@@ -205,55 +378,149 @@ div.cuerpoAnalizador > div > * {
 }
 
 .ventana-sustitucion li:hover {
-  background-color: #eee;
-}
-
-.ventana-sustitucion li:last-child {
-  margin-bottom: 0;
-}
-
-.contenedor-listas{
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  background-color: #d30d1e;
+  color: white;
 }
 
 
+/****************************************************/
+/*VENTANA SELECCION DE GRAFICOS*/
 
 .ventana-graficos {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
   z-index: 101;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
   display: flex;
   flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  align-items: center;
+  justify-content: center;
+}
+
+.ventana-graficos button{
+  width: 70%;
+  margin: 5px 0;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+.ventana-graficos button.cerrar{
+  width: auto;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0);
+  transition: none;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: #00458a;
+  padding: 10px;
+}
+
+.ventana-graficos h1{
+  text-decoration: underline;
+}
+
+.ventana-graficos button:hover {
+  background-color: #d30d1e;
+}
+
+.ventana-graficos button.cerrar:hover {
+  background-color: #d30d1e00;
+}
+
+/*************************************************/
+/*VENTANA SELECCION DE TITULARES*/
+
+.ventana-quintetos {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
+  z-index: 101;
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
+  display: flex;
+  flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
 
 }
 
-.ventana-graficos ul {
+.ventana-quintetos .contenedor-listas {
+  display: flex;
+  flex-flow: row; /* Cambiado de row a column para dispositivos móviles */
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.ventana-quintetos h1{
+  text-decoration: underline;
+}
+
+.ventana-quintetos p{
+  text-decoration: underline;
+}
+
+.ventana-quintetos ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.ventana-graficos li {
+.ventana-quintetos li {
   cursor: pointer;
   padding: 5px;
   margin-bottom: 5px;
 }
 
-.ventana-graficos li:hover {
-  background-color: #eee;
+.ventana-quintetos li:hover {
+  background-color: #d30d1e;
+  color: white;
 }
 
-.ventana-graficos li:last-child {
+.ventana-quintetos li:last-child {
   margin-bottom: 0;
 }
+
+.ventana-quintetos button {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 20px;
+  width: 50%;
+  padding: 15px;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+}
+
+.ventana-quintetos button:hover {
+  background-color: #d30d1e;
+}
+
+/*******************************************************/

@@ -22,19 +22,17 @@ class FormularioRegistroUsuarioaEquipo extends Formulario{
             $erroresCampos = self::generaErroresCampos(['usuarioaequipo', 'equipoausuario'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-            $htmlErroresGlobales
-                <div id="camposEquipos">
-                    <fieldset class="accionAdmin"> 
-                        <label for="usuarioaequipo">Escribe el Usuario:</label>
-                        <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
-                        {$erroresCampos['usuarioaequipo']}
-                        <label for="equipoausuario">Selecciona el equipo del usuario:</label>
-                        <select id="equipoausuario" name="equipoausuario">
-                            $opcionesEquipos
-                        </select>
-                        {$erroresCampos['equipoausuario']}
-                        <button type="submit" name="registro">Añadir Usuario a Equipo</button>
-                    </fieldset>
+                <div class="seleccion"> 
+                    $htmlErroresGlobales
+                    <label for="usuarioaequipo">Escribe el Usuario:</label>
+                    <input type="text" id="usuarioaequipo" name="usuarioaequipo" required>
+                    {$erroresCampos['usuarioaequipo']}
+                    <label for="equipoausuario">Selecciona el equipo del usuario:</label>
+                    <select id="equipoausuario" name="equipoausuario">
+                        $opcionesEquipos
+                    </select>
+                    {$erroresCampos['equipoausuario']}
+                    <button type="submit" name="registro">Añadir Usuario a Equipo</button>
                 </div>            
             EOF;
         return $html;
@@ -60,6 +58,8 @@ class FormularioRegistroUsuarioaEquipo extends Formulario{
         if (count($this->errores) === 0) {
             try {
                 $equipoRegistrado = Usuario::addUsuarioaEquipo($usuarioaequipo,$equipoausuario);
+                $this->errores['equipoausuario'] = '¡Jugador añadido del equipo!';
+
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage();
             }

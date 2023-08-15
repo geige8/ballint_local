@@ -21,60 +21,77 @@ class FormularioSeleccionJugadores extends Formulario{
         $jugador = '';
     
         $html .= <<<EOF
-        <div>
-            <label for="seleccion_fecha">Fecha:</label>
-            <input type="date" id="seleccion_fecha" name="seleccion_fecha">
+        <div class="seleccionDatosPartido">
+            <h1>Datos del Partido</h1>
+            <div>
+                <label for="seleccion_fecha">Fecha:</label>
+                <input type="date" id="seleccion_fecha" name="seleccion_fecha">
+                <label for="seleccion_hora">Hora:</label>
+                <input type="time" id="seleccion_hora" name="seleccion_hora">
+            </div>
         </div>
-        <div>
-            <label for="seleccion_hora">Hora:</label>
-            <input type="time" id="seleccion_hora" name="seleccion_hora">
-        </div>
+            <div class="seleccionJugadores">
+                <h1>Selección de Jugadores</h1>
+                <div class="columna-izquierda">
+                    <h2>$this->idEquipo</h2>
+                    <table>
+                        <tbody>
+        EOF;
+                    
+                    $contador = 1;
+                    foreach ($jugadores as $jugador) {
+                        $html .= "<tr>";
+                        $html .= "<td>";
+                        $html .= "<div class='jugador-caja'>";
+                        $html .= "<input type='checkbox' name='seleccionados[]' value='" . $jugador['user']. "' id='jugador_$contador'>";
+                        $html .= "<label class='jugador-label' for='jugador_$contador'>";
+                        $html .= $jugador['nombre'] . " " . $jugador['apellido1'] . " " .  $jugador['apellido2'] . " #" .  $jugador['numero'];
+                        $html .= "</label>";
+                        $html .= "</div>";
+                        $html .= "</td>";
+                        $html .= "</tr>";
+                        $contador++; 
+                    }
+                
+                    $html .= <<<EOF
+                        </tbody>
+                    </table>
+                </div>
+                <div class="columna-derecha">
+                    <div class="equipoRival">
+                        <label for="equipo_rival">Equipo Rival:</label>
+                        <input type="text" id="equipo_rival" name="equipo_rival">
+                    </div>
+                EOF;
+                for ($i = 0; $i < 12; $i++) {
+                    $html .= "<div class='playerVisit'>";
+                    
+                    // Input para el número
+                    $html .= "<div class='input-block'>";
+                    $html .= "<label for='numero$i'>Nº:</label>";
+                    $html .= "<input type='text' name='numero$i' id='numero$i'>";
+                    $html .= "</div>";
+                    
+                    // Input para el nombre
+                    $html .= "<div class='input-block'>";
+                    $html .= "<label for='nombre$i'>Nombre:</label>";
+                    $html .= "<input type='text' name='nombre$i' id='nombre$i'>";
+                    $html .= "</div>";
+                    
+                    $html .= "</div>";
+                }
+                
+            
+                // Agregamos el campo oculto con el valor de $idEquipo
+                $html .= "<input type='hidden' name='idEquipo' value='" . $this->idEquipo . "'>";
+            
+                $html .= <<<EOF
+            </div>
 
-        <div>
-        <h1>Selección de Jugadores</h1>
-        <h2>Equipo Local: $this->idEquipo</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Seleccionar</th>
-                    </tr>
-                </thead>
-                <tbody>
-        EOF;
-        
-        $contador = 1;
-        foreach ($jugadores as $jugador) {
-            $html .= "<tr>";
-            $html .= "<td>" . $contador . ". " .  $jugador['nombre'] . " " . $jugador['apellido1'] . " " .  $jugador['apellido2'] . "#" .  $jugador['numero'] . " " ."</td>";
-            $html .= "<td><input type='checkbox' name='seleccionados[]' value='" . $jugador['user']. "'></td>";
-            $html .= "</tr>";
-            $contador++; 
-        }
-    
-        $html .= <<<EOF
-                </tbody>
-            </table>          
         </div>
-        <div>
-            <h2>Equipo Visitante:</h2>
-            <label for="equipo_rival">Equipo rival:</label>
-            <input type="text" id="equipo_rival" name="equipo_rival">
-        </div>
+            <button class="aceptarJugadores" type="submit" name="aceptar">Confirmar Jugadores</button>
         EOF;
-        for ($i = 0; $i < 12; $i++) {
-            $html .= "<div>";
-            $html .= "<label for='numero$i'>Nº:</label><input type='text' name='numero$i' id='numero$i'>";
-            $html .= "<label for='nombre$i'>Nombre del jugador $i:</label><input type='text' name='nombre$i' id='nombre$i'>";
-            $html .= "</div>";
-        }
     
-        // Agregamos el campo oculto con el valor de $idEquipo
-        $html .= '<input type="hidden" name="idEquipo" value="' . $this->idEquipo . '">';
-    
-        $html .= <<<EOF
-            <input type="submit" value="Aceptar">
-        EOF;
         return $html;
     }
     

@@ -23,9 +23,9 @@ class FormularioEliminarEquipos extends Formulario{
             $erroresCampos = self::generaErroresCampos(['equipo_usuario'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-            $htmlErroresGlobales
-                <div class="accionAdmin"> 
-                    <label for="equipo_usuario">Selecciona el equipo del usuario:</label>
+                <div class="seleccion"> 
+                    $htmlErroresGlobales
+                    <label for="equipo_usuario">¿Qué equipo quieres eliminar?</label>
                     <select id="equipo_usuario" name="equipo_usuario">
                         $opcionesEquipos
                     </select>
@@ -49,6 +49,7 @@ class FormularioEliminarEquipos extends Formulario{
         if (count($this->errores) === 0) {
             try {
                 $equipoEliminado = Equipo::eliminarEquipo($equipoUsuario);
+                $this->errores['equipo_usuario'] = '¡Equipo Eliminado!';
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
             }

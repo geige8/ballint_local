@@ -25,35 +25,33 @@ class FormularioRegistroUsuarios extends Formulario{
             $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2','numero'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-                <div id="camposJugadores">
-                    <fieldset class="accionAdmin"> 
+                <div class="seleccion"> 
                     $htmlErroresGlobales
-                        <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
-                        <select id="tipo_usuario" name="tipo_usuario">
-                            <option value="E">Entrenador</option>
-                            <option value="J">Jugador</option>
-                            <option value="DT">Director Técnico</option>
-                        </select>
-                        {$erroresCampos['tipo_usuario']}
-                        <label for="equipo_usuario">Selecciona el equipo del usuario:</label>
-                        <select id="equipo_usuario" name="equipo_usuario">
-                            $opcionesEquipos
-                        </select>
-                        {$erroresCampos['equipo_usuario']}
-                        <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                            {$erroresCampos['nombre']}
-                        <label for="apellido1">1er Apellido</label>
-                            <input type="text" id="apellido1" name="apellido1" required>
-                            {$erroresCampos['apellido1']}
-                        <label for="apellido2">2do Apellido</label>
-                            <input type="text" id="apellido2" name="apellido2" required>
-                            {$erroresCampos['apellido2']}
-                        <label for="numero">Número (0-99)</label>
-                            <input type="number" id="numero" name="numero" min="0" max="99" required>
-                            {$erroresCampos['numero']}                            
-                        <button type="submit" name="registro">RegistrarUsuario</button>
-                    </fieldset>
+                    <label for="tipo_usuario">Selecciona el tipo de usuario:</label>
+                    <select id="tipo_usuario" name="tipo_usuario">
+                        <option value="E">Entrenador</option>
+                        <option value="J">Jugador</option>
+                        <option value="DT">Director Técnico</option>
+                    </select>
+                    {$erroresCampos['tipo_usuario']}
+                    <label for="equipo_usuario">Selecciona el equipo del usuario:</label>
+                    <select id="equipo_usuario" name="equipo_usuario">
+                        $opcionesEquipos
+                    </select>
+                    {$erroresCampos['equipo_usuario']}
+                    <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                        {$erroresCampos['nombre']}
+                    <label for="apellido1">1er Apellido</label>
+                        <input type="text" id="apellido1" name="apellido1" required>
+                        {$erroresCampos['apellido1']}
+                    <label for="apellido2">2do Apellido</label>
+                        <input type="text" id="apellido2" name="apellido2" required>
+                        {$erroresCampos['apellido2']}
+                    <label for="numero">Número (0-99)</label>
+                        <input type="number" id="numero" name="numero" min="0" max="99" required>
+                        {$erroresCampos['numero']}                            
+                    <button type="submit" name="registro">Registrar Usuario</button>
                 </div>            
             EOF;
         return $html;
@@ -134,6 +132,7 @@ class FormularioRegistroUsuarios extends Formulario{
             try {
                 $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
                 // Si no hay excepción, continúas con el flujo normal
+
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
             }

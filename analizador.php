@@ -10,14 +10,7 @@ $local = $_GET['idEquipo'];
 
 $nombreLocal = es\ucm\fdi\Equipo::getNombreEquipo($local);
 
-
-
 $visitante = $_GET['idEquipoVisit'];
-
-//Instancio y llamo a la funcion correspondiente
-//$form = new es\ucm\fdi\FormularioAccionPartido($_GET['idEquipo']);
-//$htmlaccionPartido = $form->gestiona();
-
 
 $jugadoresLocal = htmlspecialchars(json_encode(es\ucm\fdi\Partido::getJugadoresEquipoPartido($local)));
 $jugadoresVisitante = htmlspecialchars(json_encode(es\ucm\fdi\Partido::getJugadoresEquipoPartido($visitante)));
@@ -34,22 +27,32 @@ $contenidoPrincipal .= <<<EOS
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.15/jspdf.plugin.autotable.min.js"></script>
 
 
-<div class="container">
+    <div class="container">
         <div class="cabecera-stats">
             <div class="buttons-coach-local">
-                <h1>Locales</h1>
-                <p class="timeout">0</p>
-                <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$local`)">TIMEOUT</button>
-                <p class="faltabanquillo">0</p>
-                <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$local`)">FALTA</button>
+                <h1>BENCH</h1>
+                <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$local`)">TO</button>
+                <p class="timeoutP">0</p>
+                <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$local`)">FL</button>
+                <p class="faltabanquilloP">0</p>
             </div>
 
             <div class="localScore-display">
-                <h1>{$nombreLocal}</h1>
+                <h1>{$local}</h1>
                 <p class="points">0</p>
             </div>
 
             <div class="temporizador">
+                <select id="periodSelect">
+                    <option value="Periodo 1">Periodo 1</option>
+                    <option value="Periodo 2">Periodo 2</option>
+                    <option value="Periodo 3">Periodo 3</option>
+                    <option value="Periodo 4">Periodo 4</option>
+                    <option value="Extra 1">Extra 1</option>
+                    <option value="Extra 2">Extra 2</option>
+                    <option value="Extra 3">Extra 3</option>
+                </select>
+
                 <select id="durationSelect">
                     <option value="1">1 minuto</option>
                     <option value="2">2 minutos</option>
@@ -63,16 +66,6 @@ $contenidoPrincipal .= <<<EOS
                     <option value="10">10 minutos</option>                     
                     <option value="11">11 minutos</option>            
                     <option value="12">12 minutos</option>
-                </select>
-            
-                <select id="periodSelect">
-                    <option value="Periodo 1">Periodo 1</option>
-                    <option value="Periodo 2">Periodo 2</option>
-                    <option value="Periodo 3">Periodo 3</option>
-                    <option value="Periodo 4">Periodo 4</option>
-                    <option value="Extra 1">Extra 1</option>
-                    <option value="Extra 2">Extra 2</option>
-                    <option value="Extra 3">Extra 3</option>
                 </select>
 
                 <div class="timer-display">
@@ -97,11 +90,11 @@ $contenidoPrincipal .= <<<EOS
             </div>
 
             <div class="buttons-coach-visit">
-                <h1>Visitantes</h1>
-                <p class="timeout">0</p>
-                <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$visitante`)">TIMEOUT</button>
-                <p class="faltabanquillo">0</p>
-                <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$visitante`)">FALTA</button>
+                <h1>BENCH</h1>
+                <button class="timeout" data-accion="timeout" onclick="addTimeOut(`$visitante`)">TO</button>
+                <p class="timeoutP">0</p>
+                <button class="faltabanquillo" data-accion="faltabanquillo" onclick="addFaltaBanquillo(`$visitante`)">FL</button>
+                <p class="faltabanquilloP">0</p>
             </div>
 
         </div>    
@@ -131,21 +124,19 @@ $contenidoPrincipal .= <<<EOS
     
         <div id="comparativaEquipos">
             <div class="idpartido-display">
-                <p class="id">{$idPartido}</p>
+                <p>ID PARTIDO: </p><p class="id">{$idPartido}</p>
             </div>
             <div class="graficos-button">
-                <button id="graficos-button">Seleccionar Graficos</button>
+                <button id="graficos-button">Seleccionar Gráficos</button>
             </div>
             <h1> En pista: </h1>
             <div class="jugadoresPista">
                 <div class="localPlayers-display">
-
                 </div>
                 <div class="visitPlayers-display">
-
                 </div>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="T2A-Local">0</p>
                 <p>/</p>
                 <p class="T2F-Local" hidden>0</p>
@@ -160,7 +151,7 @@ $contenidoPrincipal .= <<<EOS
                 <p class="T2P-Visitante">0</p>
                 <p>%</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="T3A-Local">0</p>
                 <p>/</p>
                 <p class="T3F-Local" hidden>0</p>
@@ -175,7 +166,7 @@ $contenidoPrincipal .= <<<EOS
                 <p class="T3P-Visitante">0</p>
                 <p>%</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="TLA-Local">0</p>
                 <p>/</p>
                 <p class="TLF-Local" hidden>0</p>
@@ -190,42 +181,42 @@ $contenidoPrincipal .= <<<EOS
                 <p class="TLP-Visitante">0</p>
                 <p>%</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="FLH-Local">0</p>
                     <h1>FALTAS</h1>
                 <p class="FLH-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="RBO-Local">0</p>
                     <h1>REBO</h1>
                 <p class="RBO-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="RBD-Local">0</p>
                     <h1>REBD</h1>
                 <p class="RBD-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="RB-Local">0</p>
                     <h1>REB</h1>
                 <p class="RB-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="ROB-Local">0</p>
                     <h1>ROB</h1>
                 <p class="ROB-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="TAP-Local">0</p>
                     <h1>TAP</h1>
                 <p class="TAP-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="PRD-Local">0</p>
                     <h1>PRD</h1>
                 <p class="PRD-Visitante">0</p>
             </div>
-            <div>
+            <div class="comparativa">
                 <p class="AST-Local">0</p>
                     <h1>AST</h1>
                 <p class="AST-Asistente">0</p>
@@ -253,6 +244,7 @@ $contenidoPrincipal .= <<<EOS
                 <button class="action" data-accion="AST" onclick="mostrarVentanaEmergente('AST',`$visitante`)">AST</button>
             </div>
         </div>
+
     </div>
 </div>
 <script src="js\marcador.js"></script>

@@ -31,12 +31,12 @@
 
       <!-- Botón para Añadir Jugadores/Entrenadores a Equipos -->
           <a class="adminButton" href="addUsuarioTeam.php">
-              Añadir a Equipos
+              Añadir Usuarios a Equipos
           </a>
 
       <!-- Botón para Eliminar Jugadores/Entrenadores a Equipos -->
           <a class="adminButton" href="eliminar_UsuarioTeam.php">
-            Eliminar de Equipos        
+            Eliminar Usuarios de Equipos        
           </a>
     </div>
   EOS;

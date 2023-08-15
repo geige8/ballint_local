@@ -1,11 +1,23 @@
 aside#sidebarDer {
     width: 0%;
-    height: 1242px;
     display: flex;
     flex-direction: column;
     right: 0; /* Alinea el sidebar a la derecha */
-    background-color: #f0f0f0; /* Cambia el color de fondo a tu preferencia */
+    background-color: #b9d4f0; /* Cambia el color de fondo a tu preferencia */
     font-weight: bold;
     transition: width 0.3s ease 0.3s;
     overflow-y: auto; /* Añadir la barra de desplazamiento vertical */
+    color: white;
+    box-sizing: border-box;
+}
+
+
+aside#sidebarDer h1{
+    text-decoration: underline;
+    display: flex;
+    justify-content: center;
+}
+
+aside#sidebarDer div.info-display{
+    justify-content: center;
 }

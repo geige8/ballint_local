@@ -184,7 +184,7 @@ function getNombreEquipo(equipo){
             
             // Guardar la información de las tablas para futuras consultas y redirigir al index
             renametables();
-            window.location.href("index.php");
+            window.location.href = "index.php"; 
         }
         else{
             console.log("La respuesta está  NO completa en save players.");
@@ -237,6 +237,11 @@ function getNombreEquipo(equipo){
         var ventana = document.createElement("div");
         ventana.classList.add("ventana-graficos");
         document.body.appendChild(ventana);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var titulo = document.createElement("h1");
+        titulo.textContent = `¿Qué quieres consultar?`;
+        ventana.appendChild(titulo);
 
         // Crear el botón de cerrar y agregar el controlador de eventos
         var cerrar = document.createElement('button');
@@ -498,9 +503,6 @@ function getNombreEquipo(equipo){
                 cambiossugeridosporfactor(idlocal);
             });
 
-
-        // Mostrar la ventana emergente
-        ventana.classList.add("mostrar");
     });
 
     async function generarPDFS() {
@@ -1275,7 +1277,7 @@ function getNombreEquipo(equipo){
         const divContent = document.querySelector('.info-display');
 
         // Obtener el contenido dividido por líneas
-        const lines = divContent.innerHTML.split('\n').map(line => line.trim()).filter(line => line !== '');
+        const lines = divContent.innerHTML.split('<br>').map(line => line.trim()).filter(line => line !== '');
         
         // Crear una nueva instancia de jsPDF
         const doc = new jsPDF();
@@ -2409,16 +2411,16 @@ function getNombreEquipo(equipo){
     // Obtener el elemento con la clase "buttons-coach-local"
     let localbuttonscoach = document.querySelector('.buttons-coach-local');
     // Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
-    let localtimeout = localbuttonscoach.querySelector('.timeout');
+    let localtimeout = localbuttonscoach.querySelector('.timeoutP');
     // Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
-    let localfaltabanquillo = localbuttonscoach.querySelector('.faltabanquillo');
+    let localfaltabanquillo = localbuttonscoach.querySelector('.faltabanquilloP');
 
     // Obtener el elemento con la clase "buttons-coach-visit"
     let visitbuttonscoach = document.querySelector('.buttons-coach-visit');
     // Obtener el elemento con la clase "timeout" dentro del elemento "buttonscoachlocal"
-    let visittimeout = visitbuttonscoach.querySelector('.timeout');
+    let visittimeout = visitbuttonscoach.querySelector('.timeoutP');
     // Obtener el elemento con la clase "faltabanquillo" dentro del elemento "buttonscoachlocal"
-    let visitfaltabanquillo = visitbuttonscoach.querySelector('.faltabanquillo');
+    let visitfaltabanquillo = visitbuttonscoach.querySelector('.faltabanquilloP');
 
     function addTimeOut(equipo){
         if(isLocal(equipo)){
@@ -2802,6 +2804,8 @@ function getNombreEquipo(equipo){
             var cantidadEnBanquillo = document.querySelectorAll('.contenedor-jugadoresEnBanquillo:nth-child(2) input[type="checkbox"]:checked').length;
             if (cantidadEnJuego === 1 && cantidadEnBanquillo === 1) {
                 console.log(jugadoresSeleccionados);
+                mostrarMensajeLogLine("Sustitucion del " + getNombreEquipo(equipo) + " sale el #" + jugadoresSeleccionados[0].numero + " - Por el #" + jugadoresSeleccionados[1].numero);
+
                 // Llamar a una función con los jugadores seleccionados
                 makecambio(jugadoresSeleccionados);
                 getJugadoresPista();
@@ -2813,9 +2817,6 @@ function getNombreEquipo(equipo){
                 alert('Por favor, seleccione 1 jugador de pista y otro de banquillo para continuar');
             }
         });
-
-        // Mostrar la ventana emergente
-        ventana.classList.add("mostrar");
 
     }
 
@@ -2868,35 +2869,29 @@ function getNombreEquipo(equipo){
         //Parseo el JSON
         let jugadores = JSON.parse(listaJugadores);
 
-        var p = document.createElement("p");
-        p.textContent = `Equipo: ${equipo}`;
-        ventana.appendChild(p);
-    
-        for(var j = 0; j < Math.ceil(jugadores.length/3);j++){
+        var h1 = document.createElement("h1");
+        h1.textContent = `Equipo: ${equipo}`;
+        ventana.appendChild(h1);
+        
         var tr = document.createElement("tr");
-    
-        contadorFila = 0;
-    
-        while(contador < jugadores.length && contadorFila < 4){
-            var jugador = jugadores[contador];
-            contador++;
+
+        for(var j = 0; j < jugadores.length;j++){
+
+            var jugador = jugadores[j];
 
             var td = document.createElement("td");
             var boton = document.createElement("button");
 
-            boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
+            boton.textContent = jugador.numero + ' - ' + jugador.nombrejugador;
 
             boton.addEventListener("click", crearEventoClick(jugador,accion,equipo));
 
             td.appendChild(boton);
             tr.appendChild(td);
 
-            contadorFila++;
         }
-    
+
         tabla.appendChild(tr);
-        }
-    
         ventana.appendChild(tabla);
     
         // Crear el botón de cerrar y agregar el controlador de eventos
@@ -2910,9 +2905,6 @@ function getNombreEquipo(equipo){
         ventana.parentNode.removeChild(ventana);
         overlay.parentNode.removeChild(overlay);
         });
-    
-        // Mostrar la ventana emergente
-        ventana.classList.add("mostrar");
 
         // Función para crear el evento click con el valor del jugador como argumento
         function crearEventoClick(jugador,accion,equipo){
@@ -2941,16 +2933,14 @@ function getNombreEquipo(equipo){
         xhttp.send();
     }
 
-    function mostrarMensajeLogLine(mensaje){
-
+    function mostrarMensajeLogLine(mensaje) {
         let infoRef = document.querySelector(".info-display");
         let logline = '';
         period = document.getElementById("periodSelect").value;
-        logline = `[${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})] - ¡${mensaje}!\n`;
+        logline = `[${period}-Time: ${minutes}:${seconds}-(H:${localpointsElement.textContent} - V:${visitpointsElement.textContent})] - ¡${mensaje}!<br>`;
         infoRef.innerHTML += logline;
-        
     }
-
+      
     function actualizarComparativa(campo,equipo){
         if(isLocal(equipo)){
             var parametro = '.' + campo + '-Local';
@@ -3139,6 +3129,108 @@ function getNombreEquipo(equipo){
             // Lógica para manejar casos en los que la acción no esté definida
             break;
         }
+    }
+
+    function seleccionQuintetoInicial(local,visitante,jugadoresLocal,jugadoresVisitante){
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+    
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement("div");
+        ventana.classList.add("ventana-quintetos");
+        document.body.appendChild(ventana);
+    
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var titulares = document.createElement("h1");
+        titulares.textContent = `Selecciona los titulares de ambos equipos:`;
+        ventana.appendChild(titulares);
+    
+        // Crear los contenedores de lista para los jugadores locales y visitantes
+        var contenedorListas = document.createElement('div');
+        contenedorListas.classList.add('contenedor-listas');
+        ventana.appendChild(contenedorListas);
+    
+        // Crear los contenedores de lista para los jugadores locales y visitantes
+        var contenedorLocal = document.createElement('div');
+        contenedorLocal.classList.add('contenedor-jugadores');
+        contenedorListas.appendChild(contenedorLocal);
+    
+        var contenedorVisitante = document.createElement('div');
+        contenedorVisitante.classList.add('contenedor-jugadores');
+        contenedorListas.appendChild(contenedorVisitante);
+    
+        var p = document.createElement("p");
+        p.textContent = `${local}`;
+        contenedorLocal.appendChild(p);
+    
+        var p = document.createElement("p");
+        p.textContent = `${visitante}`;
+        contenedorVisitante.appendChild(p);
+        
+        // Crear las listas de jugadores y agregarlos a los contenedores
+        var listaLocal = document.createElement('ul');
+        listaLocal.classList.add('lista-jugadores');
+        contenedorLocal.appendChild(listaLocal);
+    
+        var listaVisitante = document.createElement('ul');
+        listaVisitante.classList.add('lista-jugadores');
+        contenedorVisitante.appendChild(listaVisitante);
+        
+        // Agregar los jugadores a cada lista
+        jugadoresLocal.forEach(function(jugador) {
+            var li = document.createElement('li');
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            li.appendChild(checkbox);
+            li.appendChild(document.createTextNode(jugador['numero']+' - '+jugador['jugador']+' - '+jugador['nombrejugador']));
+            listaLocal.appendChild(li);
+        });
+    
+        jugadoresVisitante.forEach(function(jugador) {
+            var li = document.createElement('li');
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            li.appendChild(checkbox);
+            li.appendChild(document.createTextNode(jugador['numero']+' - '+jugador['jugador']+' - '+jugador['nombrejugador']));
+            listaVisitante.appendChild(li);
+        });
+     
+    
+        // Crear el botón de confirmar y agregar el controlador de eventos
+        var confirmar = document.createElement('button');
+        confirmar.classList.add('confirmar');
+        confirmar.innerHTML = 'Confirmar';
+        ventana.appendChild(confirmar);
+     
+        confirmar.addEventListener('click', function() {
+            // Obtener los jugadores seleccionados
+            var jugadoresSeleccionados = [];
+            var checkboxesSeleccionados = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxesSeleccionados.forEach(function(checkbox) {
+                var jugador = checkbox.parentNode.textContent.split(' - ');
+                jugadoresSeleccionados.push({numero: jugador[0], jugador: jugador[1]});
+            });
+            // Validar que se hayan seleccionado 5 jugadores locales y 5 visitantes
+            var cantidadLocal = document.querySelectorAll('.contenedor-jugadores:nth-child(1) input[type="checkbox"]:checked').length;
+            var cantidadVisitante = document.querySelectorAll('.contenedor-jugadores:nth-child(2) input[type="checkbox"]:checked').length;
+            if (cantidadLocal === 5 && cantidadVisitante === 5) {
+                console.log(jugadoresSeleccionados);
+                // Llamar a una función con los jugadores seleccionados
+                setTitulares(jugadoresSeleccionados);
+                getJugadoresPista();
+                
+                // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+            } else {
+                alert('Por favor, seleccione 5 jugadores locales y 5 visitantes antes de confirmar.');
+            }
+        });
+    
+    
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

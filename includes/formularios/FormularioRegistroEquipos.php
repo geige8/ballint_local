@@ -14,31 +14,29 @@ class FormularioRegistroEquipos extends Formulario{
             $erroresCampos = self::generaErroresCampos(['categoria_equipo', 'seccion_equipo','letra_equipo'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
-            $htmlErroresGlobales
-                <div id="camposEquipos">
-                <fieldset class="accionAdmin"> 
-                <label for="categoria_equipo">Selecciona la categoria del equipo:</label>
-                        <select id="categoria_equipo" name="categoria_equipo">
-                            <option value="Nacional">Nacional</option>
-                            <option value="PrimeraAutonomica">Primera Autonómica</option>
-                            <option value="SegundaAutonomica">Segunda Autonómica</option>
-                            <option value="Sub22">Sub22</option>
-                            <option value="Junior">Junior</option>
-                            <option value="Cadete">Cadete</option>
-                            <option value="Infantil">Infantil</option>
-                        </select>
-                        {$erroresCampos['categoria_equipo']}
-                        <label for="seccion_equipo">Selecciona si es masculino o femenino:</label>
-                        <select id="seccion_equipo" name="seccion_equipo">
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
-                        </select>
-                        {$erroresCampos['seccion_equipo']}
-                        <label for="letra_equipo">Letra del Equipo (1):</label>
-                        <input type="text" id="letra_equipo" name="letra_equipo" required>
-                        {$erroresCampos['letra_equipo']}
-                        <button type="submit" name="registro">Registrar Equipo</button>
-                    </fieldset>
+                <div class="seleccion"> 
+                    $htmlErroresGlobales
+                    <label for="categoria_equipo">Selecciona la categoria del equipo:</label>
+                    <select id="categoria_equipo" name="categoria_equipo">
+                        <option value="Nacional">Nacional</option>
+                        <option value="PrimeraAutonomica">Primera Autonómica</option>
+                        <option value="SegundaAutonomica">Segunda Autonómica</option>
+                        <option value="Sub22">Sub22</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Cadete">Cadete</option>
+                        <option value="Infantil">Infantil</option>
+                    </select>
+                    {$erroresCampos['categoria_equipo']}
+                    <label for="seccion_equipo">Selecciona si es masculino o femenino:</label>
+                    <select id="seccion_equipo" name="seccion_equipo">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                    {$erroresCampos['seccion_equipo']}
+                    <label for="letra_equipo">Letra del Equipo (1):</label>
+                    <input type="text" id="letra_equipo" name="letra_equipo" required>
+                    {$erroresCampos['letra_equipo']}
+                    <button type="submit" name="registro">Registrar Equipo</button>
                 </div>            
             EOF;
         return $html;

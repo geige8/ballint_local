@@ -21,17 +21,15 @@ class FormularioSeleccionEquipos extends Formulario{
 
         // Generamos el HTML para los campos del formulario
         $html .= <<<EOF
-        <div>
+        <div class="seleccion">
             <label for="idEquipo">Selecciona un equipo:</label>
             <select id="idEquipo" name="idEquipo">
                 <option value="">Selecciona un equipo</option>
                 $opcionesEquipos
             </select>
+            <button type="submit" name="siguiente">Siguiente</button>
         </div>
         EOF;
-
-        // Generamos el botón de submit
-        $html .= "<button type=\"submit\" name=\"siguiente\">Siguiente</button>";
 
         return $html;
     }
