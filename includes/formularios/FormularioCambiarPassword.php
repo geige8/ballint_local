@@ -22,13 +22,13 @@ class FormularioCambiarPassword extends Formulario
             <div class="datos">
                 <div class="columna">
                     <div class="columna-centrada">
-                        $htmlErroresGlobales   
                         <div class="password">
                            <p>Nueva contraseña: <input type="password" name="password" value="$password" required/>{$erroresCampos['password']}</p>
                         </div>
                         <div class="password">
                             <p>Repita la nueva contraseña: <input type="password" name="password2" value="$password2" required/>{$erroresCampos['password2']}</p>
                         </div>
+                        $htmlErroresGlobales   
                         <div class="botonEditar">
                             <button type="submit" name="actualizar">Cambiar Password</button>
                         </div>
@@ -57,12 +57,25 @@ class FormularioCambiarPassword extends Formulario
             $this->errores['password2'] = 'Los passwords deben coincidir';
         }
         
-         if (count($this->errores) === 0) {
+        if (count($this->errores) === 0) {
             $pss=Usuario::cambiarPassword($password, $password2);
-            if(!$pss){
-                $this->errores[]= "No se ha podido cambiar la contraseña";
+            if($pss != 1){
+                switch($pss){
+                    case 2:
+                        $this->errores[]= "Debe rellenar las dos contraseñas";
+                    break;
+                    case 3:
+                        $this->errores[]= "Las contraseñas no coinciden";
+                    break;
+                    case 4:
+                        $this->errores[]= "Contraseña muy corta o muy larga";
+                    break;
+                    default:
+                    $this->errores[]= "No se ha podido cambiar la contraseña";
+                    break;
+                }
             }
-         }
+        }
         
         
     }

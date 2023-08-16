@@ -450,6 +450,8 @@ class Equipo{
         }
 
         // Minutos
+        $equipo['MT'] = $team['MT'];
+
         $minutosjugados = floor($team['MT'] / 60) ?? 0;
         $segundosRestantes = $team['MT'] % 60 ?? 0;
         $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
@@ -969,78 +971,240 @@ class Equipo{
 
     public static function mostrarStatsEquipo($equipo){
 
-
         $html = "";
         $html .= "
             <div class='stats'>
-                <p>Partidos Jugados: {$equipo['PJ']}</p>
-                <p>Victorias: {$equipo['W']}</p>
-                <p>Derrotas: {$equipo['L']}</p>
-                <p>Puntos PP: {$equipo['PTSP']}</p>
-                <p>Puntos RPP: {$equipo['PTSPR']}</p>
-                <p>Minutos Totales: {$equipo['MTT']}</p>
-                <p>Minutos Promedio: {$equipo['MTP']}</p>
-                <p>+/- PP: {$equipo['MSMSP']}</p>
-                <p>T2A: {$equipo['T2A']}</p>
-                <p>T2A: {$equipo['T2P']}%</p>
-                <p>T2A PP: {$equipo['T2PP']}</p>
-    
-                <p>T3A: {$equipo['T3A']}</p>
-                <p>T3A: {$equipo['T3P']}%</p>
-                <p>T3A PP: {$equipo['T3PP']}</p>
-    
-                <p>TLA: {$equipo['TLA']}</p>
-                <p>TLA: {$equipo['TLP']}%</p>
-                <p>TLA PP: {$equipo['TLPP']}</p>
-    
-                <p>TCA: {$equipo['TCA']}</p>
-                <p>%TCA: {$equipo['TCP']}%</p>
-                <p>TCA PP: {$equipo['TCPP']}</p>
-    
-                <p>FP: {$equipo['FLH']}</p>
-                <p>FP PP: {$equipo['FLHP']}</p>
-    
-                <p>FR: {$equipo['FLR']}</p>
-                <p>FR PP: {$equipo['FLRP']}</p>
-    
-                <p>TEC: {$equipo['TEC']}</p>
-                <p>TEC PP: {$equipo['TEC']}</p>
-    
-                <p>RBO: {$equipo['RBO']}</p>
-                <p>RBO PP: {$equipo['RBOP']}</p>
-                
-                <p>RBD: {$equipo['RBD']}</p>
-                <p>RBD PP: {$equipo['RBDP']}</p>
-    
-                <p>RBT: {$equipo['REB']}</p>
-                <p>RBT PP: {$equipo['REBP']}</p>
-    
-                <p>ROB: {$equipo['ROB']}</p>
-                <p>ROB PP: {$equipo['ROBP']}</p>
-    
-                <p>TAP: {$equipo['TAP']}</p>
-                <p>TAP PP: {$equipo['TAPP']}</p>
-    
-                <p>PRD: {$equipo['PRD']}</p>
-                <p>PRD PP: {$equipo['PRDP']}</p>
-    
-                <p>AST: {$equipo['AST']}</p>
-                <p>AST PP: {$equipo['ASTP']}</p>
 
-                <p>Puntos en Q1: {$equipo['PTQ1']}</p>
-                <p>Puntos en Q1 PP: {$equipo['PTQ1P']}</p>
-    
-                <p>Puntos en Q2:  {$equipo['PTQ2']}</p>
-                <p>Puntos en Q2 PP: {$equipo['PTQ2P']}</p>
-    
-                <p>Puntos en Q3: {$equipo['PTQ3']}</p>
-                <p>Puntos en Q3 PP: {$equipo['PTQ3P']}</p>
-    
-                <p>Puntos en Q4:  {$equipo['PTQ4']}</p>
-                <p>Puntos en Q4 PP: {$equipo['PTQ4P']}</p>
-    
-                <p>Puntos en EXTRA:  {$equipo['PTQE']}</p>
-                <p>Puntos en EXTRA PP: {$equipo['PTQEP']}</p>
+            <div class='stats-row'>
+            <h3>Estadísticas de Partidos</h3>
+                <div class='stat'>
+                    <p>Partidos Jugados</p>
+                    <p>{$equipo['PJ']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Victorias</p>
+                    <p>{$equipo['W']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Derrotas</p>
+                    <p>{$equipo['L']}</p>
+                </div>
+            </div>
+
+            <div class='stats-row'>
+            <h3>Estadísticas Clave</h3>
+                <div class='stat'>
+                    <p>Puntos PP</p>
+                    <p>{$equipo['PTSP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Puntos RPP</p>
+                    <p>{$equipo['PTSPR']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Minutos Totales</p>
+                    <p>{$equipo['MTT']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Minutos Promedio</p>
+                    <p>{$equipo['MTP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>+/- PP</p>
+                    <p>{$equipo['MSMSP']}</p>
+                </div>
+            </div>
+
+            <div class='stats-row'>
+            <h3>Estadísticas Anotación</h3>
+                <div class='stat'>
+                    <p>PTS Q1</p>
+                    <p>{$equipo['PTQ1']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q1 PP</p>
+                    <p>{$equipo['PTQ1P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q2</p>
+                    <p>{$equipo['PTQ2']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q2 PP</p>
+                    <p>{$equipo['PTQ2P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q3</p>
+                    <p>{$equipo['PTQ3']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q3 PP</p>
+                    <p>{$equipo['PTQ3P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q4</p>
+                    <p>{$equipo['PTQ4']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q4 PP</p>
+                    <p>{$equipo['PTQ4P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS EXTRA</p>
+                    <p>{$equipo['PTQE']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS EXTRA PP</p>
+                    <p>{$equipo['PTQEP']}</p>
+                </div>
+            </div>
+
+            <div class='stats-row'>
+            <h3>Estadísticas Tiro</h3>
+                <div class='stat'>
+                    <p>T2A</p>
+                    <p>{$equipo['T2A']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T2A</p>
+                    <p>{$equipo['T2P']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>T2A PP</p>
+                    <p>{$equipo['T2PP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A</p>
+                    <p>{$equipo['T3A']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A</p>
+                    <p>{$equipo['T3P']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A PP</p>
+                    <p>{$equipo['T3PP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA</p>
+                    <p>{$equipo['TLA']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA</p>
+                    <p>{$equipo['TLP']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA PP</p>
+                    <p>{$equipo['TLPP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TCA</p>
+                    <p>{$equipo['TCA']}</p>
+                </div>
+                <div class='stat'>
+                    <p>%TCA</p>
+                    <p>{$equipo['TCP']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>TCA PP</p>
+                    <p>{$equipo['TCPP']}</p>
+                </div>
+            </div>
+
+
+
+
+            <div class='stats-row'>
+            <h3>Estadísticas Rebotes</h3>
+                <div class='stat'>
+                    <p>RBO</p>
+                    <p>{$equipo['RBO']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBO PP</p>
+                    <p>{$equipo['RBOP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBD</p>
+                    <p>{$equipo['RBD']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBD PP</p>
+                    <p>{$equipo['RBDP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBT</p>
+                    <p>{$equipo['REB']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBT PP</p>
+                    <p>{$equipo['REBP']}</p>
+                </div>
+            </div>
+
+            <div class='stats-row'>  
+            <h3>Estadísticas de Juego</h3>  
+                <div class='stat'>
+                    <p>ROB</p>
+                    <p>{$equipo['ROB']}</p>
+                </div>
+                <div class='stat'>
+                    <p>ROB PP</p>
+                    <p>{$equipo['ROBP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TAP</p>
+                    <p>{$equipo['TAP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TAP PP</p>
+                    <p>{$equipo['TAPP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PRD</p>
+                    <p>{$equipo['PRD']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PRD PP</p>
+                    <p>{$equipo['PRDP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>AST</p>
+                    <p>{$equipo['AST']}</p>
+                </div>
+                <div class='stat'>
+                    <p>AST PP</p>
+                    <p>{$equipo['ASTP']}</p>
+                </div>
+            </div>
+
+            <div class='stats-row'>
+            <h3>Estadísticas Faltas</h3>
+                <div class='stat'>
+                    <p>FP</p>
+                    <p>{$equipo['FLH']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FP PP</p>
+                    <p>{$equipo['FLHP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FR</p>
+                    <p>{$equipo['FLR']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FR PP</p>
+                    <p>{$equipo['FLRP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TEC</p>
+                    <p>{$equipo['TEC']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TEC PP</p>
+                    <p>{$equipo['TEC']}</p>
+                </div>
+        </div>
 
             </div>    
         ";
@@ -1050,59 +1214,89 @@ class Equipo{
     public static function mostrarStatsAreasdeMejoraEquipo($equipo){
 
         $html = "<div class='stats'>";
+    
+        if ($equipo['T2P'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%T2A</p>";
+            $html .= "<p class='stat-value'>{$equipo['T2P']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($equipo['T3P'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%T3A</p>";
+            $html .= "<p class='stat-value'>{$equipo['T3P']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($equipo['TLP'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TLA</p>";
+            $html .= "<p class='stat-value'>{$equipo['TLP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($equipo['TCP'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TCA</p>";
+            $html .= "<p class='stat-value'>{$equipo['TCP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        
+        if ($equipo['FLHP'] >= 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>FLHP</p>";
+            $html .= "<p class='stat-value'>{$equipo['FLHP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($equipo['FLRP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%FLRP</p>";
+            $html .= "<p class='stat-value'>{$equipo['FLRP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
 
-
-            // Verificar y agregar el mensaje para T2P
-            if ($equipo['T2P'] <= 30) {
-                $html .= "<p>%T2A: {$equipo['T2P']}% - Tiene que mejorar</p>";
-            }
-            if ($equipo['T3P'] <= 30) {
-                $html .= "<p>%T3A: {$equipo['T3P']}% - Tiene que mejorar</p>";
-            }
-            if ($equipo['TLP'] <= 30) {
-                $html .= "<p>%TLA: {$equipo['TLP']}% - Tiene que mejorar</p>";
-            }
-            if ($equipo['TCP'] <= 30) {
-                $html .= "<p>%TCA: {$equipo['TCP']}% - Tiene que mejorar</p>";
-            }
-
-            /////
-
-            if ($equipo['FLHP'] >= 3) {
-                $html .= "<p>FLHP: {$equipo['FLHP']} - Tiene que mejorar</p>";
-            }
-            if ($equipo['FLRP'] <= 1) {
-                $html .= "<p>%FLRP: {$equipo['FLRP']}% - Tiene que mejorar</p>";
-            }
-
-            ///////
-
-            if ($equipo['RBOP'] < 1 ) {
-                $html .= "<p>RBOP: {$equipo['RBOP']} - Tiene que mejorar</p>";
-            }
-            if ($equipo['RBDP'] < 3) {
-                $html .= "<p>%RBDP: {$equipo['RBDP']}% - Tiene que mejorar</p>";
-            } 
-            if ($equipo['REBP'] < 3) {
-                $html .= "<p>REBP: {$equipo['REBP']} - Tiene que mejorar</p>";
-            }
-
-            ////////
-
-            if ($equipo['ROBP'] <= 1) {
-                $html .= "<p>ROBP: {$equipo['ROBP']} - Tiene que mejorar</p>";
-            } 
-            if ($equipo['TAPP'] <= 0.2) {
-                $html .= "<p>%TAPP: {$equipo['TAPP']} - Tiene que mejorar</p>";
-            } 
-            if ($equipo['PRDP'] >= 2) {
-                $html .= "<p>%PRDP: {$equipo['PRDP']} - Tiene que mejorar</p>";
-            } 
-            if ($equipo['ASTP'] <= 1) {
-                $html .= "<p>ASTP: {$equipo['ASTP']} - Tiene que mejorar</p>";
-            } 
-
-
+        if ($equipo['RBOP'] < 1 ) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>RBOP</p>";
+            $html .= "<p class='stat-value'>{$equipo['RBOP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($equipo['RBDP'] < 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%RBDP</p>";
+            $html .= "<p class='stat-value'>{$equipo['RBDP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($equipo['REBP'] < 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>REBP</p>";
+            $html .= "<p class='stat-value'>{$equipo['REBP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        
+        if ($equipo['ROBP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>ROBP</p>";
+            $html .= "<p class='stat-value'>{$equipo['ROBP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($equipo['TAPP'] <= 0.2) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TAPP</p>";
+            $html .= "<p class='stat-value'>{$equipo['TAPP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($equipo['PRDP'] >= 2) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%PRDP</p>";
+            $html .= "<p class='stat-value'>{$equipo['PRDP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($equipo['ASTP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>ASTP</p>";
+            $html .= "<p class='stat-value'>{$equipo['ASTP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+    
         $html .= "</div>";
         return $html;
     }
@@ -1112,19 +1306,56 @@ class Equipo{
         $html = "";
 
         $html .= "
-            <p>PORCENTAJES DE USO DE TIRO de 2: {$equipoAvanzado['T2PU']}%</p>
-            <p>PORCENTAJES DE USO DE TIRO de 3: {$equipoAvanzado['T3PU']}%</p>
-            <p>PORCENTAJES DE USO DE TIRO de 1: {$equipoAvanzado['T1PU']}%</p>
-            <p>PORCENTAJE DE TIRO EFECTIVO: {$equipoAvanzado['eFGP']}%</p>
-            <p>TRUE SHOOTING: {$equipoAvanzado['TSP']}%</p>
-            <p>PORCENTAJE DE ASISTENCIAS: {$equipoAvanzado['ASP']}%</p>
-            <p>PORCENTAJE DE PERDIDAS: {$equipoAvanzado['TOP']}%</p>
-            <p>PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO: {$equipoAvanzado['TLP']}%</p>
-            <p>POSESIONES POR PARTIDO: {$equipoAvanzado['POSP']}%</p>
-            <p>OFENSIVE EFFICIENCY: {$equipoAvanzado['OERP']}%</p>
-            <p>DEFENSIVE EFFICIENCY: {$equipoAvanzado['DERP']}%</p>
-            <p>RITMO DE PARTIDO: {$equipoAvanzado['PACEP']} Puntos x Posesion</p>
-
+        <div class='stats'>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO T2</p>
+                <p class='stat-value'>{$equipoAvanzado['T2PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO T3</p>
+                <p class='stat-value'>{$equipoAvanzado['T3PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO TL</p>
+                <p class='stat-value'>{$equipoAvanzado['T1PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%TEFEC</p>
+                <p class='stat-value'>{$equipoAvanzado['eFGP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>TRUE S%</p>
+                <p class='stat-value'>{$equipoAvanzado['TSP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>AST %</p>
+                <p class='stat-value'>{$equipoAvanzado['ASP']}%</p>
+            </div>
+                <div class='stat-container'>
+                <p class='stat-label'>PRD %</p>
+                <p class='stat-value'>{$equipoAvanzado['TOP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%TL/TC</p>
+                <p class='stat-value'>{$equipoAvanzado['TLP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>POS/PJ</p>
+                <p class='stat-value'>{$equipoAvanzado['POSP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>OFR%</p>
+                <p class='stat-value'>{$equipoAvanzado['OERP']}%</p>
+            </div>
+            <div class='stat-container'>
+            <p class='stat-label'>DFR%</p>
+            <p class='stat-value'>{$equipoAvanzado['DERP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>RITMO</p>
+                <p class='stat-value'>{$equipoAvanzado['PACEP']} PTSxPOS</p>
+            </div>
+        </div>
         ";
         return $html;
     }
@@ -1210,7 +1441,7 @@ class Equipo{
         return $html;
     }
 
-    //Paina de Partido
+    //Pagina de Partido
     public static function mostrarDetallesPartidoporEquipos($estadisticas) {
 
         $html = "";

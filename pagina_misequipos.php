@@ -21,7 +21,7 @@
     $contenidoPrincipal .= <<<EOS
         <div class="equipos">
             <div class="misequipos">
-                <h2>Equipos a los que pertenece</h2>
+                <h2>Mis Equipos</h2>
                 $htmlEquiposfromUser
             </div>
     EOS;
@@ -40,19 +40,19 @@
 
         $contenidoPrincipal .= <<<EOS
             <div class="statsEquipos">
-            <h2>Estadisticas de {$datosEquipo['nombre_equipo']}: </h2>
+            <h2>Estadísticas del {$datosEquipo['nombre_equipo']}: </h2>
                 $htmlfrommostrarStatsEquipo
             </div>
-            <div>
-            <h1>Areas de Mejora de {$datosEquipo['nombre_equipo']}:</h1>
+            <div class="cuadrostatsMejora">
+            <h2>Áreas de Mejora del {$datosEquipo['nombre_equipo']}:</h2>
                 $htmlfrommostrarAreasdeMejoraEquipo
             </div>
-            <div>
-                <h1>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h1>
+            <div class="cuadrostatsAvanzadas">
+                <h2>Estadísticas Avanzadas del {$datosEquipo['nombre_equipo']}:</h2>
                 $htmlfrommostrarStatsAvanzadasJugadorEquipo
             </div>
             <div class="lastgames">
-            <h2>Ultimos Partidos de {$datosEquipo['nombre_equipo']}: </h2>
+                <h2>Ultimos Partidos del {$datosEquipo['nombre_equipo']}: </h2>
                 $htmlUltimosPartidosEquipo
             </div>
         EOS;

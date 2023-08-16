@@ -17,9 +17,9 @@
 
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
-            <h1>Detalles del Perfil de '$entrenador'</h1>
+            <h1>Detalles del Perfil de $entrenador</h1>
             <div>
-                <h1>Equipos de '$entrenador'</h1>
+                <h1>Equipos de $entrenador</h1>
                 $htmlEquiposfromUser
             </div>
     EOS;

@@ -21,21 +21,21 @@
 
         $contenidoPrincipal .= <<<EOS
             <div class="paginaDetalle">
-                <h1>Detalles del Equipo '$equipo'</h1>
-                <div class="statsEquipos">
-                    <h2>Estadisticas de {$datosEquipo['nombre_equipo']}: </h2>
+                <h1>Detalles del $equipo</h1>
+                <div class="cuadrostats">
+                    <h2>Estadísticas del {$datosEquipo['nombre_equipo']}: </h2>
                     $htmlfrommostrarStatsEquipo
                 </div>
-                <div>
-                    <h1>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h1>
+                <div class="cuadrostatsAvanzadas">
+                    <h2>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h2>
                     $htmlfrommostrarStatsAvanzadasJugadorEquipo
                 </div>
-                <div>
-                    <h1>Entrenadores del  '$equipo'</h1>
+                <div class="cuadroEntrenadores">
+                    <h2>Entrenadores del  '$equipo'</h2>
                     $htmllistaentrenadoresEquipo
                 </div>
-                <div>
-                    <h1>Jugadores del  '$equipo'</h1>
+                <div class="cuadroJugadores">
+                    <h2>Jugadores del  '$equipo'</h2>
                     $htmllistajugadoresEquipo
                 </div>
                 <div class="lastgames">

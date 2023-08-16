@@ -564,168 +564,385 @@ class Jugador{
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //MOSTRAR:
     public static function mostrarStatsJugador($jugador){
-
         $html = "";
-
         $html .= "
         <div class='stats'>
-            <p>Partidos Jugados: {$jugador['PJ']}</p>
-            <p>Minutos Totales: {$jugador['MTT']}</p>
-            <p>Minutos Promedio: {$jugador['MTP']}</p>
+            <div class='stats-row'>
+            <h3>Estadísticas de Partidos</h3>
+                <div class='stat'>
+                    <p>Partidos Jugados</p>
+                    <p>{$jugador['PJ']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Minutos Totales</p>
+                    <p>{$jugador['MTT']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Minutos Promedio</p>
+                    <p>{$jugador['MTP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Partidos Titular</p>
+                    <p>{$jugador['TIT']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Partidos Suplente</p>
+                    <p>{$jugador['SUP']}</p>
+                </div>
+            </div>
+        
+            <div class='stats-row'>
+            <h3>Estadísticas Clave</h3>
+                <div class='stat'>
+                    <p>PTS</p>
+                    <p>{$jugador['PTS']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PPP</p>
+                    <p>{$jugador['PTSP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>+/-</p>
+                    <p>{$jugador['MSMS']}</p>
+                </div>
+                <div class='stat'>
+                    <p>+/- PP</p>
+                    <p>{$jugador['MSMSP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Valoración</p>
+                    <p>{$jugador['VAL']}</p>
+                </div>
+                <div class='stat'>
+                    <p>Valoración PP</p>
+                    <p>{$jugador['VALP']}</p>
+                </div>
+            </div>
+        
+            <div class='stats-row'>
+            <h3>Estadísticas Tiro</h3>
+                <div class='stat'>
+                    <p>T2A</p>
+                    <p>{$jugador['T2A']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T2A</p>
+                    <p>{$jugador['T2P']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>T2A PP</p>
+                    <p>{$jugador['T2PP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A</p>
+                    <p>{$jugador['T3A']}</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A</p>
+                    <p>{$jugador['T3P']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>T3A PP</p>
+                    <p>{$jugador['T3PP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA</p>
+                    <p>{$jugador['TLA']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA</p>
+                    <p>{$jugador['TLP']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>TLA PP</p>
+                    <p>{$jugador['TLPP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TCA</p>
+                    <p>{$jugador['TCA']}</p>
+                </div>
+                <div class='stat'>
+                    <p>%TCA</p>
+                    <p>{$jugador['TCP']}%</p>
+                </div>
+                <div class='stat'>
+                    <p>TCA PP</p>
+                    <p>{$jugador['TCPP']}</p>
+                </div>
+            </div>
 
-            <p>Partidos Titular: {$jugador['TIT']}</p>
-            <p>Partidos Suplente: {$jugador['SUP']}</p>
+            <div class='stats-row'>
+            <h3>Estadísticas Anotación</h3>
+                <div class='stat'>
+                    <p>PTS Q1</p>
+                    <p>{$jugador['PTQ1']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q1 PP</p>
+                    <p>{$jugador['PTQ1P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q2</p>
+                    <p>{$jugador['PTQ2']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q2 PP</p>
+                    <p>{$jugador['PTQ2P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q3</p>
+                    <p>{$jugador['PTQ3']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q3 PP</p>
+                    <p>{$jugador['PTQ3P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q4</p>
+                    <p>{$jugador['PTQ4']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS Q4 PP</p>
+                    <p>{$jugador['PTQ4P']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS EXTRA</p>
+                    <p>{$jugador['PTQE']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PTS EXTRA PP</p>
+                    <p>{$jugador['PTQEP']}</p>
+                </div>
+            </div>
 
-            <p>+/-: {$jugador['MSMS']}</p>
-            <p>+/- PP: {$jugador['MSMSP']}</p>
+            <div class='stats-row'>
+            <h3>Estadísticas Rebotes</h3>
+                <div class='stat'>
+                    <p>RBO</p>
+                    <p>{$jugador['RBO']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBO PP</p>
+                    <p>{$jugador['RBOP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBD</p>
+                    <p>{$jugador['RBD']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBD PP</p>
+                    <p>{$jugador['RBDP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBT</p>
+                    <p>{$jugador['REB']}</p>
+                </div>
+                <div class='stat'>
+                    <p>RBT PP</p>
+                    <p>{$jugador['REBP']}</p>
+                </div>
+            </div>
 
-            <p>PTS: {$jugador['PTS']}</p>
-            <p>PPP: {$jugador['PTSP']}</p>
+            <div class='stats-row'>
+            <h3>Estadísticas de Juego</h3>
+                <div class='stat'>
+                    <p>ROB</p>
+                    <p>{$jugador['ROB']}</p>
+                </div>
+                <div class='stat'>
+                    <p>ROB PP</p>
+                    <p>{$jugador['ROBP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TAP</p>
+                    <p>{$jugador['TAP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TAP PP</p>
+                    <p>{$jugador['TAPP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PRD</p>
+                    <p>{$jugador['PRD']}</p>
+                </div>
+                <div class='stat'>
+                    <p>PRD PP</p>
+                    <p>{$jugador['PRDP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>AST</p>
+                    <p>{$jugador['AST']}</p>
+                </div>
+                <div class='stat'>
+                    <p>AST PP</p>
+                    <p>{$jugador['ASTP']}</p>
+                </div>
+            </div>
 
-            <p>T2A: {$jugador['T2A']}</p>
-            <p>T2A: {$jugador['T2P']}%</p>
-            <p>T2A PP: {$jugador['T2PP']}</p>
-
-            <p>T3A: {$jugador['T3A']}</p>
-            <p>T3A: {$jugador['T3P']}%</p>
-            <p>T3A PP: {$jugador['T3PP']}</p>
-
-            <p>TLA: {$jugador['TLA']}</p>
-            <p>TLA: {$jugador['TLP']}%</p>
-            <p>TLA PP: {$jugador['TLPP']}</p>
-
-            <p>TCA: {$jugador['TCA']}</p>
-            <p>%TCA: {$jugador['TCP']}%</p>
-            <p>TCA PP: {$jugador['TCPP']}</p>
-
-            <p>FP: {$jugador['FLH']}</p>
-            <p>FP PP: {$jugador['FLHP']}</p>
-
-            <p>FR: {$jugador['FLR']}</p>
-            <p>FR PP: {$jugador['FLRP']}</p>
-
-            <p>TEC: {$jugador['TEC']}</p>
-            <p>TEC PP: {$jugador['TEC']}</p>
-
-            <p>RBO: {$jugador['RBO']}</p>
-            <p>RBO PP: {$jugador['RBOP']}</p>
-            
-            <p>RBD: {$jugador['RBD']}</p>
-            <p>RBD PP: {$jugador['RBDP']}</p>
-
-            <p>RBT: {$jugador['REB']}</p>
-            <p>RBT PP: {$jugador['REBP']}</p>
-
-            <p>ROB: {$jugador['ROB']}</p>
-            <p>ROB PP: {$jugador['ROBP']}</p>
-
-            <p>TAP: {$jugador['TAP']}</p>
-            <p>TAP PP: {$jugador['TAPP']}</p>
-
-            <p>PRD: {$jugador['PRD']}</p>
-            <p>PRD PP: {$jugador['PRDP']}</p>
-
-            <p>AST: {$jugador['AST']}</p>
-            <p>AST PP: {$jugador['ASTP']}</p>
-
-            <p>Puntos en Q1: {$jugador['PTQ1']}</p>
-            <p>Puntos en Q1 PP: {$jugador['PTQ1P']}</p>
-
-            <p>Puntos en Q2:  {$jugador['PTQ2']}</p>
-            <p>Puntos en Q2 PP: {$jugador['PTQ2P']}</p>
-
-            <p>Puntos en Q3: {$jugador['PTQ3']}</p>
-            <p>Puntos en Q3 PP: {$jugador['PTQ3P']}</p>
-
-            <p>Puntos en Q4:  {$jugador['PTQ4']}</p>
-            <p>Puntos en Q4 PP: {$jugador['PTQ4P']}</p>
-
-            <p>Puntos en EXTRA:  {$jugador['PTQE']}</p>
-            <p>Puntos en EXTRA PP: {$jugador['PTQEP']}</p>
-
-            <p>Valoración:  {$jugador['VAL']}</p>
-            <p>Valoración PP: {$jugador['VALP']}</p>
-
-        </div>    
-        ";
+            <div class='stats-row'>
+            <h3>Estadísticas Faltas</h3>
+                <div class='stat'>
+                    <p>FP</p>
+                    <p>{$jugador['FLH']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FP PP</p>
+                    <p>{$jugador['FLHP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FR</p>
+                    <p>{$jugador['FLR']}</p>
+                </div>
+                <div class='stat'>
+                    <p>FR PP</p>
+                    <p>{$jugador['FLRP']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TEC</p>
+                    <p>{$jugador['TEC']}</p>
+                </div>
+                <div class='stat'>
+                    <p>TEC PP</p>
+                    <p>{$jugador['TEC']}</p>
+                </div>
+            </div>
+        </div>";
         return $html;
     }
 
     public static function mostrarStatsAreasdeMejoraJugador($jugador){
 
         $html = "<div class='stats'>";
+    
+        if ($jugador['T2P'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%T2A</p>";
+            $html .= "<p class='stat-value'>{$jugador['T2P']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($jugador['T3P'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%T3A</p>";
+            $html .= "<p class='stat-value'>{$jugador['T3P']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($jugador['TLP'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TLA</p>";
+            $html .= "<p class='stat-value'>{$jugador['TLP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($jugador['TCP'] <= 30) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TCA</p>";
+            $html .= "<p class='stat-value'>{$jugador['TCP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        
+        if ($jugador['FLHP'] >= 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>FLHP</p>";
+            $html .= "<p class='stat-value'>{$jugador['FLHP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($jugador['FLRP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%FLRP</p>";
+            $html .= "<p class='stat-value'>{$jugador['FLRP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
 
-
-            // Verificar y agregar el mensaje para T2P
-            if ($jugador['T2P'] <= 30) {
-                $html .= "<p>%T2A: {$jugador['T2P']}% - Tiene que mejorar</p>";
-            }
-            if ($jugador['T3P'] <= 30) {
-                $html .= "<p>%T3A: {$jugador['T3P']}% - Tiene que mejorar</p>";
-            }
-            if ($jugador['TLP'] <= 30) {
-                $html .= "<p>%TLA: {$jugador['TLP']}% - Tiene que mejorar</p>";
-            }
-            if ($jugador['TCP'] <= 30) {
-                $html .= "<p>%TCA: {$jugador['TCP']}% - Tiene que mejorar</p>";
-            }
-
-            /////
-
-            if ($jugador['FLHP'] >= 3) {
-                $html .= "<p>FLHP: {$jugador['FLHP']} - Tiene que mejorar</p>";
-            }
-            if ($jugador['FLRP'] <= 1) {
-                $html .= "<p>%FLRP: {$jugador['FLRP']}% - Tiene que mejorar</p>";
-            }
-
-            ///////
-
-            if ($jugador['RBOP'] < 1 ) {
-                $html .= "<p>RBOP: {$jugador['RBOP']} - Tiene que mejorar</p>";
-            }
-            if ($jugador['RBDP'] < 3) {
-                $html .= "<p>%RBDP: {$jugador['RBDP']}% - Tiene que mejorar</p>";
-            } 
-            if ($jugador['REBP'] < 3) {
-                $html .= "<p>REBP: {$jugador['REBP']} - Tiene que mejorar</p>";
-            }
-
-            ////////
-
-            if ($jugador['ROBP'] <= 1) {
-                $html .= "<p>ROBP: {$jugador['ROBP']} - Tiene que mejorar</p>";
-            } 
-            if ($jugador['TAPP'] <= 0.2) {
-                $html .= "<p>%TAPP: {$jugador['TAPP']} - Tiene que mejorar</p>";
-            } 
-            if ($jugador['PRDP'] >= 2) {
-                $html .= "<p>%PRDP: {$jugador['PRDP']} - Tiene que mejorar</p>";
-            } 
-            if ($jugador['ASTP'] <= 1) {
-                $html .= "<p>ASTP: {$jugador['ASTP']} - Tiene que mejorar</p>";
-            } 
-
-
+        if ($jugador['RBOP'] < 1 ) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>RBOP</p>";
+            $html .= "<p class='stat-value'>{$jugador['RBOP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        if ($jugador['RBDP'] < 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%RBDP</p>";
+            $html .= "<p class='stat-value'>{$jugador['RBDP']}% - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($jugador['REBP'] < 3) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>REBP</p>";
+            $html .= "<p class='stat-value'>{$jugador['REBP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+        
+        if ($jugador['ROBP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>ROBP</p>";
+            $html .= "<p class='stat-value'>{$jugador['ROBP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($jugador['TAPP'] <= 0.2) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%TAPP</p>";
+            $html .= "<p class='stat-value'>{$jugador['TAPP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($jugador['PRDP'] >= 2) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>%PRDP</p>";
+            $html .= "<p class='stat-value'>{$jugador['PRDP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        } 
+        if ($jugador['ASTP'] <= 1) {
+            $html .= "<div class='stat-container'>";
+            $html .= "<p class='stat-label'>ASTP</p>";
+            $html .= "<p class='stat-value'>{$jugador['ASTP']} - Tiene que mejorar</p>";
+            $html .= "</div>";
+        }
+    
         $html .= "</div>";
         return $html;
     }
-
+    
     public static function mostrarStatsAvanzadasJugador($jugadorAvanzado){
 
         $html = "";
 
         $html .= "
-            <p>PORCENTAJES DE USO DE TIRO de 2: {$jugadorAvanzado['T2PU']}%</p>
-            <p>PORCENTAJES DE USO DE TIRO de 3: {$jugadorAvanzado['T3PU']}%</p>
-            <p>PORCENTAJES DE USO DE TIRO de 1: {$jugadorAvanzado['T1PU']}%</p>
-            <p>PORCENTAJE DE TIRO EFECTIVO: {$jugadorAvanzado['eFGP']}%</p>
-            <p>TRUE SHOOTING: {$jugadorAvanzado['TSP']}%</p>
-            <p>PORCENTAJE DE ASISTENCIAS: {$jugadorAvanzado['ASP']}%</p>
-            <p>PORCENTAJE DE PERDIDAS: {$jugadorAvanzado['TOP']}%</p>
-            <p>PORCENTAJE DE TIRO LIBRE RESPECTO AL TIRO DE CAMPO: {$jugadorAvanzado['TLP']}%</p>
-            <p>GAME SCORE: {$jugadorAvanzado['GS']}%</p>
-
+        <div class='stats'>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO T2</p>
+                <p class='stat-value'>{$jugadorAvanzado['T2PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO T3</p>
+                <p class='stat-value'>{$jugadorAvanzado['T3PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%USO TL</p>
+                <p class='stat-value'>{$jugadorAvanzado['T1PU']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%TEFEC</p>
+                <p class='stat-value'>{$jugadorAvanzado['eFGP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>TRUE S%</p>
+                <p class='stat-value'>{$jugadorAvanzado['TSP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>AST %</p>
+                <p class='stat-value'>{$jugadorAvanzado['ASP']}%</p>
+            </div>
+                <div class='stat-container'>
+                <p class='stat-label'>PRD %</p>
+                <p class='stat-value'>{$jugadorAvanzado['TOP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>%TL/TC</p>
+                <p class='stat-value'>{$jugadorAvanzado['TLP']}%</p>
+            </div>
+            <div class='stat-container'>
+                <p class='stat-label'>GAMESCORE</p>
+                <p class='stat-value'>{$jugadorAvanzado['GS']}%</p>
+            </div>
+        </div>
         ";
         return $html;
     }
@@ -736,51 +953,11 @@ class Jugador{
         $html = "";
 
         $html .= "
-            <table>
-                <tr>
-                    <th>Rival</th>
-                    <th>Fecha</th>
-                    <th>Titular</th>
-                    <th>Minutos</th>
-                    <th>+/-</th>
-                    <th>PTS</th>
-                    <th>T2A</th>
-                    <th>T2%</th>
-                    <th>T3A</th>
-                    <th>T3%</th>
-                    <th>TCA</th>
-                    <th>TC%</th>
-                    <th>TLA</th>
-                    <th>TL%</th>
-                    <th>FLH</th>
-                    <th>FLR</th>
-                    <th>TEC</th>
-                    <th>RBO</th>
-                    <th>RBD</th>
-                    <th>RBT</th>
-                    <th>ROB</th>
-                    <th>TAP</th>
-                    <th>PRD</th>
-                    <th>AST</th>
-                    <th>PTQ1</th>
-                    <th>PTQ2</th>
-                    <th>PTQ3</th>                    
-                    <th>PTQ4</th>
-                    <th>PTQE</th>
-                    <th>T2%Us</th>                    
-                    <th>T3%Us</th>
-                    <th>TL%Us</th>
-                    <th>eFG%</th>                    
-                    <th>TS%</th>
-                    <th>AS%</th>
-                    <th>GS</th>
-                    <th>VAL</th>
-                </tr>
                 <tr>
                     <td>
-                    <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
-                    {$partido['visitante']}
-                </a>
+                        <a href='pagina_partido.php?partido={$partido['visitante']}&fecha={$partido['fecha']}&id={$partidoId}'>
+                        {$partido['visitante']}
+                        </a>
                     </td>
                     <td>{$partido['fecha']}</td>
                     <td>{$estadisticas['TIT']}</td>
@@ -818,8 +995,7 @@ class Jugador{
                     <td>{$estadisticas['ASP']}%</td>
                     <td>{$estadisticas['GS']}</td>
                     <td>{$estadisticas['VAL']}</td>
-                </tr>
-            </table>";
+                </tr>";
         return $html;
     }
 
@@ -832,32 +1008,87 @@ class Jugador{
         $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
 
         foreach($equiposdelUsuario as $equipo){
-
+            
             //Para cada equipo al que pertenezca quiero mostrar los partidos.
             //Tengo que obtener el id de cada partido de ese equipo
             
             $partidos = Partido::getpartidosfromEquipo($equipo);
 
-            //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+            usort($partidos, function($a, $b) {
+                return strtotime($b['fecha']) - strtotime($a['fecha']);
+            });
 
-            foreach($partidos as $partido){
-
-                //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
-                $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
-
-                if($estadisticas){
-
-                    $estadisticasPartido = self::statsfromJugadorEnPartido($estadisticas);
+            if($partidos){
                 
-                    //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
-    
-                    //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+                $html .= "           
+                <table>
+                    <tr>
+                        <th>Rival</th>
+                        <th>Fecha</th>
+                        <th>Titular</th>
+                        <th>Minutos</th>
+                        <th>+/-</th>
+                        <th>PTS</th>
+                        <th>T2A</th>
+                        <th>T2%</th>
+                        <th>T3A</th>
+                        <th>T3%</th>
+                        <th>TCA</th>
+                        <th>TC%</th>
+                        <th>TLA</th>
+                        <th>TL%</th>
+                        <th>FLH</th>
+                        <th>FLR</th>
+                        <th>TEC</th>
+                        <th>RBO</th>
+                        <th>RBD</th>
+                        <th>RBT</th>
+                        <th>ROB</th>
+                        <th>TAP</th>
+                        <th>PRD</th>
+                        <th>AST</th>
+                        <th>PTQ1</th>
+                        <th>PTQ2</th>
+                        <th>PTQ3</th>                    
+                        <th>PTQ4</th>
+                        <th>PTQE</th>
+                        <th>T2%Us</th>                    
+                        <th>T3%Us</th>
+                        <th>TL%Us</th>
+                        <th>eFG%</th>                    
+                        <th>TS%</th>
+                        <th>AS%</th>
+                        <th>GS</th>
+                        <th>VAL</th>
+                    </tr>";
 
-                    $html .= self::mostrarStatsPartidoJugador($partido,$estadisticasPartido,$partido['id']);
+                //Ahora quiero buscar en la tabla de cada uno de esos partidos las estadisticas para ese jugador
+
+                foreach($partidos as $partido){
+
+                    //Necesito que me devuelva las estadisticas de ese jugador para ese partido si es que ha participado
+                    $estadisticas = Partido::getstatsUsuario($partido['id'],$jugador);
+
+                    if($estadisticas){
+
+                        $estadisticasPartido = self::statsfromJugadorEnPartido($estadisticas);
+                    
+                        //Ademas necesito los datos de ese partido, pero ya los he obtenido antes.
+        
+                        //Ahora llamaría al metodo mostrar para que se muestre la fila entera de dichas estadisticas.
+
+                        $html .= self::mostrarStatsPartidoJugador($partido,$estadisticasPartido,$partido['id']);
+                    }
                 }
+
             }
+
+            $html .="</table>";
+
         }
         
+
+
         return $html;
     }
 

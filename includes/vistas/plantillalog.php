@@ -10,10 +10,9 @@
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/automatizacion.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/sidebarDer.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/cabecera.css" />
-        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/estilosjs.css" />
+        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/cambioPass.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/analizadorstyles.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/perfil.css" />
-        <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/misequipos.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/login.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/main.css" />
         <link rel="stylesheet" type="text/css" href="<?= RUTA_CSS ?>/footer.css" />

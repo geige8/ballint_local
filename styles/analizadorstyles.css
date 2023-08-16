@@ -434,6 +434,7 @@ div.graficos-button button:hover {
 
 .ventana-graficos h1{
   text-decoration: underline;
+  font-size: 16px; 
 }
 
 .ventana-graficos button:hover {
@@ -524,3 +525,216 @@ div.graficos-button button:hover {
 }
 
 /*******************************************************/
+.ventana-factor {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
+  z-index: 101;
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
+  display: flex;
+  flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.ventana-factor div.contenido {
+  display: flex;
+  flex-wrap: wrap; /* Esto hará que los botones fluyan en dos columnas */
+  max-width: 80%;
+  max-height: 80%;
+  align-items: center; /* Alinea los botones horizontalmente */
+  justify-content: center;
+}
+
+.ventana-factor button{
+  width: 25%;
+  margin: 10px;
+  background-color: #00458a;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+}
+
+.ventana-factor button.cerrar{
+  width: auto;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0);
+  transition: none;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: #00458a;
+  padding: 10px;
+}
+
+.ventana-factor h1{
+  text-decoration: underline;
+  font-size: 16px; 
+}
+
+.ventana-factor button:hover {
+  background-color: #d30d1e;
+}
+
+.ventana-factor button.cerrar:hover {
+  background-color: #d30d1e00;
+}
+
+.ventana-factor-lista {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
+  z-index: 101;
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
+  display: flex;
+  flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.ventana-factor-lista div.contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea los botones horizontalmente */
+  justify-content: center;
+}
+
+.ventana-factor-lista div.contenido div{
+  margin: 5px 0px;
+}
+
+.ventana-factor-lista button.cerrar{
+  width: auto;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0);
+  transition: none;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Convertir el enlace en un bloque */
+  text-decoration: none;
+  color: #00458a;
+  padding: 10px;
+}
+
+.ventana-factor-lista h1{
+  text-decoration: underline;
+  font-size: 16px; 
+}
+
+
+/**/
+
+.displaytablas{
+  display: flex;
+}
+
+.displaytablas div {
+  display: flex;
+  width: 50%;
+  align-items: center; /* Alinea los botones horizontalmente */
+  
+}
+.displaytablas table {
+  border-collapse: collapse;
+  min-width: 80%;
+  min-height: 100%;
+  margin: auto;
+}
+
+.displaytablas table tbody tr td{
+  text-align: center;
+  background-color: #00458a;
+  border: 1px solid  white;
+  color: white;
+}
+
+.displaytablas table tr td {
+  text-align: center;
+  background-color: white;
+  border: 1px solid  #00458a;
+  color: black;
+}
+
+
+/****/
+.displaytablasCompletas{
+  display: flex;
+  overflow: auto;
+}
+
+.displaytablasCompletas div {
+  display: flex;
+  align-items: center; /* Alinea los botones horizontalmente */
+}
+.displaytablasCompletas table {
+  border-collapse: collapse;
+  min-width: 80%;
+  min-height: 100%;
+  margin: 30px;
+}
+
+.displaytablasCompletas table tbody tr td{
+  text-align: center;
+  background-color: #00458a;
+  border: 1px solid  white;
+  color: white;
+}
+
+.displaytablasCompletas table tr td {
+  text-align: center;
+  background-color: white;
+  border: 1px solid  #00458a;
+  color: black;
+}
+.ventana-graficos2 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b9d4f0;
+  padding: 2vh; /* Utilizando unidades relativas */
+  z-index: 101;
+  border: 1vh solid #00458a; /* Utilizando unidades relativas */
+  border-radius: 1vh; /* Utilizando unidades relativas */
+  box-shadow: 0 0 5vh rgba(0, 0, 0, 0.3); /* Utilizando unidades relativas */
+  display: flex;
+  flex-flow: column;
+  max-width: 80%; /* Utilizando porcentaje */
+  max-height: 80%;
+  overflow-y: auto; /* Añade un scroll vertical si es necesario */
+  justify-content: center;
+}
+
+
+.ventana-graficos2 .cerrar{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

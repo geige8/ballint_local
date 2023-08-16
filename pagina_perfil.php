@@ -42,38 +42,34 @@
         <div class="perfil">
             <div class="perfilCabecera">
                 <div class="tituloCabecera">
-                    <img src="{$rutaImgs}/{$usuario['user']}.jpg" alt="imagen">
-                    <p>Nombre: {$usuario['nombre']} {$usuario['apellido1']} {$usuario['apellido2']}</p>
-                    <p>ID#{$usuario['id']} - @{$usuario['user']}</p>
-                    <p></p>
-                </div>
-                <div class="cambiarPassword">
-                    <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
+                    <img class="perfilImagen" src="{$rutaImgs}/{$usuario['user']}.jpg" alt="imagen">
+                    <div class="infoUsuario">
+                        <p>{$usuario['nombre']} {$usuario['apellido1']} {$usuario['apellido2']}</p>
+                        <p>ID#{$usuario['id']} - @{$usuario['user']}</p>
+                        <div class="cambiarPassword">
+                        <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
             <div class="cuadrostats">
-                <h1>Estadisticas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                <h2>Estadísticas:</h2>
                 $htmlfrommostrarStatsJugador
             </div>
-
             <div class="cuadrostatsMejora">
-            <h1>Areas de Mejora de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                <h2>Áreas de Mejora:</h2>
                 $htmlfrommostrarAreasdeMejora
             </div>
-
             <div class="cuadrostatsAvanzadas">
-                <h1>Estadisticas Avanzadas de {$usuario['user']} {$usuario['apellido1']} {$usuario['apellido2']}</h1>
+                <h2>Estadísticas Avanzadas:</h2>
                 $htmlfrommostrarStatsAvanzadasJugador
             </div>
-
             <div class="perfilEquipos">
-                <h2>Equipos a los que pertenece</h2>
+                <h2>Equipos a los que pertenece:</h2>
                 $htmlEquiposfromUser
             </div>
-
             <div class="lastgames">
-            <h2>Últimos Partidos</h2>
+            <h2>Últimos Partidos:</h2>
                 $htmlUltimosPartidos
             </div>
         </div>
@@ -91,13 +87,14 @@
         <div class="perfil">
             <div class="perfilCabecera">
                 <div class="tituloCabecera">
-                    <img src="{$rutaImgs}/{$usuario['user']}.jpg" alt="imagen">
-                    <p>Nombre: {$usuario['nombre']} {$usuario['apellido1']} {$usuario['apellido2']}</p>
-                    <p>ID#{$usuario['id']} - @{$usuario['user']}</p>
-                    <p></p>
-                </div>
-                <div class="cambiarPassword">
-                    <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
+                    <img class="perfilImagen" src="{$rutaImgs}/{$usuario['user']}.jpg" alt="imagen">
+                    <div class="infoUsuario">
+                        <p>{$usuario['nombre']} {$usuario['apellido1']} {$usuario['apellido2']}</p>
+                        <p>ID#{$usuario['id']} - @{$usuario['user']}</p>
+                        <div class="cambiarPassword">
+                        <button onclick='mostrarVentanaCambioPass(`{$htmlcambiarPasswordForm}`)'>Cambiar contraseña</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="perfilEquipos">

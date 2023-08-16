@@ -6,7 +6,7 @@
     $equipo = $_GET['equipo'];
 
     // Condición para verificar si $factor es igual a cualquiera de las opciones mencionadas
-        if ($factor == "T2P" || $factor == "T3P" || $factor == "TLP" || $factor == "PTSP" || $factor == "REB" || $factor == "VAL") {
+        if ($factor == "T2P" || $factor == "T3P" || $factor == "TLP" || $factor == "PTSP" || $factor == "MSMSP"|| $factor == "REB" || $factor == "VAL") {
 
             $jugadores = es\ucm\fdi\Partido::getJugadoresporFactorAvanzado($factor,$equipo);
         } else {

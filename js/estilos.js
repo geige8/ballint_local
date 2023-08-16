@@ -14,7 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(articleHeight);
 
     // Establecer la altura máxima del aside
-    sidebarDer.style.height = `${articleHeight}px`;
+    if(sidebarDer){
+      sidebarDer.style.height = `${articleHeight}px`;
+    }
+
     const computedStyles = window.getComputedStyle(sidebarIzq);
     const widthValue = parseFloat(computedStyles.width);
 

@@ -219,7 +219,7 @@ $contenidoPrincipal .= <<<EOS
             <div class="comparativa">
                 <p class="AST-Local">0</p>
                     <h1>AST</h1>
-                <p class="AST-Asistente">0</p>
+                <p class="AST-Visitante">0</p>
             </div>
         </div>
 

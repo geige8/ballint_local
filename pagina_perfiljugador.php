@@ -4,7 +4,7 @@
 
     $jugador = $_GET['jugador'];
 
-    $tituloPagina = 'Perfil';
+    $tituloPagina = 'Detalle';
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
     $rutaImgs=RUTA_IMGS;
@@ -25,21 +25,21 @@
 
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
-            <h1>Detalles del Perfil de '$jugador'</h1>
-            <div>
-                <h1>Stats de '$jugador'</h1>
+            <h1>Detalles del Perfil de $jugador</h1>
+            <div class="cuadrostats">
+                <h2>Estadísticas:</h2>
                 $htmlfrommostrarStatsJugador
             </div>
-            <div>
-                <h1>Stats Avanzadas de '$jugador'</h1>
+            <div class="cuadrostatsAvanzadas">
+                <h2>Estadísticas Avanzadas:</h2>
                 $htmlfrommostrarStatsAvanzadasJugador
             </div>
-            <div>
-                <h1>Equipos de '$jugador'</h1>
+            <div class="perfilEquipos">
+                <h2>Equipos a los que pertenece:</h2>
                 $htmlEquiposfromUser
             </div>
-            <div>
-                <h1>Ultimos partidos de '$jugador'</h1>
+            <div class="lastgames">
+                <h2>Últimos Partidos:</h2>
                 $htmlUltimosPartidos
             </div>
         </div>

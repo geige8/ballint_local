@@ -150,11 +150,16 @@ function getNombreEquipo(equipo){
 
         if((parseInt(localpointsElement.textContent)) > (parseInt(visitpointsElement.textContent))){
 
-            return true;
+            return 1;
 
         }
         else{
-            return false;
+            if((parseInt(localpointsElement.textContent)) < (parseInt(visitpointsElement.textContent))){
+                return 0;
+            }
+            else{
+                return 2;
+            }
         }
     }
 
@@ -281,8 +286,6 @@ function getNombreEquipo(equipo){
                         getEquiposEstadisticas(function(equipos) {
                             if (equipos) {
                             mostrarEstadisticaCompleta(jugadores,equipos);
-                            const doc1 = generarPDFestadisticaCompleta(jugadores,equipos);
-                            doc1.save(idlocal + '.' + idvisitante + '(EstadisticaCompleta).pdf');
                             } else {
                             console.log("Error al obtener los jugadores");
                             }
@@ -570,21 +573,9 @@ function getNombreEquipo(equipo){
     
         // Crear la ventana emergente y agregarla al cuerpo del documento
         var ventana = document.createElement('div');
-        ventana.classList.add("ventana-graficos");
+        ventana.classList.add("ventana-graficos2");
         document.body.appendChild(ventana);
-    
-        // Crear el botón de cerrar y agregar el controlador de eventos
-        var cerrar = document.createElement('button');
-        cerrar.classList.add('cerrar');
-        cerrar.innerHTML = 'X';
-        ventana.appendChild(cerrar);
-    
-        cerrar.addEventListener('click', function() {
-        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
-        });
-    
+        
         var localfullTable = document.createElement('table');
         var visitfullTable = document.createElement('table');
 
@@ -1088,7 +1079,7 @@ function getNombreEquipo(equipo){
     
         // Crear la ventana emergente y agregarla al cuerpo del documento
         var displaytablas = document.createElement("div");
-        displaytablas.classList.add("displaytablas");
+        displaytablas.classList.add("displaytablasCompletas");
         ventana.appendChild(displaytablas);
     
         // Obtener los elementos de anclaje para las tablas
@@ -1104,6 +1095,18 @@ function getNombreEquipo(equipo){
     
         displaytablas.appendChild(localfullPlayersDisplay);
         displaytablas.appendChild(visitfullPlayersDisplay);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+    
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
     }
 
     function generarPDFestadisticaCompleta(jugadores, equipos) {
@@ -1170,7 +1173,7 @@ function getNombreEquipo(equipo){
         // Crear la cabecera de la tabla para los jugadores
         const headersJugadores = [
             'NO', 'Nombre', 'TITL', 'MTS', 'MSMS', 'PTS', 'T2A', 'T2%', 'T3A', 'T3%',
-            'TCA', 'TC%', 'TLA', 'TL%', 'FLH', 'FLR', 'TEC', 'RBO', 'RBD', 'RBT', 'ROB',
+            'TCA', 'TC%', 'TLA', 'TL%', 'FLH', 'FLR', 'TEC', 'RBO', 'RBD','ROB',
             'TAP', 'PRD', 'AST', 'PTQ1', 'PTQ2', 'PTQ3', 'PTQ4', 'PTQE', 'T2%Us', 'T3%Us',
             'TL%Us', 'eFG%', 'TS%', 'AS%', 'GS', 'VAL'
         ];
@@ -1186,7 +1189,7 @@ function getNombreEquipo(equipo){
                 jugador.TCA, jugador.TCP + '%',
                 jugador.TLA, jugador.TLP + '%',
                 jugador.FLH, jugador.FLR, jugador.TEC, jugador.RBO,
-                jugador.RBD, jugador.RBT, jugador.ROB, jugador.TAP, jugador.PRD,
+                jugador.RBD, jugador.ROB, jugador.TAP, jugador.PRD,
                 jugador.AST, jugador.PTQ1, jugador.PTQ2, jugador.PTQ3,
                 jugador.PTQ4, jugador.PTQE, jugador.T2PU, jugador.T3PU,
                 jugador.T1PU, jugador.eFGP, jugador.TSP, jugador.ASP,
@@ -1635,17 +1638,17 @@ function getNombreEquipo(equipo){
         
         // Crear la ventana emergente y agregarla al cuerpo del documento
         var ventana = document.createElement('div');
-        ventana.classList.add("ventana-graficos");
+        ventana.classList.add("ventana-factor");
         document.body.appendChild(ventana);
-        
+
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `Para que factor quieres obtener cambios sugeridos`;
+        ventana.appendChild(mensaje);
+
         // Crear el contenido que deseas mostrar en la ventana emergente
         var contenido = document.createElement('div');
         contenido.classList.add('contenido');
 
-        var mensaje = document.createElement('p');
-        mensaje.textContent = `Para que factor quieres obtener cambios sugeridos`;
-        contenido.appendChild(mensaje);
-        
         //OK
 
         var botonT2A = document.createElement("button");
@@ -1755,6 +1758,11 @@ function getNombreEquipo(equipo){
         botonPTSP.addEventListener("click", crearListaCambio("PTSP",equipo));
         contenido.appendChild(botonPTSP);
 
+        var botonMSMSP = document.createElement("button");
+        botonMSMSP.textContent = "MSMSP";
+        botonMSMSP.addEventListener("click", crearListaCambio("MSMSP",equipo));
+        contenido.appendChild(botonMSMSP);
+
         var botonREB = document.createElement("button");
         botonREB.textContent = "REB";
         botonREB.addEventListener("click", crearListaCambio("REB",equipo));
@@ -1796,6 +1804,54 @@ function getNombreEquipo(equipo){
         });
     }
 
+    function mostrarListaJugadoresporFactor(jugadores,factor){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-factor-lista");
+        document.body.appendChild(ventana);
+
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `Mejores Cambios según: ${factor}`;
+        ventana.appendChild(mensaje);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        // Aquí implemento
+        //Ordenar
+        jugadores.sort(function(a, b) {
+        return (b.factor+b.historico) - (a.factor+a.historico);
+        });
+
+        for (var i = 0; i < jugadores.length; i++) {
+            var jugador = jugadores[i];
+            var elementoJugador = document.createElement('div');
+            elementoJugador.textContent = `${jugador.numero}-${jugador.nombrejugador} - ${factor}:${jugador.factor} - H:${jugador.historico} `;
+            contenido.appendChild(elementoJugador);
+        }
+            
+        // Agregar el contenido a la ventana emergente
+        ventana.appendChild(contenido);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+        ventana.parentNode.removeChild(ventana);
+        overlay.parentNode.removeChild(overlay);
+        });
+    }
+
     function evaluacionJugadores(jugadores){
 
         // Crear la capa de fondo oscuro y agregarla al DOM
@@ -1807,15 +1863,16 @@ function getNombreEquipo(equipo){
         var ventana = document.createElement('div');
         ventana.classList.add("ventana-graficos");
         document.body.appendChild(ventana);
+        
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `De qué jugador quieres una evaluacion:`;
+        ventana.appendChild(mensaje);
 
         // Crear el contenido que deseas mostrar en la ventana emergente
         var contenido = document.createElement('div');
         contenido.classList.add('contenido');
 
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
-        var mensaje = document.createElement('p');
-        mensaje.textContent = `De que jugador quieres una evaluacion:`;
-        contenido.appendChild(mensaje);
 
         // Crear una tabla para la lista de jugadores
         var tabla = document.createElement("table");
@@ -1893,14 +1950,26 @@ function getNombreEquipo(equipo){
         ventana.classList.add("ventana-graficos");
         document.body.appendChild(ventana);
 
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `La evaluación de ${jugador['nombrejugador']} es:`;
+        ventana.appendChild(mensaje);
+
         // Crear el contenido que deseas mostrar en la ventana emergente
         var contenido = document.createElement('div');
         contenido.classList.add('contenido');
-
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
-        var mensaje = document.createElement('p');
-        mensaje.textContent = `La evaluación de ${jugador['nombrejugador']} es:`;
-        contenido.appendChild(mensaje);
 
         // Agregar el contenido a la ventana emergente
         for (var clave in evaluacion) {
@@ -1911,6 +1980,18 @@ function getNombreEquipo(equipo){
         }
      
         ventana.appendChild(contenido);
+    }
+
+    function mostrarEvaluacionEquipo(evaluacion){
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
 
         // Crear el botón de cerrar y agregar el controlador de eventos
         var cerrar = document.createElement('button');
@@ -1924,10 +2005,33 @@ function getNombreEquipo(equipo){
             overlay.parentNode.removeChild(overlay);
         });
 
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `La evaluación del equipo es:`;
+        ventana.appendChild(mensaje);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+
+
+        // Agregar el contenido a la ventana emergente
+        for (var clave in evaluacion) {
+            var mensaje = document.createElement('p');
+            mensaje.textContent = `Su ${clave} es ${evaluacion[clave] === "1" ? 'mayor o igual' : 'menor'} al habitual.`;
+            mensaje.style.color = evaluacion[clave] === "1" ? 'green' : 'red';
+            contenido.appendChild(mensaje);
+        }
+     
+        ventana.appendChild(contenido);
+
+
+
 
     }
 
-    function mostrarEvaluacionEquipo(evaluacion){
+    function mostrarImpactoLastTimeOut(parcial) {
         // Crear la capa de fondo oscuro y agregarla al DOM
         var overlay = document.createElement('div');
         overlay.classList.add('overlay');
@@ -1944,17 +2048,10 @@ function getNombreEquipo(equipo){
 
         // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('p');
-        mensaje.textContent = `La evaluación del equipo es:`;
+        mensaje.textContent = `El parcial desde el último Tiempo Muerto es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
         contenido.appendChild(mensaje);
 
         // Agregar el contenido a la ventana emergente
-        for (var clave in evaluacion) {
-            var mensaje = document.createElement('p');
-            mensaje.textContent = `Su ${clave} es ${evaluacion[clave] === "1" ? 'mayor o igual' : 'menor'} al habitual.`;
-            mensaje.style.color = evaluacion[clave] === "1" ? 'green' : 'red';
-            contenido.appendChild(mensaje);
-        }
-     
         ventana.appendChild(contenido);
 
         // Crear el botón de cerrar y agregar el controlador de eventos
@@ -1964,96 +2061,10 @@ function getNombreEquipo(equipo){
         ventana.appendChild(cerrar);
 
         cerrar.addEventListener('click', function() {
-            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-            ventana.parentNode.removeChild(ventana);
-            overlay.parentNode.removeChild(overlay);
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+        ventana.parentNode.removeChild(ventana);
+        overlay.parentNode.removeChild(overlay);
         });
-
-
-    }
-
-    function mostrarListaJugadoresporFactor(jugadores,factor){
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement('div');
-    ventana.classList.add("ventana-graficos");
-    document.body.appendChild(ventana);
-
-    // Crear el contenido que deseas mostrar en la ventana emergente
-    var contenido = document.createElement('div');
-    contenido.classList.add('contenido');
-
-    var mensaje = document.createElement('p');
-    mensaje.textContent = `Mejores Cambios según: ${factor}`;
-    contenido.appendChild(mensaje);
-
-    // Aquí implemento
-    //Ordenar
-    jugadores.sort(function(a, b) {
-    return (b.factor+b.historico) - (a.factor+a.historico);
-    });
-
-    for (var i = 0; i < jugadores.length; i++) {
-        var jugador = jugadores[i];
-        var elementoJugador = document.createElement('div');
-        elementoJugador.textContent = `${jugador.numero}-${jugador.nombrejugador} - ${factor}:${jugador.factor} - H:${jugador.historico} `;
-        contenido.appendChild(elementoJugador);
-    }
-        
-    // Agregar el contenido a la ventana emergente
-    ventana.appendChild(contenido);
-
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
-
-    cerrar.addEventListener('click', function() {
-    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-    ventana.parentNode.removeChild(ventana);
-    overlay.parentNode.removeChild(overlay);
-    });
-    }
-
-    function mostrarImpactoLastTimeOut(parcial) {
-    // Crear la capa de fondo oscuro y agregarla al DOM
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-
-    // Crear la ventana emergente y agregarla al cuerpo del documento
-    var ventana = document.createElement('div');
-    ventana.classList.add("ventana-graficos");
-    document.body.appendChild(ventana);
-
-    // Crear el contenido que deseas mostrar en la ventana emergente
-    var contenido = document.createElement('div');
-    contenido.classList.add('contenido');
-
-    // Aquí utilizo las comillas inversas para poder interpolación de variables
-    var mensaje = document.createElement('p');
-    mensaje.textContent = `El parcial desde el último Tiempo Muerto es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
-    contenido.appendChild(mensaje);
-
-    // Agregar el contenido a la ventana emergente
-    ventana.appendChild(contenido);
-
-    // Crear el botón de cerrar y agregar el controlador de eventos
-    var cerrar = document.createElement('button');
-    cerrar.classList.add('cerrar');
-    cerrar.innerHTML = 'X';
-    ventana.appendChild(cerrar);
-
-    cerrar.addEventListener('click', function() {
-    // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
-    ventana.parentNode.removeChild(ventana);
-    overlay.parentNode.removeChild(overlay);
-    });
     }
 
     function mostrarImpactoLastChange(parcial) {

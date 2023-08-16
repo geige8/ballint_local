@@ -67,14 +67,6 @@ class Usuario{
         return password_verify($password1,$password2);
     }
     
-
-
-
-
-
-
-
-
     //Métodos Static
     
     public static function cambiarPassword($password1, $password2){

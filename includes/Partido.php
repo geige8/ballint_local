@@ -852,6 +852,7 @@ class Partido{
         $resultado = $conn->query($queryempate);
         //Si la consulta es correcta
         if ($resultado !== false) {
+            echo "La 1a Consulta es correcta\n";
             $row = $resultado->fetch_assoc();
             $cantidadEmpates = $row['cantidad_empates'];
             //Si estaban antes de la canasta empatados
@@ -930,8 +931,7 @@ class Partido{
                         //3.2.2. Hay que mirar si es otro lider, si es así, hay una alternancia y cambio de lider.
 
                 //3.1 Hay que mirar si ahora hay empate, si es así se pone empate a 1 y lider al que estaba, no hay alternancia.
-                $queryempate = "SELECT COUNT(DISTINCT puntos) AS cantidad_valores FROM tmp_partidoe";
-
+                $queryempate = "SELECT COUNT(DISTINCT PPP) AS cantidad_valores FROM tmp_partidoe";
                 $resultado3 = $conn->query($queryempate);
 
                 if ($resultado3 !== false) {
@@ -1168,7 +1168,7 @@ class Partido{
 
         $resultado = Equipo::addpartidojugado($equipo);
 
-        if($ganador){
+        if($ganador == 1){
             $resultado = Equipo::addpartidoganado($equipo,$idPartido);
         }
         else{
@@ -1604,21 +1604,27 @@ class Partido{
 
     public static function addtiempolider($ganador){
 
-        if($ganador){
-            $equipo = 1;
-        }else{
-            $equipo = 2;
-        }
-
         $conn = Aplicacion::getInstance()->getConexionBd();
+
+        switch($ganador){
+
+            case 0:
+                $query = sprintf("UPDATE tmp_partidoe SET tiempolider = tiempolider + 1 WHERE id =  2 ");
     
-        $query = sprintf("UPDATE tmp_partidoe SET tiempolider = tiempolider + 1 WHERE id =  $equipo ");
+                if ($conn->query($query) === false) {
+                    error_log("Error BD ({$conn->errno}): {$conn->error}");
+                }
+            break;
+            case 1:
+                $query = sprintf("UPDATE tmp_partidoe SET tiempolider = tiempolider + 1 WHERE id =  1 ");
     
-        if ($conn->query($query) === false) {
-            $result = false;
-            error_log("Error BD ({$conn->errno}): {$conn->error}");
-        }
-    
+                if ($conn->query($query) === false) {
+                    error_log("Error BD ({$conn->errno}): {$conn->error}");
+                }
+            break;
+            case 2:
+            break;
+        }    
     }
 
     public static function gettimeplayed(){

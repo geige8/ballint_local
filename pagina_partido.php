@@ -40,18 +40,19 @@
 
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
-            <div>
-            <h1>Detalles del Partido #$partidoId vs '$partido' el '$fecha'</h1>
+            <div class="infoPartido">
+            <h1>Detalles del Partido #$partidoId vs $partido el $fecha</h1>
                 $htmldetallesPartidoEquipos
             </div>
-            <div>
-                <h1> Datos sobre los Jugadores </h1>
-                $htmlstatsPartidoJugadores
-            </div>
-            <div>
+            <div class="infoPartido">
                 <h1> Datos sobre los Equipos </h1>
                 $htmlstatsPartidoEquipos
             </div>
+            <div class="infoPartido">
+                <h1> Datos sobre los Jugadores </h1>
+                $htmlstatsPartidoJugadores
+            </div>
+
         </div>
     EOS;
     
