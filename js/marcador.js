@@ -231,6 +231,69 @@ function getNombreEquipo(equipo){
 /*BOTÓN DE GRÁFICOS Y TODA LA FUNCIONALIDAD*/
 /////////////////////////////////////////////////////////////
 
+    document.getElementById("eliminaraccion-button").addEventListener("click",() =>{
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement("div");
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var titulo = document.createElement("h1");
+        titulo.textContent = `¿De que equipo quieres eliminar una accion?`;
+        ventana.appendChild(titulo);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+        
+        cerrar.addEventListener('click', function() {
+        // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+
+        var equipolocal = document.createElement('button');
+        equipolocal.classList.add('equipolocal');
+        equipolocal.innerHTML = 'Local';
+        ventana.appendChild(equipolocal);
+
+        equipolocal.addEventListener('click', function() {
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+            getJugadoresEquipo(function(jugadores) {
+                if (jugadores) {
+                    mostrarVentanaEliminarAccionJugador(jugadores);
+                } else {
+                    console.log("Error al obtener los jugadores");
+                }
+            }, idlocal);  
+        });
+
+        var equipovisitante = document.createElement('button');
+        equipovisitante.classList.add('equipovisitante');
+        equipovisitante.innerHTML = 'Visitante';
+        ventana.appendChild(equipovisitante);
+
+        equipovisitante.addEventListener('click', function() {
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+            getJugadoresEquipo(function(jugadores) {
+                if (jugadores) {
+                    mostrarVentanaEliminarAccionJugador(jugadores);
+                } else {
+                    console.log("Error al obtener los jugadores");
+                }
+            }, idvisitante);   
+        });
+    });
+
     document.getElementById("graficos-button").addEventListener("click", () => {
 
         // Crear la capa de fondo oscuro y agregarla al DOM
@@ -1437,6 +1500,34 @@ function getNombreEquipo(equipo){
         xhttp.open("GET", "getEvaluacionEquipo.php?equipo=" + encodeURIComponent(equipoJSON), true);
         xhttp.send();
     }
+
+    function getJugadoresEquipo(callback,equipo) {
+
+        var equipoJSON = JSON.stringify(equipo);
+    
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+    
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText) {
+                console.log("La respuesta está completa.");
+                // La respuesta ha sido recibida
+                var jugadores = JSON.parse(this.responseText);
+                console.log(jugadores);
+                callback(jugadores); // Llamar a la devolución de llamada con los jugadores
+            } else {
+                console.log("La respuesta está vacía o incompleta.");
+                callback(null); // Llamar a la devolución de llamada con valor nulo
+            }
+            }
+        };
+    
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "getJugadoresEquipo.php?equipo=" + encodeURIComponent(equipoJSON), true);
+        xhttp.send();
+    }
       
     function getJugadores(callback) {
     // Crear una solicitud AJAX
@@ -1629,6 +1720,216 @@ function getNombreEquipo(equipo){
     xhttp.open("GET", "getParcialCambio.php", true);
     xhttp.send();
     }
+
+    function mostrarVentanaEliminarAccionJugador(jugadores){
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-graficos");
+        document.body.appendChild(ventana);
+        
+        // Aquí utilizo las comillas inversas para poder interpolación de variables
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `De qué jugador quieres eliminar una accion:`;
+        ventana.appendChild(mensaje);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+
+        // Crear una tabla para la lista de jugadores
+        var tabla = document.createElement("table");
+        contador = 0;
+
+        for(var j = 0; j < Math.ceil(jugadores.length/3);j++){
+
+            var tr = document.createElement("tr");
+        
+            contadorFila = 0;
+        
+            while(contador < jugadores.length && contadorFila < 4){
+              var jugador = jugadores[contador];
+              contador++;
+      
+              var td = document.createElement("td");
+              var boton = document.createElement("button");
+      
+              boton.textContent = jugador.numero + '-' + jugador.nombrejugador;
+      
+              boton.addEventListener("click", eliminarAccionJugador(jugador));
+      
+              td.appendChild(boton);
+              tr.appendChild(td);
+      
+              contadorFila++;
+            }
+        
+            tabla.appendChild(tr);
+        }
+
+        ventana.appendChild(tabla);
+
+        // Función para crear el evento click con el valor del jugador como argumento
+        function eliminarAccionJugador(jugador){
+            return function() {
+                console.log(jugador)
+                mostrarVentanaEliminarAccion(jugador);
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+            }
+        }
+
+        // Agregar el contenido a la ventana emergente
+        ventana.appendChild(contenido);
+
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+        
+
+
+
+
+    }
+
+    function mostrarVentanaEliminarAccion(jugador){
+
+        // Crear la capa de fondo oscuro y agregarla al DOM
+        var overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+        document.body.appendChild(overlay);
+        
+        // Crear la ventana emergente y agregarla al cuerpo del documento
+        var ventana = document.createElement('div');
+        ventana.classList.add("ventana-factor");
+        document.body.appendChild(ventana);
+
+        var mensaje = document.createElement('h1');
+        mensaje.textContent = `Qué acción deseas eliminar`;
+        ventana.appendChild(mensaje);
+
+        // Crear el contenido que deseas mostrar en la ventana emergente
+        var contenido = document.createElement('div');
+        contenido.classList.add('contenido');
+
+        //OK
+ 
+        var botonT2A = document.createElement("button");
+        botonT2A.textContent = "T2A";
+        botonT2A.addEventListener("click", eliminarAccionJugador("T2A",jugador));
+        contenido.appendChild(botonT2A);
+
+        var botonT2F = document.createElement("button");
+        botonT2F.textContent = "T2F";
+        botonT2F.addEventListener("click", eliminarAccionJugador("T2F",jugador));
+        contenido.appendChild(botonT2F);
+
+        var botonT3A = document.createElement("button");
+        botonT3A.textContent = "T3A";
+        botonT3A.addEventListener("click", eliminarAccionJugador("T3A",jugador));
+        contenido.appendChild(botonT3A);
+
+        var botonT3F = document.createElement("button");
+        botonT3F.textContent = "T3F";
+        botonT3F.addEventListener("click", eliminarAccionJugador("T3F",jugador));
+        contenido.appendChild(botonT3F);
+
+        var botonTLA = document.createElement("button");
+        botonTLA.textContent = "TLA";
+        botonTLA.addEventListener("click", eliminarAccionJugador("TLA",jugador));
+        contenido.appendChild(botonTLA);
+
+        var botonTLF = document.createElement("button");
+        botonTLF.textContent = "TLF";
+        botonTLF.addEventListener("click", eliminarAccionJugador("TLF",jugador));
+        contenido.appendChild(botonTLF);
+
+        var botonFLH = document.createElement("button");
+        botonFLH.textContent = "FLH";
+        botonFLH.addEventListener("click", eliminarAccionJugador("FLH",jugador));
+        contenido.appendChild(botonFLH);
+
+        var botonFLR = document.createElement("button");
+        botonFLR.textContent = "FLR";
+        botonFLR.addEventListener("click", eliminarAccionJugador("FLR",jugador));
+        contenido.appendChild(botonFLR);
+
+        var botonTEC = document.createElement("button");
+        botonTEC.textContent = "TEC";
+        botonTEC.addEventListener("click", eliminarAccionJugador("TEC",jugador));
+        contenido.appendChild(botonTEC);
+
+        var botonRBO = document.createElement("button");
+        botonRBO.textContent = "RBO";
+        botonRBO.addEventListener("click", eliminarAccionJugador("RBO",jugador));
+        contenido.appendChild(botonRBO);
+
+        var botonRBD = document.createElement("button");
+        botonRBD.textContent = "RBD";
+        botonRBD.addEventListener("click", eliminarAccionJugador("RBD",jugador));
+        contenido.appendChild(botonRBD);
+
+        var botonROB = document.createElement("button");
+        botonROB.textContent = "ROB";
+        botonROB.addEventListener("click", eliminarAccionJugador("ROB",jugador));
+        contenido.appendChild(botonROB);
+
+        var botonTAP = document.createElement("button");
+        botonTAP.textContent = "TAP";
+        botonTAP.addEventListener("click", eliminarAccionJugador("TAP",jugador));
+        contenido.appendChild(botonTAP);
+
+        var botonPRD = document.createElement("button");
+        botonPRD.textContent = "PRD";
+        botonPRD.addEventListener("click", eliminarAccionJugador("PRD",jugador));
+        contenido.appendChild(botonPRD);
+
+        var botonAST = document.createElement("button");
+        botonAST.textContent = "AST";
+        botonAST.addEventListener("click", eliminarAccionJugador("AST",jugador));
+        contenido.appendChild(botonAST);
+
+        function eliminarAccionJugador(factor,jugador){
+            return function() {
+                console.log(factor + ' ' + jugador.numero);
+                eliminarAccion(jugador,factor,jugador.equipo);           
+                ventana.parentNode.removeChild(ventana);
+                overlay.parentNode.removeChild(overlay);
+            }
+        }
+        
+        // Agregar el contenido a la ventana emergente
+        ventana.appendChild(contenido);
+        
+        // Crear el botón de cerrar y agregar el controlador de eventos
+        var cerrar = document.createElement('button');
+        cerrar.classList.add('cerrar');
+        cerrar.innerHTML = 'X';
+        ventana.appendChild(cerrar);
+        
+        cerrar.addEventListener('click', function() {
+            // Eliminar tanto la ventana emergente como la capa de fondo oscuro del DOM
+            ventana.parentNode.removeChild(ventana);
+            overlay.parentNode.removeChild(overlay);
+        });
+
+    }
+
+
 
     function cambiossugeridosporfactor(equipo){
         // Crear la capa de fondo oscuro y agregarla al DOM
@@ -2245,7 +2546,12 @@ function getNombreEquipo(equipo){
 
         actualizarDatosPuntos(puntos,equipo,jugador);
 
-        mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+        if (puntos < 0) {
+            // Acción a realizar si puntos es negativo
+            mostrarMensajeLogLine("¡Error! Se elimina la canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+        } else {
+            mostrarMensajeLogLine("Canasta de " + puntos + " del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+        }
     }
 
     function actualizarDatosPuntos(puntos,equipo,jugador){
@@ -2837,7 +3143,13 @@ function getNombreEquipo(equipo){
 //Ventana Emergente que muestra los jugadores en juego, para X equipo, para asignarles X accion
 
     function missedShot(equipo,jugador,puntos){
-        mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+        if (puntos < 0) {
+            // Acción a realizar si puntos es negativo
+            mostrarMensajeLogLine("¡Error! Se elimina el tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+        }else{
+            mostrarMensajeLogLine("Tiro de " + puntos + " fallado del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+
+        }
     }
 
     function mostrarVentanaEmergente(accion,equipo) {
@@ -2863,7 +3175,6 @@ function getNombreEquipo(equipo){
     }
 
     function mostrarListaJugadores(listaJugadores, accion, equipo) {
-        console.log("Estoy en mostrarlistaJugadores" + listaJugadores);
         // Crear la capa de fondo oscuro y agregarla al DOM
         var overlay = document.createElement('div');
         overlay.classList.add('overlay');
@@ -2944,6 +3255,23 @@ function getNombreEquipo(equipo){
         xhttp.send();
     }
 
+    function eliminarAccion(jugador,accion, equipo) {
+        // Crear una solicitud AJAX
+        var xhttp = new XMLHttpRequest();
+
+        // Definir la función de respuesta
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //Actualizar la pantalla
+                eliminarAccionPantalla(jugador,accion, equipo);
+            }
+        };
+
+        // Hacer la solicitud AJAX
+        xhttp.open("GET", "removeactualizartablaPartido.php?jugador=" + encodeURIComponent(jugador.numero) + "&accion=" + accion + "&equipo=" + equipo, true);
+        xhttp.send();
+    }
+
     function mostrarMensajeLogLine(mensaje) {
         let infoRef = document.querySelector(".info-display");
         let logline = '';
@@ -2969,6 +3297,23 @@ function getNombreEquipo(equipo){
         getJugadoresPista();
     }
 
+    function removeactualizarComparativa(campo,equipo){
+        if(isLocal(equipo)){
+            var parametro = '.' + campo + '-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
+        }
+        else{
+            var parametro = '.' + campo + '-Visitante';
+
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
+        }
+        getJugadoresPista();
+    }
+
     function actualizarTotalTiros(campo,equipo){
         if(isLocal(equipo)){
             let nuevoString = campo.slice(0, campo.length - 1);
@@ -2984,6 +3329,24 @@ function getNombreEquipo(equipo){
 
             let  elemento = document.querySelector(parametro);
             elemento.textContent = parseInt(elemento.textContent) + 1;
+        }
+    }
+
+    function removeactualizarTotalTiros(campo,equipo){
+        if(isLocal(equipo)){
+            let nuevoString = campo.slice(0, campo.length - 1);
+            var parametro = '.' + nuevoString + 'T-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
+        }
+        else{
+            let nuevoString = campo.slice(0, campo.length - 1);
+            var parametro = '.' + nuevoString + 'T-Visitante';
+
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
         }
     }
 
@@ -3041,6 +3404,123 @@ function getNombreEquipo(equipo){
 
     }
 
+    function removeactualizarTotalRebotes(equipo){
+
+        if(isLocal(equipo)){
+            var parametro = '.RB-Local';
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
+        }
+        else{
+            var parametro = ".RB-Visitante";
+
+
+            let  elemento = document.querySelector(parametro);
+            elemento.textContent = parseInt(elemento.textContent) - 1;
+        }
+
+    }
+
+    function eliminarAccionPantalla(jugador,accion,equipo){
+
+        //1º Mostrar el Mensaje del LogLine
+        // 2º Actualizar Comparativa o Marcador
+        switch (accion) {
+            case 'T2A':
+            // Lógica para actualizar la pantalla cuando se registra un T2A
+            addPoints(equipo,jugador,-2);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T2F':
+            // Lógica para actualizar la pantalla cuando se registra un T2F
+            missedShot(equipo,jugador,-2);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T3A':
+            // Lógica para actualizar la pantalla cuando se registra un T3A
+            addPoints(equipo,jugador,-3);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'T3F':
+            // Lógica para actualizar la pantalla cuando se registra un T3F
+            missedShot(equipo,jugador,-3);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'TLA':
+            // Lógica para actualizar la pantalla cuando se registra un TLA
+            addPoints(equipo,jugador,-1);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'TLF':
+            // Lógica para actualizar la pantalla cuando se registra un TLF
+            missedShot(equipo,jugador,-1);
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalTiros(accion,equipo);
+            actualizarPorcentaje(accion,equipo);
+            break;
+            case 'FLH':
+            // Lógica para actualizar la pantalla cuando se registra una FAL
+            mostrarMensajeLogLine("¡Error! Se elimina la falta hecha por el Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            break;
+            case 'FLR':
+            // Lógica para actualizar la pantalla cuando se registra una FAL
+            mostrarMensajeLogLine("Falta recibida por Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            break;
+            case 'TEC':
+            // Lógica para actualizar la pantalla cuando se registra un TEC
+            mostrarMensajeLogLine("¡Error! Se elimina la falta hecha por el Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa('FLH',equipo);
+            break;
+            case 'RBO':
+            // Lógica para actualizar la pantalla cuando se registra un RBO
+            mostrarMensajeLogLine("¡Error! Se elimina el Rebote Ofensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalRebotes(equipo);
+            break;
+            case 'RBD':
+            // Lógica para actualizar la pantalla cuando se registra un RBD
+            mostrarMensajeLogLine("¡Error! Se elimina el Rebote Defensivo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            removeactualizarTotalRebotes(equipo);
+            break;
+            case 'ROB':
+            // Lógica para actualizar la pantalla cuando se registra un ROB
+            mostrarMensajeLogLine("¡Error! Se elimina el Robo del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            break;
+            case 'TAP':
+            // Lógica para actualizar la pantalla cuando se registra un TAP
+            mostrarMensajeLogLine("¡Error! Se elimina el Tapón del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            break;
+            case 'PRD':
+            // Lógica para actualizar la pantalla cuando se registra un PRD
+            mostrarMensajeLogLine("¡Error! Se elimina la Pérdida del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            break;
+            case 'AST':
+            // Lógica para actualizar la pantalla cuando se registra un AST
+            mostrarMensajeLogLine("¡Error! Se elimina la Asistencia del Nº " + jugador.numero + " de " + getNombreEquipo(equipo));
+            removeactualizarComparativa(accion,equipo);
+            break;
+            default:
+            // Lógica para manejar casos en los que la acción no esté definida
+            break;
+        }
+    }
+
     function actualizarPantalla(jugador, accion, equipo){
 
         //1º Mostrar el Mensaje del LogLine
@@ -3050,42 +3530,42 @@ function getNombreEquipo(equipo){
             // Lógica para actualizar la pantalla cuando se registra un T2A
             addPoints(equipo,jugador,2);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'T2F':
             // Lógica para actualizar la pantalla cuando se registra un T2F
             missedShot(equipo,jugador,2);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'T3A':
             // Lógica para actualizar la pantalla cuando se registra un T3A
             addPoints(equipo,jugador,3);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'T3F':
             // Lógica para actualizar la pantalla cuando se registra un T3F
             missedShot(equipo,jugador,3);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'TLA':
             // Lógica para actualizar la pantalla cuando se registra un TLA
             addPoints(equipo,jugador,1);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'TLF':
             // Lógica para actualizar la pantalla cuando se registra un TLF
             missedShot(equipo,jugador,1);
             actualizarComparativa(accion,equipo);
-            actualizarTotalTiros(accion,equipo)
+            actualizarTotalTiros(accion,equipo);
             actualizarPorcentaje(accion,equipo);
             break;
             case 'FLH':

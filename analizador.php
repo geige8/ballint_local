@@ -129,6 +129,9 @@ $contenidoPrincipal .= <<<EOS
             <div class="graficos-button">
                 <button id="graficos-button">Seleccionar Gráficos</button>
             </div>
+            <div class="eliminaraccion-button">
+                <button id="eliminaraccion-button">Eliminar Acción</button>
+            </div>
             <h1> En pista: </h1>
             <div class="jugadoresPista">
                 <div class="localPlayers-display">

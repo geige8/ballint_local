@@ -16,6 +16,11 @@ class FormularioSeleccionJugadores extends Formulario{
         $html = "";
     
         // Obtenemos la lista de equipos desde la clase Equipo
+
+        // Se generan los mensajes de error si existen.
+        $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
+        $erroresCampos = self::generaErroresCampos(['seleccion_fecha', 'seleccion_hora','equipo_rival','numero','nombre'], $this->errores, 'span', array('class' => 'error'));
+        
     
         $jugadores = Equipo::getJugadoresEquipo($this->idEquipo);
         $jugador = '';
@@ -26,11 +31,15 @@ class FormularioSeleccionJugadores extends Formulario{
             <div>
                 <label for="seleccion_fecha">Fecha:</label>
                 <input type="date" id="seleccion_fecha" name="seleccion_fecha">
+                {$erroresCampos['seleccion_fecha']}
+
                 <label for="seleccion_hora">Hora:</label>
                 <input type="time" id="seleccion_hora" name="seleccion_hora">
+                {$erroresCampos['seleccion_hora']}
             </div>
         </div>
             <div class="seleccionJugadores">
+            $htmlErroresGlobales
                 <h1>Selección de Jugadores</h1>
                 <div class="columna-izquierda">
                     <h2>$this->idEquipo</h2>
@@ -61,8 +70,15 @@ class FormularioSeleccionJugadores extends Formulario{
                     <div class="equipoRival">
                         <label for="equipo_rival">Equipo Rival:</label>
                         <input type="text" id="equipo_rival" name="equipo_rival">
+                        {$erroresCampos['equipo_rival']}
+
                     </div>
                 EOF;
+
+                
+                $html .="{$erroresCampos['numero']}";
+                $html .="{$erroresCampos['nombre']}";
+
                 for ($i = 0; $i < 12; $i++) {
                     $html .= "<div class='playerVisit'>";
                     
@@ -80,6 +96,8 @@ class FormularioSeleccionJugadores extends Formulario{
                     
                     $html .= "</div>";
                 }
+
+
                 
             
                 // Agregamos el campo oculto con el valor de $idEquipo
@@ -99,21 +117,21 @@ class FormularioSeleccionJugadores extends Formulario{
   
 
     protected function procesaFormulario(&$datos){
-
-        $errores = array();
+        
+        $this->errores = [];
 
         // Obtenemos FECHA
         $fecha= $datos['seleccion_fecha'] ?? [];
 
         if (empty($fecha)) {
-            $errores['seleccion_fecha'] = "Debes seleccionar una fecha";
+            $this->errores['seleccion_fecha'] = "Debes seleccionar una fecha";
         }
 
         // Obtenemos HORA
         $hora = $datos['seleccion_hora'] ?? [];
 
         if (empty($hora)) {
-            $errores['seleccion_hora'] = "Debes seleccionar una hora";
+            $this->errores['seleccion_hora'] = "Debes seleccionar una hora";
         }
 
         // Obtenemos entrenador
@@ -123,7 +141,7 @@ class FormularioSeleccionJugadores extends Formulario{
         $idEquipo = $datos['idEquipo'] ?? null;
        
         if (empty($idEquipo)) {
-            $errores['equipo'] = "Debes seleccionar un equipo";
+            $this->errores[] = "Debes seleccionar un equipo";
         }
     
         // Obtenemos los datos de los jugadores seleccionados
@@ -140,43 +158,58 @@ class FormularioSeleccionJugadores extends Formulario{
                     'numero' => $numero,
                     'nombre' => $nombre
                 );
+            }else{
+                if(($numero && !$nombre) || (!$numero && $nombre)){
+                    if (empty($numero)) {
+                        $this->errores['numero'] = "Debes rellenar también el nombre";
+                    }
+
+                    if (empty($nombre)) {
+                        $this->errores['nombre'] = "Debes rellenar también el numero";
+                    }
+                }
             }
         }
 
         // Comprobamos que hay al menos un jugador local y visitante seleccionado
         if (count($jugadoresSeleccionados) < 5 || count($jugadoresVisitantes)<5) {
-            $errores['jugadores'] = "Debes seleccionar al menos 5 jugadores de cada equipo";
+            $this->errores[] = "Debes seleccionar al menos 5 jugadores de cada equipo";
+        }
+
+        if(count($jugadoresSeleccionados) > 12 ){
+
+            $this->errores[] = "Debes seleccionar máximo 12 jugadores de cada equipo";
+
         }
     
         // Obtenemos el nombre del equipo rival
         $nombreRival = str_replace(' ', '', $datos['equipo_rival'] ?? null);
 
         if (empty($nombreRival)) {
-            $errores['equipo_rival'] = "Debes introducir el nombre del equipo rival";
+            $this->errores['equipo_rival'] = "Debes introducir el nombre del equipo rival";
         }
     
-        // Si hay errores, los guardamos en el objeto
-        if (count($errores) > 0) {
-            $this->errores = $errores;
-            return false;
+        // Si hay this->errores, los guardamos en el objeto
+        if (count($this->errores) === 0) {
+
+            // Si todo está correcto, llamamos a la función para crear la tabla temporal
+            //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
+            $tablaTemporalCreada = Partido::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
+            $tablaTemporalCreada2 = Partido::crearTablaTemporalE($idEquipo, $nombreRival);
+            $tablapartidosactualizada = Partido::insertarPartido($idEquipo, $nombreRival,$fecha,$hora);
+
+            if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {
+
+            // Redirigimos al usuario a la página analizador.php con el idEquipo como parámetro GET
+                $url = $this->urlRedireccion . '?idEquipo=' . $idEquipo .'&idEquipoVisit=' . $nombreRival;
+                header("Location: $url");
+                exit();
+            } else {
+                $this->errores[] = "Ha habido un error al crear la tabla temporal";
+            }
         }
         
-        // Si todo está correcto, llamamos a la función para crear la tabla temporal
-        //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
-        $tablaTemporalCreada = Partido::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
-        $tablaTemporalCreada2 = Partido::crearTablaTemporalE($idEquipo, $nombreRival);
-        $tablapartidosactualizada = Partido::insertarPartido($idEquipo, $nombreRival,$fecha,$hora);
 
-        if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {
-
-           // Redirigimos al usuario a la página analizador.php con el idEquipo como parámetro GET
-            $url = $this->urlRedireccion . '?idEquipo=' . $idEquipo .'&idEquipoVisit=' . $nombreRival;
-            header("Location: $url");
-            exit();
-        } else {
-            $this->errores['general'] = "Ha habido un error al crear la tabla temporal";
-            return false;
-        }
     }
     
         

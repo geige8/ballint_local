@@ -174,14 +174,14 @@ div.cuerpoAnalizador div.acciones{
   align-items: center;
 } 
 
-div.idpartido-display,div.graficos-button{
+div.idpartido-display,div.graficos-button,div.eliminaraccion-button{
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
 }
 
-div.graficos-button button{
+div.graficos-button button,div.eliminaraccion-button button{
   width: 70%;
   margin: 5px 0;
   background-color: #00458a;
@@ -196,7 +196,7 @@ div.graficos-button button{
 
 
 
-div.graficos-button button:hover {
+div.graficos-button button:hover, div.eliminaraccion-button button:hover {
   background-color: #d30d1e;
 }
 
