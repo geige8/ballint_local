@@ -68,7 +68,7 @@ class Equipo{
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
-        $sql = "SELECT id_equipo FROM equipos";
+        $sql = "SELECT id_equipo FROM equipos ORDER BY id ASC";
 
         if ($resultado = $conn->query($sql)) {
 
@@ -1775,10 +1775,6 @@ class Equipo{
     public static function mostrarEquipos(){
 
         $equiposClub = self::getListadoEquipos();
-
-        usort($equiposClub, function($a, $b) {
-            return strcmp($a, $b);
-        });
 
         $equiposMostrar = self::mostrarListadoEquipos($equiposClub);
 

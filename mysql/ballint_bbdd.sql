@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-08-2023 a las 12:26:13
+-- Tiempo de generación: 19-08-2023 a las 14:23:54
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -53,11 +53,11 @@ INSERT INTO `credenciales` (`id`, `user`, `password`, `rol`) VALUES
 (12, 'AlbertoST', '12345', 'J'),
 (13, 'JoacoY', '$2y$10$0Zwrb1SEMkk2tJDRwbUK1O2dVJcJjQTvUrJHHguJu3.KZ.0WzrYAy', 'J'),
 (14, 'JoseluS', '12345', 'J'),
-(18, 'admin', '$2y$10$agS4H2gHlgMS9In9sO9oNudEYnndmCssEQXIOt2lUtBc3croIn5M.', 'A'),
-(19, 'GonzaloGaezE8', '$2y$10$vtrcH0TYkBq8DUPV7almfuoIsguTtfR18buh9u8HjaNr3HylrJRPS', 'E'),
-(24, 'MarioGoezJ', '$2y$10$XZvFs2j6Il6HS8ZfGv1WCetVzmUNDvn851HIWkibUIPDY6TV0Pv.C', 'J'),
-(25, 'JuanPeezDT', '$2y$10$RmCVZe0TIHM09NHVURvNdekBdRU6k0Zeyltfk3DFRdouKk85VvUOm', 'DT'),
-(26, 'LolalinGainE', '$2y$10$cdlG2R6TYhRE4BT.CmKhW.ub1W5Bu/SKtviroQYmsUeJwAV7V4nvy', 'E');
+(15, 'admin', '$2y$10$agS4H2gHlgMS9In9sO9oNudEYnndmCssEQXIOt2lUtBc3croIn5M.', 'A'),
+(16, 'GonzaloGaezE8', '$2y$10$vtrcH0TYkBq8DUPV7almfuoIsguTtfR18buh9u8HjaNr3HylrJRPS', 'E'),
+(17, 'MarioGoezJ', '$2y$10$XZvFs2j6Il6HS8ZfGv1WCetVzmUNDvn851HIWkibUIPDY6TV0Pv.C', 'J'),
+(18, 'JuanPeezDT', '$2y$10$RmCVZe0TIHM09NHVURvNdekBdRU6k0Zeyltfk3DFRdouKk85VvUOm', 'DT'),
+(19, 'LolalinGainE', '$2y$10$cdlG2R6TYhRE4BT.CmKhW.ub1W5Bu/SKtviroQYmsUeJwAV7V4nvy', 'E');
 
 -- --------------------------------------------------------
 
@@ -99,8 +99,8 @@ CREATE TABLE `entrenadores` (
 --
 
 INSERT INTO `entrenadores` (`id`, `user`, `nombre`, `apellido1`, `apellido2`) VALUES
-(3, 'GonzaloGaezE8', 'Gonzalo', 'Garcia', 'Gomez'),
-(5, 'LolalinGainE', 'Lolalin', 'Garcia', 'Martin');
+(1, 'GonzaloGaezE8', 'Gonzalo', 'Garcia', 'Gomez'),
+(2, 'LolalinGainE', 'Lolalin', 'Garcia', 'Martin');
 
 -- --------------------------------------------------------
 
@@ -149,9 +149,33 @@ CREATE TABLE `equipos` (
 --
 
 INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `W`, `L`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `TEC`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(4, 'Sub22FemeninoA', 'Sub22', 'LF Sub22 Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'NacionalMasculinoA', 'Nacional', 'LF Nacional Masculino A', 'Masculino', 'A', 5, 4, 1, 10, 3, 9, 703, 356, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0),
-(10, 'InfantilMasculinoB', 'Infantil', 'LF Infantil Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(1, 'NacionalMasculinoA', 'Nacional', 'LF Nacional Masculino A', 'Masculino', 'A', 5, 4, 1, 10, 3, 9, 703, 356, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0),
+(2, 'NacionalFemeninoA', 'Nacional', 'LF Nacional Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, 'PrimeraAutonomicaMasculinoA', 'PrimeraAutonomica', 'LF PrimeraAutonomica Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 'PrimeraAutonomicaFemeninoA', 'PrimeraAutonomica', 'LF PrimeraAutonomica Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 'SegundaAutonomicaFemeninoA', 'SegundaAutonomica', 'LF SegundaAutonomica Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 'Sub22FemeninoA', 'Sub22', 'LF Sub22 Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 'Sub22MasculinoA', 'Sub22', 'LF Sub22 Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 'Sub22MasculinoB', 'Sub22', 'LF Sub22 Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(9, 'Sub22MasculinoC', 'Sub22', 'LF Sub22 Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 'JuniorFemeninoA', 'Junior', 'LF Junior Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 'JuniorFemeninoB', 'Junior', 'LF Junior Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(12, 'JuniorMasculinoA', 'Junior', 'LF Junior Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(13, 'JuniorMasculinoB', 'Junior', 'LF Junior Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(14, 'CadeteFemeninoA', 'Cadete', 'LF Cadete Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(15, 'CadeteFemeninoB', 'Cadete', 'LF Cadete Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(16, 'CadeteFemeninoC', 'Cadete', 'LF Cadete Femenino C', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(17, 'CadeteMasculinoA', 'Cadete', 'LF Cadete Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(18, 'CadeteMasculinoB', 'Cadete', 'LF Cadete Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(19, 'CadeteMasculinoC', 'Cadete', 'LF Cadete Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(20, 'CadeteMasculinoD', 'Cadete', 'LF Cadete Masculino D', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(21, 'InfantilMasculinoA', 'Infantil', 'LF Infantil Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(22, 'InfantilMasculinoB', 'Infantil', 'LF Infantil Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(23, 'InfantilMasculinoC', 'Infantil', 'LF Infantil Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(24, 'InfantilMasculinoD', 'Infantil', 'LF Infantil Masculino D', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(25, 'InfantilFemeninoA', 'Infantil', 'LF Infantil Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(26, 'InfantilFemeninoB', 'Infantil', 'LF Infantil Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(27, 'InfantilFemeninoC', 'Infantil', 'LF Infantil Femenino C', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -212,7 +236,7 @@ INSERT INTO `jugadores` (`id`, `user`, `nombre`, `apellido1`, `apellido2`, `nume
 (12, 'AlbertoST', 'Alberto', 'Sanz', 'Toril', 12, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (13, 'JoacoY', 'Joaquín', 'Yañez', 'Saz', 13, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (14, 'JoseluS', 'Juan Luis', 'Saez-Benito', 'Torquemada', 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 'MarioGoezJ', 'Mario', 'Gomez', 'Lopez', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(15, 'MarioGoezJ', 'Mario', 'Gomez', 'Lopez', 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -744,24 +768,23 @@ CREATE TABLE `usuarios_equipos` (
 --
 
 INSERT INTO `usuarios_equipos` (`id`, `equipo_id`, `usuario_id`) VALUES
-(29, 5, 1),
-(48, 10, 1),
-(30, 5, 2),
-(31, 5, 3),
-(32, 5, 4),
-(33, 5, 5),
-(34, 5, 6),
-(35, 5, 7),
-(36, 5, 8),
-(37, 5, 9),
-(38, 5, 10),
-(39, 5, 11),
-(40, 5, 12),
-(41, 5, 13),
-(42, 5, 14),
-(44, 5, 19),
-(43, 5, 24),
-(45, 5, 26);
+(29, 1, 1),
+(30, 1, 2),
+(31, 1, 3),
+(32, 1, 4),
+(33, 1, 5),
+(34, 1, 6),
+(35, 1, 7),
+(36, 1, 8),
+(37, 1, 9),
+(38, 1, 10),
+(39, 1, 11),
+(40, 1, 12),
+(41, 1, 13),
+(42, 1, 14),
+(44, 1, 16),
+(43, 1, 17),
+(45, 1, 19);
 
 --
 -- Índices para tablas volcadas
@@ -875,7 +898,7 @@ ALTER TABLE `usuarios_equipos`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `directorestecnicos`
@@ -887,19 +910,19 @@ ALTER TABLE `directorestecnicos`
 -- AUTO_INCREMENT de la tabla `entrenadores`
 --
 ALTER TABLE `entrenadores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `partidos`
@@ -959,7 +982,7 @@ ALTER TABLE `tmp_partido_44`
 -- AUTO_INCREMENT de la tabla `usuarios_equipos`
 --
 ALTER TABLE `usuarios_equipos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- Restricciones para tablas volcadas
