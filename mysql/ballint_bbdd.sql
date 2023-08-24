@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-08-2023 a las 14:23:54
+-- Tiempo de generación: 24-08-2023 a las 20:44:04
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -39,7 +39,7 @@ CREATE TABLE `credenciales` (
 --
 
 INSERT INTO `credenciales` (`id`, `user`, `password`, `rol`) VALUES
-(1, 'Pedro', '$2y$10$0Zwrb1SEMkk2tJDRwbUK1O2dVJcJjQTvUrJHHguJu3.KZ.0WzrYAy', 'J'),
+(1, 'Pedro', '$2y$10$7rshgMmQdU0qXC/0ZkAiSORC9vope6B87SIV2jPvBrLyhoteqioDS', 'J'),
 (2, 'JuanPe', '12345', 'J'),
 (3, 'PaGar3', '12345', 'J'),
 (4, 'JBruq', '12345', 'J'),
@@ -55,9 +55,10 @@ INSERT INTO `credenciales` (`id`, `user`, `password`, `rol`) VALUES
 (14, 'JoseluS', '12345', 'J'),
 (15, 'admin', '$2y$10$agS4H2gHlgMS9In9sO9oNudEYnndmCssEQXIOt2lUtBc3croIn5M.', 'A'),
 (16, 'GonzaloGaezE8', '$2y$10$vtrcH0TYkBq8DUPV7almfuoIsguTtfR18buh9u8HjaNr3HylrJRPS', 'E'),
-(17, 'MarioGoezJ', '$2y$10$XZvFs2j6Il6HS8ZfGv1WCetVzmUNDvn851HIWkibUIPDY6TV0Pv.C', 'J'),
 (18, 'JuanPeezDT', '$2y$10$RmCVZe0TIHM09NHVURvNdekBdRU6k0Zeyltfk3DFRdouKk85VvUOm', 'DT'),
-(19, 'LolalinGainE', '$2y$10$cdlG2R6TYhRE4BT.CmKhW.ub1W5Bu/SKtviroQYmsUeJwAV7V4nvy', 'E');
+(19, 'LolalinGainE', '$2y$10$cdlG2R6TYhRE4BT.CmKhW.ub1W5Bu/SKtviroQYmsUeJwAV7V4nvy', 'E'),
+(28, 'FedericoMareJ5740', '$2y$10$wIzzvE0txeOQ5e5RSizNP.qtPg/6Pap8wLI8h8IMq8S4o/FCh/AUe', 'J'),
+(30, 'MarioGoezJ19396', '$2y$10$QR4WumpuCOq23R1I.EhDZei.V2WFxYYDNYpggBHX/FlT93CQ/8SG6', 'J');
 
 -- --------------------------------------------------------
 
@@ -222,7 +223,7 @@ CREATE TABLE `jugadores` (
 --
 
 INSERT INTO `jugadores` (`id`, `user`, `nombre`, `apellido1`, `apellido2`, `numero`, `PJ`, `MT`, `TIT`, `SUP`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `FLR`, `TEC`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'Pedro', 'Pedro', 'Martinez', 'Fernandez', 1, 5, 9, 5, 0, 703, 356, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 712, 0, 0, 0, 0),
+(1, 'Pedro', 'Pedro', 'Martinez', 'Fernandez', 1, 5, 433, 5, 0, 703, 356, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 712, 0, 0, 0, 0),
 (2, 'JuanPe', 'Juan ', 'Pérez', 'García', 2, 5, 9, 5, 0, 703, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (3, 'PaGar3', 'Pablo ', 'Alonso ', 'García', 3, 5, 9, 5, 0, 703, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (4, 'JBruq', 'Javier', 'Bru', 'Querol', 4, 5, 9, 5, 0, 703, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -236,7 +237,7 @@ INSERT INTO `jugadores` (`id`, `user`, `nombre`, `apellido1`, `apellido2`, `nume
 (12, 'AlbertoST', 'Alberto', 'Sanz', 'Toril', 12, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (13, 'JoacoY', 'Joaquín', 'Yañez', 'Saz', 13, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (14, 'JoseluS', 'Juan Luis', 'Saez-Benito', 'Torquemada', 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'MarioGoezJ', 'Mario', 'Gomez', 'Lopez', 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(30, 'MarioGoezJ19396', 'Mario', 'Gomez', 'Lopez', 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -783,8 +784,8 @@ INSERT INTO `usuarios_equipos` (`id`, `equipo_id`, `usuario_id`) VALUES
 (41, 1, 13),
 (42, 1, 14),
 (44, 1, 16),
-(43, 1, 17),
-(45, 1, 19);
+(45, 1, 19),
+(59, 1, 30);
 
 --
 -- Índices para tablas volcadas
@@ -898,7 +899,7 @@ ALTER TABLE `usuarios_equipos`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `directorestecnicos`
@@ -922,7 +923,7 @@ ALTER TABLE `equipos`
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `partidos`
@@ -982,7 +983,7 @@ ALTER TABLE `tmp_partido_44`
 -- AUTO_INCREMENT de la tabla `usuarios_equipos`
 --
 ALTER TABLE `usuarios_equipos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- Restricciones para tablas volcadas

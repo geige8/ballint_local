@@ -3,11 +3,9 @@ namespace es\ucm\fdi;
 
 class Equipo{
 
-
     protected $id;
     protected $nombre;
     protected $seccion;
-
 
     public function __construct($id,$nombre, $seccion){ //OK
         $this->id = $id;
@@ -15,7 +13,7 @@ class Equipo{
         $this->seccion = $seccion;
     }
 ///////////////////////////////////////////////////////////////
-    //Registro
+    //Registro y eliminar de la Tabla Equipos
 
     public static function registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo){
         $result = true;
@@ -203,6 +201,49 @@ class Equipo{
         return $result;
     }
 
+    //Obtener los jugadores de un equipo
+    public static function getJugadoresEquipo($equipo_id){
+
+        $id_equipo = self::getidEquipo($equipo_id);
+
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("
+        SELECT jugadores.id AS jugador_id, user, nombre, apellido1, apellido2, numero
+        FROM jugadores 
+        WHERE jugadores.user IN (
+            SELECT user FROM credenciales WHERE id IN (
+                SELECT usuario_id FROM usuarios_equipos WHERE equipo_id = '%s'
+            )
+            )
+        ", $id_equipo);
+    
+
+        $rs = $conn->query($query);
+
+        $result = false;
+        $jugadores = array();
+            if ($rs) {
+                $i = 0;
+                while ($row = $rs->fetch_assoc()) {
+                    $jugadores[$i] = array(
+                        'user' => $row['user'],
+                        'nombre' => $row['nombre'],
+                        'apellido1' => $row['apellido1'],
+                        'apellido2' => $row['apellido2'],
+                        'numero' => $row['numero']
+
+                    );
+                    $i++;
+                }
+                $result = $jugadores;
+                $rs->free();
+            } else {
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+        return $result;
+    }
+
 //////////////////////////////////////////////////////////////////////////////////
 //MANEJO TABLA EQUIPOS
 
@@ -249,6 +290,7 @@ class Equipo{
         return $resultado;
     }
 
+    //Añadir un partido jugado
     public static function addpartidojugado($equipo){
 
         $result = true;
@@ -269,6 +311,7 @@ class Equipo{
         return $result;
     }
 
+    //Añadir un partido Ganado
     public static function addpartidoganado($equipo,$idPartido){
 
         $result = true;
@@ -300,6 +343,7 @@ class Equipo{
         return $result;
     }
 
+    //Añadir un partido perdido
     public static function addpartidoperdido($equipo,$idPartido){
 
         $result = true;
@@ -331,88 +375,6 @@ class Equipo{
         return $result;
     }
 
-    public static function getJugadoresEquipo($equipo_id){
-
-        $id_equipo = self::getidEquipo($equipo_id);
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("
-        SELECT jugadores.id AS jugador_id, user, nombre, apellido1, apellido2, numero
-        FROM jugadores 
-        WHERE jugadores.user IN (
-            SELECT user FROM credenciales WHERE id IN (
-                SELECT usuario_id FROM usuarios_equipos WHERE equipo_id = '%s'
-            )
-            )
-        ", $id_equipo);
-    
-
-        $rs = $conn->query($query);
-
-        $result = false;
-        $jugadores = array();
-            if ($rs) {
-                $i = 0;
-                while ($row = $rs->fetch_assoc()) {
-                    $jugadores[$i] = array(
-                        'user' => $row['user'],
-                        'nombre' => $row['nombre'],
-                        'apellido1' => $row['apellido1'],
-                        'apellido2' => $row['apellido2'],
-                        'numero' => $row['numero']
-
-                    );
-                    $i++;
-                }
-                $result = $jugadores;
-                $rs->free();
-            } else {
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-        return $result;
-    }
-
-    public static function getEntrenadoresEquipo($equipo_id){
-
-        $id_equipo = self::getidEquipo($equipo_id);
-
-        $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("
-        SELECT entrenadores.id AS jugador_id, user, nombre, apellido1, apellido2
-        FROM entrenadores 
-        WHERE entrenadores.user IN (
-            SELECT user FROM credenciales WHERE id IN (
-                SELECT usuario_id FROM usuarios_equipos WHERE equipo_id = '%s'
-            )
-            )
-        ", $id_equipo);
-    
-
-        $rs = $conn->query($query);
-
-        $result = false;
-        $entrenadores = array();
-            if ($rs) {
-                $i = 0;
-                while ($row = $rs->fetch_assoc()) {
-                    $entrenadores[$i] = array(
-                        'user' => $row['user'],
-                        'nombre' => $row['nombre'],
-                        'apellido1' => $row['apellido1'],
-                        'apellido2' => $row['apellido2'],
-                    );
-                    $i++;
-                }
-                $result = $entrenadores;
-                $rs->free();
-            } else {
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-        return $result;
-    }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ESTADISTICAS DE LOS EQUIPOS:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -441,7 +403,9 @@ class Equipo{
             $equipo['PTSP'] = 0;
         }
 
+        //Puntos Recibidos
         $equipo['PPR'] = $team['PPR'];
+
         // Puntos Recibidos Promedio
         if ($team['PJ'] > 0) {
             $equipo['PTSPR'] = number_format(($equipo['PPR'] ?? 0) / ($team['PJ'] ?? 0), 2);
@@ -460,14 +424,21 @@ class Equipo{
         // Minutos Promedio
         if ($team['PJ'] > 0) {
             $segundospromedio = ($team['MT'] ?? 0) / ($team['PJ'] ?? 0);
+            // En este caso: $segundospromedio = 9 / 5 = 1.8 segundos por partido
             $minutosjugados = floor($segundospromedio / 60);
-            $segundosRestantes = $segundospromedio % 60;
+
+            $segundosRestantes = $segundospromedio - ($minutosjugados * 60);
+
+            $segundosRestantes = ceil($segundosRestantes);
+
             $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
+
             $equipo['MTP'] = $tiempoFormato;
         } else {
             $equipo['MTP'] = "00:00";
         }
 
+        //Mas Menos
         $equipo['MSMS'] = $team['MSMS'];
     
         // Más Menos Promedio
@@ -476,8 +447,6 @@ class Equipo{
         } else {
             $equipo['MSMSP'] = 0;
         }
-    
-
     
         // Tiros de dos
         $equipo['T2A'] = $team['T2A'];
@@ -618,19 +587,6 @@ class Equipo{
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //ESTADISTICA AVANZADA
 
-        // // Puntos de Titular
-        // $equipo['TIT'] = $team['TIT']; //Llamar a función que obtenga eso
-
-        // //Puntos de Suplente
-        // $equipo['SUP'] = $team['SUP']; //Llamar a función que obtenga eso
-    
-        // // Promedio Puntos Titular
-        // if ($team['PJ'] > 0) {
-        //     $equipo['TITP'] = number_format(($team['TIT'] ?? 0) / ($team['PJ'] ?? 0), 2);
-        // } else {
-        //     $equipo['TITP'] = 0;
-        // }
-
         //Puntos Por Cuartos
         $equipo['PTQ1'] = $team['PTQ1'];
         $equipo['PTQ2'] = $team['PTQ2'];
@@ -676,7 +632,7 @@ class Equipo{
         $denominator_TO = ($equipo['TCA'] + $equipo['TCF']) + (0.44 * ($equipo['TLA'] + $equipo['TLF'])) + $equipo['PRD'];
 
         if ($denominator_TO > 0) {
-            $equipo['TOP'] = (($equipo['PRD']) / $denominator_TO) * 100;
+            $equipo['TOP'] = number_format((($equipo['PRD']) / $denominator_TO),2) * 100;
         }
         else{
             $equipo['TOP'] = 0;
@@ -686,7 +642,7 @@ class Equipo{
         $denominator_TLP = $equipo['TCA'] + $equipo['TCF'];
 
         if ($denominator_TLP > 0) {
-            $equipo['TLP'] = ($equipo['TCA'] / $denominator_TLP) * 100;
+            $equipo['TLP'] = number_format(($equipo['TCA'] / $denominator_TLP),2) * 100;
         } else {
             $equipo['TLP'] = 0;
         }
@@ -696,7 +652,7 @@ class Equipo{
         $total_field_attempts = $equipo['TCA'] + $equipo['TCF'];
         $total_free_attempts = $equipo['TLA'] + $equipo['TLF'];
         if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
-            $equipo['TSP'] = ($equipo['PPP']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)) * 100;
+            $equipo['TSP'] = number_format(($equipo['PPP']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)),2) * 100;
         } else {
             $equipo['TSP'] = 0;
         }
@@ -706,7 +662,7 @@ class Equipo{
         //La fórmula es: AS% = AS / (2PM + 3PM)
         $total_field_made = $equipo['T2A'] + $equipo['T3A'];
         if ($total_field_made > 0) {
-            $equipo['ASP'] = ($equipo['AST']) / $total_field_made * 100;
+            $equipo['ASP'] = number_format((($equipo['AST']) / $total_field_made),2) * 100;
         } else {
             $equipo['ASP'] = 0;
         }
@@ -731,7 +687,7 @@ class Equipo{
         //DER (DEFENSIVE EFFICIENCY RATING)
         // La fórmula es: DER = PTS / POS
         if($equipo['POS'] > 0){
-            $equipo['DER'] = ($equipo['PPR'] / $equipo['POS']) * 100;
+            $equipo['DER'] = number_format(($equipo['PPR'] / $equipo['POS']),2) * 100;
         } else {
             $equipo['DER'] = 0;
         }
@@ -743,7 +699,7 @@ class Equipo{
 
         //Ritmo
         if($equipo['POS'] > 0){
-            $equipo['PACE'] = ($equipo['PPP'] / $equipo['POS']);
+            $equipo['PACE'] = number_format(($equipo['PPP'] / $equipo['POS']),2);
         } else {
             $equipo['PACE'] = 0;
         }
@@ -1240,57 +1196,57 @@ class Equipo{
             $html .= "</div>";
         }
         
-        if ($equipo['FLHP'] >= 3) {
+        if ($equipo['FLHP'] >= 15) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>FLHP</p>";
             $html .= "<p class='stat-value'>{$equipo['FLHP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         }
-        if ($equipo['FLRP'] <= 1) {
+        if ($equipo['FLRP'] <= 5) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>%FLRP</p>";
             $html .= "<p class='stat-value'>{$equipo['FLRP']}% - Tiene que mejorar</p>";
             $html .= "</div>";
         }
 
-        if ($equipo['RBOP'] < 1 ) {
+        if ($equipo['RBOP'] < 5 ) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>RBOP</p>";
             $html .= "<p class='stat-value'>{$equipo['RBOP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         }
-        if ($equipo['RBDP'] < 3) {
+        if ($equipo['RBDP'] < 15) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>%RBDP</p>";
             $html .= "<p class='stat-value'>{$equipo['RBDP']}% - Tiene que mejorar</p>";
             $html .= "</div>";
         } 
-        if ($equipo['REBP'] < 3) {
+        if ($equipo['REBP'] < 15) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>REBP</p>";
             $html .= "<p class='stat-value'>{$equipo['REBP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         }
         
-        if ($equipo['ROBP'] <= 1) {
+        if ($equipo['ROBP'] <= 5) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>ROBP</p>";
             $html .= "<p class='stat-value'>{$equipo['ROBP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         } 
-        if ($equipo['TAPP'] <= 0.2) {
+        if ($equipo['TAPP'] <= 1) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>%TAPP</p>";
             $html .= "<p class='stat-value'>{$equipo['TAPP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         } 
-        if ($equipo['PRDP'] >= 2) {
+        if ($equipo['PRDP'] >= 10) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>%PRDP</p>";
             $html .= "<p class='stat-value'>{$equipo['PRDP']} - Tiene que mejorar</p>";
             $html .= "</div>";
         } 
-        if ($equipo['ASTP'] <= 1) {
+        if ($equipo['ASTP'] <= 5) {
             $html .= "<div class='stat-container'>";
             $html .= "<p class='stat-label'>ASTP</p>";
             $html .= "<p class='stat-value'>{$equipo['ASTP']} - Tiene que mejorar</p>";
@@ -1705,7 +1661,7 @@ class Equipo{
 
     public static function mostrarlistaEntrenadoresEquipo($equipo) {
 
-        $listaEntrenadores = self::getEntrenadoresEquipo($equipo);
+        $listaEntrenadores = Entrenador::getEntrenadoresEquipo($equipo);
 
         $html = "";
         $i = 1;

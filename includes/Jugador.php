@@ -10,8 +10,8 @@ class Jugador{
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //Obtener el numero de un jugador
+    //GETTERS TABLA JUGADORES
+    //Obtener el numero de un jugador dado su user
     public static function getNumJugador($jugador){
 
         $result = false;
@@ -34,7 +34,7 @@ class Jugador{
         return $result;
     }
 
-    //Obtener el nombre de un jugador
+    //Obtener el nombre Completo de un jugador como la suma de su nombre y apellidos, dado un user
     public static function getnombreJugador($jugador){
 
         $result = false;
@@ -57,8 +57,13 @@ class Jugador{
         return $result;
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FUNCIONES
+
     //Guardar los datos de un jugador al finalizar el partido
     public static function guardaDatosJugador($jugador){
+
+        $resultado = false;
 
         $conn = Aplicacion::getInstance()->getConexionBd();
 
@@ -102,10 +107,8 @@ class Jugador{
 
         return $resultado;
     }
-    
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Obtener las estadisticas del jugador
+    //Obtener las estadisticas del jugador, dados los parametros un jugador
     public static function statsfromJugador($usuario){
 
         $jugador = array();
@@ -113,7 +116,7 @@ class Jugador{
         // Partidos Jugados
         $jugador['PJ'] = $usuario['PJ'];
     
-        // Minutos
+        // Segundos Totales de Juego
         $jugador['MT'] = $usuario['MT'];
 
         $minutosjugados = floor($usuario['MT'] / 60) ?? 0;
@@ -124,9 +127,15 @@ class Jugador{
         // Minutos Promedio
         if ($usuario['PJ'] > 0) {
             $segundospromedio = ($usuario['MT'] ?? 0) / ($usuario['PJ'] ?? 0);
+            // En este caso: $segundospromedio = 9 / 5 = 1.8 segundos por partido
             $minutosjugados = floor($segundospromedio / 60);
-            $segundosRestantes = $segundospromedio % 60;
+
+            $segundosRestantes = $segundospromedio - ($minutosjugados * 60);
+
+            $segundosRestantes = ceil($segundosRestantes);
+
             $tiempoFormato = sprintf("%02d:%02d", $minutosjugados, $segundosRestantes);
+
             $jugador['MTP'] = $tiempoFormato;
         } else {
             $jugador['MTP'] = "00:00";
@@ -138,6 +147,7 @@ class Jugador{
         // Partidos de Suplente
         $jugador['SUP'] = $usuario['SUP'];
     
+        //Mas Menos
         $jugador['MSMS'] = $usuario['MSMS'];
     
         // Más Menos Promedio
@@ -293,7 +303,6 @@ class Jugador{
             $jugador['ASTP'] = 0;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //ESTADISTICA AVANZADA
 
         //Puntos Por Cuartos
@@ -333,7 +342,7 @@ class Jugador{
         // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         $total_attempts = $jugador['TCA'] + $jugador['TCF'];
         if ($total_attempts > 0) {
-            $jugador['eFGP'] = (($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100;
+            $jugador['eFGP'] = number_format((($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts),2) * 100;
         } else {
             $jugador['eFGP'] = 0;
         }
@@ -343,7 +352,7 @@ class Jugador{
         $denominator_TO = ($jugador['TCA'] + $jugador['TCF']) + (0.44 * ($jugador['TLA'] + $jugador['TLF'])) + $jugador['PRD'];
 
         if ($denominator_TO > 0) {
-            $jugador['TOP'] = (($jugador['PRD']) / $denominator_TO) * 100;
+            $jugador['TOP'] = number_format((($jugador['PRD']) / $denominator_TO),2) * 100;
         }
         else{
             $jugador['TOP'] = 0;
@@ -354,7 +363,7 @@ class Jugador{
         $denominator_TLP = $jugador['TCA'] + $jugador['TCF'];
 
         if ($denominator_TLP > 0) {
-            $jugador['TLP'] = ($jugador['TCA'] / $denominator_TLP) * 100;
+            $jugador['TLP'] = number_format(($jugador['TCA'] / $denominator_TLP),2) * 100;
         } else {
             $jugador['TLP'] = 0;
         }
@@ -366,7 +375,7 @@ class Jugador{
         $total_field_attempts = $jugador['TCA'] + $jugador['TCF'];
         $total_free_attempts = $jugador['TLA'] + $jugador['TLF'];
         if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
-            $jugador['TSP'] = ($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)) * 100;
+            $jugador['TSP'] = number_format(($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts)),2) * 100;
         } else {
             $jugador['TSP'] = 0;
         }
@@ -376,18 +385,17 @@ class Jugador{
         // La fórmula es: AS% = AS / (2PM + 3PM)
         $total_field_made = $jugador['T2A'] + $jugador['T3A'];
         if ($total_field_made > 0) {
-            $jugador['ASP'] = ($jugador['AST']) / $total_field_made * 100;
+            $jugador['ASP'] = number_format((($jugador['AST']) / $total_field_made),2) * 100;
         } else {
             $jugador['ASP'] = 0;
         }
 
-        //El indicador de uso del jugador (USG%) se calcula con la siguiente expresión, lo usaremos solo en los partidos
-        //$jugador['PUSO'] = (((($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))+$jugador['PRD'])*($equipo['MT']/5))/(($jugador['MT'])*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))+$equipo['PRD'])))*100;
-        
+
         // GmSc - Game Score; the formula is PTS + 0.4 * FG - 0.7 * FGA - 0.4*(FTA - FT) + 0.7 * ORB + 0.3 * DRB + STL + 0.7 * AST + 0.7 * BLK - 0.4 * PF - TOV. 
         // Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. 
         // The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.).
-        $jugador['GS'] = ($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD']);
+        $jugador['GS'] = number_format(($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']
+        +0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD']),2);
 
         //VALORACION
 
@@ -402,6 +410,7 @@ class Jugador{
         return $jugador;
     }  
 
+    //Obtener las estadisticas del jugador en partido, dados los parametros un jugador
     public static function statsfromJugadorEnPartido($usuario){
 
         $jugador = array();
@@ -433,7 +442,7 @@ class Jugador{
         $jugador['T2A'] = $usuario['T2A'];
         $jugador['T2F'] = $usuario['T2F'];
         if (($usuario['T2A'] + $usuario['T2F']) > 0) {
-            $jugador['T2P'] = number_format(($usuario['T2A'] / ($usuario['T2A'] + $usuario['T2F'])) * 100, 2);
+            $jugador['T2P'] = number_format(($usuario['T2A'] / ($usuario['T2A'] + $usuario['T2F'])) * 100, 1);
         } else {
             $jugador['T2P'] = 0;
         }
@@ -442,7 +451,7 @@ class Jugador{
         $jugador['T3A'] = $usuario['T3A'];
         $jugador['T3F'] = $usuario['T3F'];
         if (($usuario['T3A'] + $usuario['T3F']) > 0) {
-            $jugador['T3P'] = number_format(($usuario['T3A'] / ($usuario['T3A'] + $usuario['T3F'])) * 100, 2);
+            $jugador['T3P'] = number_format(($usuario['T3A'] / ($usuario['T3A'] + $usuario['T3F'])) * 100, 1);
         } else {
             $jugador['T3P'] = 0;
         }
@@ -451,7 +460,7 @@ class Jugador{
         $jugador['TLA'] = $usuario['TLA'];
         $jugador['TLF'] = $usuario['TLF'];
         if (($usuario['TLA'] + $usuario['TLF']) > 0) {
-            $jugador['TLP'] = number_format(($usuario['TLA'] / ($usuario['TLA'] + $usuario['TLF'])) * 100, 2);
+            $jugador['TLP'] = number_format(($usuario['TLA'] / ($usuario['TLA'] + $usuario['TLF'])) * 100, 1);
         } else {
             $jugador['TLP'] = 0;
         }
@@ -460,7 +469,7 @@ class Jugador{
         $jugador['TCA'] = $usuario['T2A'] + $usuario['T3A'];
         $jugador['TCF'] = $usuario['T2F'] + $usuario['T3F'];
         if (($jugador['TCA'] + $jugador['TCF']) > 0) {
-            $jugador['TCP'] = number_format(($jugador['TCA'] / ($jugador['TCA'] + $jugador['TCF'])) * 100, 2);
+            $jugador['TCP'] = number_format(($jugador['TCA'] / ($jugador['TCA'] + $jugador['TCF'])) * 100, 1);
         } else {
             $jugador['TCP'] = 0;
         }
@@ -508,9 +517,9 @@ class Jugador{
         // PORCENTAJES DE USO DE TIRO
         $total_shots = $jugador['T2A'] + $jugador['T3A'] + ($jugador['TLA'] * 0.44);
         if ($total_shots > 0) {
-            $jugador['T2PU'] = number_format(($jugador['T2A'] / $total_shots), 2) * 100;
-            $jugador['T3PU'] = number_format(($jugador['T3A'] / $total_shots), 2) * 100;
-            $jugador['T1PU'] = number_format((($jugador['TLA'] * 0.44) / $total_shots), 2) * 100;
+            $jugador['T2PU'] = number_format(($jugador['T2A'] / $total_shots), 1) * 100;
+            $jugador['T3PU'] = number_format(($jugador['T3A'] / $total_shots), 1) * 100;
+            $jugador['T1PU'] = number_format((($jugador['TLA'] * 0.44) / $total_shots), 1) * 100;
         } else {
             $jugador['T2PU'] = 0;
             $jugador['T3PU'] = 0;
@@ -520,7 +529,7 @@ class Jugador{
         // PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         $total_attempts = $jugador['TCA'] + $jugador['TCF'];
         if ($total_attempts > 0) {
-            $jugador['eFGP'] = number_format((($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100, 2);
+            $jugador['eFGP'] = number_format((($jugador['T2A'] + $jugador['T3A'] + 0.5 * $jugador['T3A']) / $total_attempts) * 100, 1);
         } else {
             $jugador['eFGP'] = 0;
         }
@@ -531,7 +540,7 @@ class Jugador{
         $total_field_attempts = $jugador['TCA'] + $jugador['TCF'];
         $total_free_attempts = $jugador['TLA'] + $jugador['TLF'];
         if (($total_field_attempts + 0.44 * $total_free_attempts) > 0) {
-            $jugador['TSP'] = number_format(($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts))  * 100, 2);
+            $jugador['TSP'] = number_format(($jugador['PTS']) / (2 * ($total_field_attempts + 0.44 * $total_free_attempts))  * 100, 1);
         } else {
             $jugador['TSP'] = 0;
         }
@@ -541,18 +550,17 @@ class Jugador{
         // La fórmula es: AS% = AS / (2PM + 3PM)
         $total_field_made = $jugador['T2A'] + $jugador['T3A'];
         if ($total_field_made > 0) {
-            $jugador['ASP'] = number_format(($jugador['AST']) / $total_field_made  * 100, 2);
+            $jugador['ASP'] = number_format(($jugador['AST']) / $total_field_made  * 100, 1);
         } else {
             $jugador['ASP'] = 0;
         }
 
-        //El indicador de uso del jugador (USG%) se calcula con la siguiente expresión, lo usaremos solo en los partidos
-        //$jugador['PUSO'] = (((($jugador['TCA']+$jugador['TCF'])+(0.44*($jugador['TLA'] + $jugador['TLF']))+$jugador['PRD'])*($equipo['MT']/5))/(($jugador['MT'])*(($equipo['TCA']+$equipo['TCF'])+(0.44*($equipo['TLA'] + $equipo['TLF']))+$equipo['PRD'])))*100;
-        
         // GmSc - Game Score; the formula is PTS + 0.4 * FG - 0.7 * FGA - 0.4*(FTA - FT) + 0.7 * ORB + 0.3 * DRB + STL + 0.7 * AST + 0.7 * BLK - 0.4 * PF - TOV. 
         // Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. 
         // The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.).
-        $jugador['GS'] = number_format($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+$jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD'],2);
+        $jugador['GS'] = number_format($jugador['PTS']+0.4*$jugador['TCA']-0.7*($jugador['TCA']+
+        $jugador['TCF'])-0.4*$jugador['TCF']+0.7*$jugador['RBO']+0.3*$jugador['RBD']+$jugador['ROB']+
+        0.7*$jugador['AST']+0.7* $jugador['TAP']-0.4*$jugador['FLH']-$jugador['PRD'],1);
 
         //VALORACION
 
@@ -562,7 +570,9 @@ class Jugador{
     }  
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //MOSTRAR:
+    //MOSTRAR
+
+    //Mostrar las stats de un jugador
     public static function mostrarStatsJugador($jugador){
         $html = "";
         $html .= "
@@ -810,6 +820,7 @@ class Jugador{
         return $html;
     }
 
+    //Mostrar las areas de mejora de un jugador
     public static function mostrarStatsAreasdeMejoraJugador($jugador){
 
         $html = "<div class='stats'>";
@@ -900,6 +911,7 @@ class Jugador{
         return $html;
     }
     
+    //Mostrar las Stats Avanzadas de un jugador
     public static function mostrarStatsAvanzadasJugador($jugadorAvanzado){
 
         $html = "";
@@ -947,8 +959,8 @@ class Jugador{
         return $html;
     }
 
+    //Mostrar las stats de un jugador en un partido
     public static function mostrarStatsPartidoJugador($partido,$estadisticas,$partidoId){
-
 
         $html = "";
 
@@ -999,6 +1011,7 @@ class Jugador{
         return $html;
     }
 
+    //Mostrar los ultimos partidos de un jugador
     public static function mostrarUltimosPartidosJugador($jugador){
 
         $html = "";
@@ -1087,9 +1100,8 @@ class Jugador{
 
         }
         
-
-
         return $html;
     }
 
 }
+?>

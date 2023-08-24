@@ -97,6 +97,34 @@ class Usuario{
         return $result;
     }
 
+    public static function cambiarPasswordUser($password1, $password2,$user){
+
+        $usuario = $user;
+
+        if($password1 === $password2 && $password1 !== ''){
+            $passwordAux = trim($password1);
+            $passwordAux = filter_var($passwordAux, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            if (mb_strlen($passwordAux) < 5 || mb_strlen($passwordAux) > 20) {
+                $result = 4;
+            } else {
+                $passwordAux = password_hash($passwordAux, PASSWORD_DEFAULT);
+
+                $connection  = Aplicacion::getInstance()->getConexionBd();
+                $query = "UPDATE credenciales SET password = '" . $passwordAux . "' WHERE user = '" . $usuario . "'";
+                $result = $connection->query($query);
+                $result = 1;
+            }
+
+        } else if($password1 === '' || $password2 === ''){
+            $result = 2;
+        } else{
+            $result = 3;
+        }
+
+        return $result;
+    }
+
     public static function getDatosPerfilJugador($nombreUsuario){
 
         //Obtengo la conexión realizada

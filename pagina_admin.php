@@ -6,6 +6,7 @@
   $contenidoPrincipal = '';
   $rutaImgs = RUTA_IMGS;
 
+
   $contenidoPrincipal .= <<<EOS
     <h1> Panel de Control del Administrador</h1>
     <div class="botonesAdmin">
@@ -37,6 +38,11 @@
       <!-- Botón para Eliminar Jugadores/Entrenadores a Equipos -->
           <a class="adminButton" href="eliminar_UsuarioTeam.php">
             Eliminar Usuarios de Equipos        
+          </a>
+
+      <!-- Botón para Cambiar Contraseñas-->
+          <a class="adminButton" href="cambiar_passUser.php">
+            Cambiar Password        
           </a>
     </div>
   EOS;

@@ -22,7 +22,7 @@ class FormularioRegistroUsuarios extends Formulario{
  
             // Se generan los mensajes de error si existen.
             $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
-            $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2','numero'], $this->errores, 'span', array('class' => 'error'));
+            $erroresCampos = self::generaErroresCampos(['tipo_usuario', 'equipo_usuario','nombre','apellido1','apellido2','numero','imagen'], $this->errores, 'span', array('class' => 'error'));
             
             $html = <<<EOF
                 <div class="seleccion"> 
@@ -50,7 +50,10 @@ class FormularioRegistroUsuarios extends Formulario{
                         {$erroresCampos['apellido2']}
                     <label for="numero">Número (0-99)</label>
                         <input type="number" id="numero" name="numero" min="0" max="99" required>
-                        {$erroresCampos['numero']}                            
+                        {$erroresCampos['numero']}
+                    <label for="imagen">Imagen</label>
+                        <input type="file" class="custom-file-input" name="imagen" id="imagen" required/></label>
+                        {$erroresCampos['imagen']}
                     <button type="submit" name="registro">Registrar Usuario</button>
                 </div>            
             EOF;
@@ -115,6 +118,23 @@ class FormularioRegistroUsuarios extends Formulario{
             }
         }
 
+        $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+        $max_tamanyo = 1024 * 1024 * 8; // 8 MB
+
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            if (!in_array($_FILES['imagen']['type'], $extensiones)) {
+                $this->errores['imagen'] = 'Es una imagen';
+                if ($_FILES['imagen']['size'] > $max_tamanyo) {
+                    $this->errores['imagen'] = 'La imagen excede el tamaño máximo';
+                }
+            }
+        } else {
+            $this->errores['imagen'] = 'Hubo un problema al subir la imagen';
+        }
+
+
+        
+        
 
         if (count($this->errores) === 0) {
             // Obtener las dos primeras letras de apellido1Jugador
@@ -128,10 +148,19 @@ class FormularioRegistroUsuarios extends Formulario{
         
             // Combinar todas las partes para formar el nombre de usuario, incluyendo el número aleatorio
             $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario . $numero . $numero_aleatorio;
-        
+
             try {
+
                 $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
                 // Si no hay excepción, continúas con el flujo normal
+                $ruta_fichero_origen = $_FILES['imagen']['tmp_name'];
+                $ruta_nuevo_destino = 'C:/xampp/htdocs/BALLINT/ballint_local/imgs/' . $usuarionombre . '.jpg'; // Cambia 'holaaa' por el nombre de archivo que quieras
+                
+                if (move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino)) {
+                    // El archivo se ha movido exitosamente
+                } else {
+                    $this->errores['imagen'] = 'Hubo un problema al subir la imagen';
+                }
 
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
