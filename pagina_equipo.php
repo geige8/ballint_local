@@ -23,11 +23,11 @@
             <div class="paginaDetalle">
                 <h1>Detalles del $equipo</h1>
                 <div class="cuadrostats">
-                    <h2>Estadísticas del {$datosEquipo['nombre_equipo']}: </h2>
+                    <h2>Estadísticas del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}: </h2>
                     $htmlfrommostrarStatsEquipo
                 </div>
                 <div class="cuadrostatsAvanzadas">
-                    <h2>Stats Avanzadas de {$datosEquipo['nombre_equipo']}:</h2>
+                    <h2>Stats Avanzadas de LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h2>
                     $htmlfrommostrarStatsAvanzadasJugadorEquipo
                 </div>
                 <div class="cuadroEntrenadores">
@@ -39,7 +39,7 @@
                     $htmllistajugadoresEquipo
                 </div>
                 <div class="lastgames">
-                <h2>Ultimos Partidos de {$datosEquipo['nombre_equipo']}: </h2>
+                <h2>Ultimos Partidos de LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}: </h2>
                     $htmlUltimosPartidosEquipo
                 </div>
             </div>

@@ -21,9 +21,8 @@ class Equipo{
         $conn = Aplicacion::getInstance()->getConexionBd();
 
         $idEquipo = $categoria_equipo .  $seccion_equipo . $letra_equipo;
-        $nombreEquipo = 'LF ' . $categoria_equipo . ' ' . $seccion_equipo . ' ' . $letra_equipo;
 
-        $query = "INSERT INTO equipos (id_equipo,categoria,nombre_equipo,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$nombreEquipo','$seccion_equipo','$letra_equipo')"; 
+        $query = "INSERT INTO equipos (id_equipo,categoria,seccion,letra)  VALUES ('$idEquipo','$categoria_equipo','$seccion_equipo','$letra_equipo')"; 
 
         $rs = $conn->query($query);
 
@@ -103,30 +102,27 @@ class Equipo{
     }
 
     //Obtener el nombre completo de un equipo basado en su id_equipo(NacionalMasculino)
-    public static function getNombreEquipo($idEquipoLocal){
+    public static function getNombreEquipo($idEquipoLocal) {
 
         $conn = Aplicacion::getInstance()->getConexionBd();
-
-        $query = sprintf("SELECT nombre_equipo FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($idEquipoLocal));
-
+        $query = sprintf("SELECT categoria, seccion, letra FROM equipos WHERE id_equipo = '%s'", $conn->real_escape_string($idEquipoLocal));
         $rs = $conn->query($query);
-
         $result = false;
-
-        $equipos = array();
-
-            if ($rs) {
-                while ($row = $rs->fetch_assoc()) {
-                    $equipos = $row['nombre_equipo'];
-                }
-                $result = $equipos;
-                $rs->free();
-            } else {
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
+        $nombreEquipo = ''; 
+    
+        if ($rs) {
+            while ($row = $rs->fetch_assoc()) {
+                $nombreEquipo = 'LF' . $row['categoria'] . $row['seccion'] . $row['letra'];
             }
-
+            $result = $nombreEquipo; 
+            $rs->free();
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+    
         return $result;
     }
+    
 
     //Obtener el id (1,2,3) de un equipo basado en su id_equipo(NacionalMasculino)
     public static function getidEquipo($equipo_id){
@@ -1720,7 +1716,7 @@ class Equipo{
         $html .= <<<EOS
             <div class="equipo">
                 <a href="pagina_equipo.php?equipo={$equipo}">
-                    <p>{$datosEquipo['nombre_equipo']}</p>
+                    <p>LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}</p>
                 </a>
             </div>
         EOS;

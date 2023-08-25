@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-08-2023 a las 20:44:04
+-- Tiempo de generación: 25-08-2023 a las 21:04:57
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -113,7 +113,6 @@ CREATE TABLE `equipos` (
   `id` int(10) NOT NULL,
   `id_equipo` varchar(50) NOT NULL,
   `categoria` varchar(50) NOT NULL,
-  `nombre_equipo` varchar(50) NOT NULL,
   `seccion` enum('Masculino','Femenino') NOT NULL,
   `letra` varchar(1) DEFAULT NULL,
   `PJ` int(11) NOT NULL,
@@ -149,34 +148,34 @@ CREATE TABLE `equipos` (
 -- Volcado de datos para la tabla `equipos`
 --
 
-INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `nombre_equipo`, `seccion`, `letra`, `PJ`, `W`, `L`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `TEC`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
-(1, 'NacionalMasculinoA', 'Nacional', 'LF Nacional Masculino A', 'Masculino', 'A', 5, 4, 1, 10, 3, 9, 703, 356, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0),
-(2, 'NacionalFemeninoA', 'Nacional', 'LF Nacional Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'PrimeraAutonomicaMasculinoA', 'PrimeraAutonomica', 'LF PrimeraAutonomica Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 'PrimeraAutonomicaFemeninoA', 'PrimeraAutonomica', 'LF PrimeraAutonomica Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 'SegundaAutonomicaFemeninoA', 'SegundaAutonomica', 'LF SegundaAutonomica Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 'Sub22FemeninoA', 'Sub22', 'LF Sub22 Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 'Sub22MasculinoA', 'Sub22', 'LF Sub22 Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 'Sub22MasculinoB', 'Sub22', 'LF Sub22 Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 'Sub22MasculinoC', 'Sub22', 'LF Sub22 Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'JuniorFemeninoA', 'Junior', 'LF Junior Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 'JuniorFemeninoB', 'Junior', 'LF Junior Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'JuniorMasculinoA', 'Junior', 'LF Junior Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 'JuniorMasculinoB', 'Junior', 'LF Junior Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 'CadeteFemeninoA', 'Cadete', 'LF Cadete Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 'CadeteFemeninoB', 'Cadete', 'LF Cadete Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 'CadeteFemeninoC', 'Cadete', 'LF Cadete Femenino C', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 'CadeteMasculinoA', 'Cadete', 'LF Cadete Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 'CadeteMasculinoB', 'Cadete', 'LF Cadete Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 'CadeteMasculinoC', 'Cadete', 'LF Cadete Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(20, 'CadeteMasculinoD', 'Cadete', 'LF Cadete Masculino D', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(21, 'InfantilMasculinoA', 'Infantil', 'LF Infantil Masculino A', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(22, 'InfantilMasculinoB', 'Infantil', 'LF Infantil Masculino B', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(23, 'InfantilMasculinoC', 'Infantil', 'LF Infantil Masculino C', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(24, 'InfantilMasculinoD', 'Infantil', 'LF Infantil Masculino D', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(25, 'InfantilFemeninoA', 'Infantil', 'LF Infantil Femenino A', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(26, 'InfantilFemeninoB', 'Infantil', 'LF Infantil Femenino B', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(27, 'InfantilFemeninoC', 'Infantil', 'LF Infantil Femenino C', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `equipos` (`id`, `id_equipo`, `categoria`, `seccion`, `letra`, `PJ`, `W`, `L`, `PPP`, `PPR`, `MT`, `MSMS`, `T2A`, `T2F`, `T3A`, `T3F`, `TLA`, `TLF`, `FLH`, `TEC`, `FLR`, `RBO`, `RBD`, `ROB`, `TAP`, `PRD`, `AST`, `PTQ1`, `PTQ2`, `PTQ3`, `PTQ4`, `PTQE`) VALUES
+(1, 'NacionalMasculinoA', 'Nacional', 'Masculino', 'A', 5, 4, 1, 10, 3, 9, 703, 356, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0),
+(2, 'NacionalFemeninoA', 'Nacional', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, 'PrimeraAutonomicaMasculinoA', 'PrimeraAutonomica', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 'PrimeraAutonomicaFemeninoA', 'PrimeraAutonomica', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 'SegundaAutonomicaFemeninoA', 'SegundaAutonomica', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(6, 'Sub22FemeninoA', 'Sub22', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 'Sub22MasculinoA', 'Sub22', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 'Sub22MasculinoB', 'Sub22', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(9, 'Sub22MasculinoC', 'Sub22', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 'JuniorFemeninoA', 'Junior', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 'JuniorFemeninoB', 'Junior', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(12, 'JuniorMasculinoA', 'Junior', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(13, 'JuniorMasculinoB', 'Junior', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(14, 'CadeteFemeninoA', 'Cadete', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(15, 'CadeteFemeninoB', 'Cadete', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(16, 'CadeteFemeninoC', 'Cadete', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(17, 'CadeteMasculinoA', 'Cadete', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(18, 'CadeteMasculinoB', 'Cadete', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(19, 'CadeteMasculinoC', 'Cadete', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(20, 'CadeteMasculinoD', 'Cadete', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(21, 'InfantilMasculinoA', 'Infantil', 'Masculino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(22, 'InfantilMasculinoB', 'Infantil', 'Masculino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(23, 'InfantilMasculinoC', 'Infantil', 'Masculino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(24, 'InfantilMasculinoD', 'Infantil', 'Masculino', 'D', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(25, 'InfantilFemeninoA', 'Infantil', 'Femenino', 'A', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(26, 'InfantilFemeninoB', 'Infantil', 'Femenino', 'B', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(27, 'InfantilFemeninoC', 'Infantil', 'Femenino', 'C', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -817,8 +816,7 @@ ALTER TABLE `entrenadores`
 --
 ALTER TABLE `equipos`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_equipo` (`id_equipo`),
-  ADD UNIQUE KEY `nombre_equipo` (`nombre_equipo`);
+  ADD UNIQUE KEY `id_equipo` (`id_equipo`);
 
 --
 -- Indices de la tabla `jugadores`
@@ -1011,14 +1009,14 @@ ALTER TABLE `jugadores`
 -- Filtros para la tabla `partidos`
 --
 ALTER TABLE `partidos`
-  ADD CONSTRAINT `equipo_id_fk` FOREIGN KEY (`local`) REFERENCES `equipos` (`id_equipo`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `equipo_id_fk` FOREIGN KEY (`local`) REFERENCES `equipos` (`id_equipo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `usuarios_equipos`
 --
 ALTER TABLE `usuarios_equipos`
-  ADD CONSTRAINT `equipo_fk` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_fk` FOREIGN KEY (`usuario_id`) REFERENCES `credenciales` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `equipo_fk` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_fk` FOREIGN KEY (`usuario_id`) REFERENCES `credenciales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
