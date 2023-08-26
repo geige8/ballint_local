@@ -27,19 +27,19 @@
         <div class="paginaDetalle">
             <h1>Detalles del Perfil de $jugador</h1>
             <div class="cuadrostats">
-                <h2>Estadísticas:</h2>
+                <h2>Estadísticas de $jugador:</h2>
                 $htmlfrommostrarStatsJugador
             </div>
             <div class="cuadrostatsAvanzadas">
-                <h2>Estadísticas Avanzadas:</h2>
+                <h2>Estadísticas Avanzadas de $jugador:</h2>
                 $htmlfrommostrarStatsAvanzadasJugador
             </div>
             <div class="perfilEquipos">
-                <h2>Equipos a los que pertenece:</h2>
+                <h2>Equipos a los que pertenece de $jugador:</h2>
                 $htmlEquiposfromUser
             </div>
             <div class="lastgames">
-                <h2>Últimos Partidos:</h2>
+                <h2>Últimos Partidos de de $jugador:</h2>
                 $htmlUltimosPartidos
             </div>
         </div>

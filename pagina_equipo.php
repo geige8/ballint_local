@@ -3,7 +3,7 @@
 
     $equipo = $_GET['equipo'];
 
-    $tituloPagina = $equipo;
+    $tituloPagina = 'Detalle ' . $equipo;
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
     $rutaImgs=RUTA_IMGS;
@@ -21,25 +21,25 @@
 
         $contenidoPrincipal .= <<<EOS
             <div class="paginaDetalle">
-                <h1>Detalles del $equipo</h1>
+                <h1>Página Detalle del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h1>
                 <div class="cuadrostats">
                     <h2>Estadísticas del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}: </h2>
                     $htmlfrommostrarStatsEquipo
                 </div>
                 <div class="cuadrostatsAvanzadas">
-                    <h2>Stats Avanzadas de LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h2>
+                    <h2>Estadísticas Avanzadas del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h2>
                     $htmlfrommostrarStatsAvanzadasJugadorEquipo
                 </div>
                 <div class="cuadroEntrenadores">
-                    <h2>Entrenadores del  '$equipo'</h2>
+                    <h2>Entrenadores del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h2>
                     $htmllistaentrenadoresEquipo
                 </div>
                 <div class="cuadroJugadores">
-                    <h2>Jugadores del  '$equipo'</h2>
+                    <h2>Jugadores del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}:</h2>
                     $htmllistajugadoresEquipo
                 </div>
                 <div class="lastgames">
-                <h2>Ultimos Partidos de LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}: </h2>
+                <h2>Últimos Partidos del LF {$datosEquipo['categoria']} {$datosEquipo['seccion']} {$datosEquipo['letra']}: </h2>
                     $htmlUltimosPartidosEquipo
                 </div>
             </div>

@@ -968,7 +968,7 @@ class Equipo{
             </div>
 
             <div class='stats-row'>
-            <h3>Estadísticas Anotación</h3>
+            <h3>Estadísticas de Anotación</h3>
                 <div class='stat'>
                     <p>PTS Q1</p>
                     <p>{$equipo['PTQ1']}</p>
@@ -1012,7 +1012,7 @@ class Equipo{
             </div>
 
             <div class='stats-row'>
-            <h3>Estadísticas Tiro</h3>
+            <h3>Estadísticas de Tiro</h3>
                 <div class='stat'>
                     <p>T2A</p>
                     <p>{$equipo['T2A']}</p>
@@ -1067,7 +1067,7 @@ class Equipo{
 
 
             <div class='stats-row'>
-            <h3>Estadísticas Rebotes</h3>
+            <h3>Estadísticas de Rebotes</h3>
                 <div class='stat'>
                     <p>RBO</p>
                     <p>{$equipo['RBO']}</p>
@@ -1131,7 +1131,7 @@ class Equipo{
             </div>
 
             <div class='stats-row'>
-            <h3>Estadísticas Faltas</h3>
+            <h3>Estadísticas de Faltas</h3>
                 <div class='stat'>
                     <p>FP</p>
                     <p>{$equipo['FLH']}</p>

@@ -1,3 +1,3 @@
 <footer>
-Copyright © 2023 BallInt App from Gonzalo Guillermo García Gómez
+Copyright © 2023 Ballint from Gonzalo Guillermo García Gómez
 </footer>

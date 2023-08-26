@@ -373,8 +373,6 @@ class Usuario{
         $idUsuario = self::getidNombreUser($usuarioaequipo);
 
         $idEquipoUsuario = Equipo::getidEquipo($equipoausuario);
-
-        echo $idUsuario;
         
         $query = "INSERT INTO usuarios_equipos (equipo_id,usuario_id)  VALUES ($idEquipoUsuario,$idUsuario)"; 
 

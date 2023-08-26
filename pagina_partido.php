@@ -41,7 +41,7 @@
     $contenidoPrincipal .= <<<EOS
         <div class="paginaDetalle">
             <div class="infoPartido">
-            <h1>Detalles del Partido #$partidoId vs $partido el $fecha</h1>
+            <h1>Detalles del Partido #$partidoId del $fecha</h1>
                 $htmldetallesPartidoEquipos
             </div>
             <div class="infoPartido">

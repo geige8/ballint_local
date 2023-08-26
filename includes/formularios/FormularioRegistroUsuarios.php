@@ -49,7 +49,7 @@ class FormularioRegistroUsuarios extends Formulario{
                         <input type="text" id="apellido2" name="apellido2" required>
                         {$erroresCampos['apellido2']}
                     <label for="numero">Número (0-99)</label>
-                        <input type="number" id="numero" name="numero" min="0" max="99" required>
+                        <input type="number" id="numero" name="numero" min="-1" max="99" required>
                         {$erroresCampos['numero']}
                     <label for="imagen">Imagen</label>
                         <input type="file" class="custom-file-input" name="imagen" id="imagen" required/></label>
@@ -106,7 +106,7 @@ class FormularioRegistroUsuarios extends Formulario{
         $numero = trim($datos['numero'] ?? '');
 
         // Verificar si el campo está vacío o no es un número
-        if (!$numero || !is_numeric($numero)) {
+        if (!isset($numero) || !is_numeric($numero)) {
             $this->errores['numero'] = 'Debes seleccionar un número válido entre 0 y 99.';
         } else {
             // Convertir el valor del campo a un entero
@@ -138,16 +138,19 @@ class FormularioRegistroUsuarios extends Formulario{
 
         if (count($this->errores) === 0) {
             // Obtener las dos primeras letras de apellido1Jugador
-            $primeras_letras_apellido1 = substr($apellido1Jugador, 0, 2);
+            $primeras_letras_apellido1 = substr($apellido1Jugador, 0, 1);
         
             // Obtener las dos últimas letras de apellido2Jugador
-            $ultimas_letras_apellido2 = substr($apellido2Jugador, -2);
+            $ultimas_letras_apellido2 = substr($apellido2Jugador, -1);
         
             // Generar un número aleatorio de 1 a 999 (puedes ajustar el rango según tus necesidades)
-            $numero_aleatorio = mt_rand(1, 999);
+            $numero_aleatorio = mt_rand(1, 99);
+
+            $numero_nuevo = ($numero + 1) * $numero_aleatorio;
+
         
             // Combinar todas las partes para formar el nombre de usuario, incluyendo el número aleatorio
-            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario . $numero . $numero_aleatorio;
+            $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario .  $numero_nuevo;
 
             try {
 

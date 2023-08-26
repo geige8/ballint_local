@@ -3,6 +3,7 @@
 
 main #NoLog{
     min-height: 80vh;
+    max-height: 80vh;
     height: 100%;
     float: left;
     width: 100%;

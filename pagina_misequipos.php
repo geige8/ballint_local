@@ -21,7 +21,7 @@
     $contenidoPrincipal .= <<<EOS
         <div class="equipos">
             <div class="misequipos">
-                <h2>Mis Equipos</h2>
+                <h2>Mis Equipos:</h2>
                 $htmlEquiposfromUser
             </div>
     EOS;
