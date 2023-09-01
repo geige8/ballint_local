@@ -18,21 +18,22 @@ class FormularioEliminarEquipos extends Formulario{
 
         }
  
-            // Se generan los mensajes de error si existen.
-            $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
-            $erroresCampos = self::generaErroresCampos(['equipo_usuario'], $this->errores, 'span', array('class' => 'error'));
-            
-            $html = <<<EOF
-                <div class="seleccion"> 
-                    $htmlErroresGlobales
-                    <label for="equipo_usuario">¿Qué equipo quieres eliminar?</label>
-                    <select id="equipo_usuario" name="equipo_usuario">
-                        $opcionesEquipos
-                    </select>
-                    {$erroresCampos['equipo_usuario']}
-                    <button type="submit" name="registro">Eliminar Equipo</button>
-                </div>
-            EOF;
+        // Se generan los mensajes de error si existen.
+        $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
+        $erroresCampos = self::generaErroresCampos(['equipo_usuario'], $this->errores, 'span', array('class' => 'error'));
+        
+        $html = <<<EOF
+            <div class="seleccion"> 
+                $htmlErroresGlobales
+                <label for="equipo_usuario">¿Qué equipo quieres eliminar?</label>
+                <select id="equipo_usuario" name="equipo_usuario">
+                    $opcionesEquipos
+                </select>
+                {$erroresCampos['equipo_usuario']}
+                <button type="submit" name="registro">Eliminar Equipo</button>
+            </div>
+        EOF;
+        
         return $html;
     }            
                  

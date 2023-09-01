@@ -48,7 +48,6 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
             $this->errores['usuarioaequipo'] = 'El nombre del jugador no puede estar vacío';
         }
 
-        // Validar campo "tipo_usuario" para cada jugador
         $equipoausuario = trim($datos['equipoausuario'] ?? '');
         $equipoausuario = filter_var($equipoausuario, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (!$equipoausuario || empty($equipoausuario)){
@@ -57,7 +56,6 @@ class FormularioEliminarUsuarioaEquipo extends Formulario{
         
         if (count($this->errores) === 0) {
 
-        
             try {
                 $equipoRegistrado = Usuario::eliminarUsuarioEquipo($usuarioaequipo,$equipoausuario);
                 $this->errores['equipoausuario'] = '¡Jugador eliminado del equipo!';

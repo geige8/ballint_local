@@ -66,7 +66,6 @@ class FormularioRegistroEquipos extends Formulario{
         if (count($this->errores) === 0) {
             try {
                 $equipoRegistrado = Equipo::registrarEquipo($categoria_equipo,$seccion_equipo,$letra_equipo);
-                // Si no hay excepción, continuas con el flujo normal
             } catch (\Exception $e) {
                 $this->errores[] = $e->getMessage(); // Agregar el mensaje de error a los errores
             }

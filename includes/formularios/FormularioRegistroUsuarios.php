@@ -105,14 +105,11 @@ class FormularioRegistroUsuarios extends Formulario{
 
         $numero = trim($datos['numero'] ?? '');
 
-        // Verificar si el campo está vacío o no es un número
         if (!isset($numero) || !is_numeric($numero)) {
             $this->errores['numero'] = 'Debes seleccionar un número válido entre 0 y 99.';
         } else {
-            // Convertir el valor del campo a un entero
             $numero = intval($numero);
 
-            // Verificar si el número está dentro del rango permitido (0-99)
             if ($numero < 0 || $numero > 99) {
                 $this->errores['numero'] = 'El número debe estar entre 0 y 99.';
             }
@@ -143,24 +140,21 @@ class FormularioRegistroUsuarios extends Formulario{
             // Obtener las dos últimas letras de apellido2Jugador
             $ultimas_letras_apellido2 = substr($apellido2Jugador, -1);
         
-            // Generar un número aleatorio de 1 a 999 (puedes ajustar el rango según tus necesidades)
+            // Generar un número aleatorio de 1 a 99
             $numero_aleatorio = mt_rand(1, 99);
 
             $numero_nuevo = ($numero + 1) * $numero_aleatorio;
 
         
-            // Combinar todas las partes para formar el nombre de usuario, incluyendo el número aleatorio
             $usuarionombre = $nombreJugador . $primeras_letras_apellido1 . $ultimas_letras_apellido2 . $tipoUsuario .  $numero_nuevo;
 
             try {
 
                 $usuarioregistrado = Usuario::registrarUsuario($usuarionombre,$nombreJugador,$apellido1Jugador,$apellido2Jugador,$tipoUsuario,$equipoUsuario,$numero);
-                // Si no hay excepción, continúas con el flujo normal
                 $ruta_fichero_origen = $_FILES['imagen']['tmp_name'];
                 $ruta_nuevo_destino = 'C:/xampp/htdocs/BALLINT/ballint_local/imgs/' . $usuarionombre . '.jpg'; // Cambia 'holaaa' por el nombre de archivo que quieras
                 
                 if (move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino)) {
-                    // El archivo se ha movido exitosamente
                 } else {
                     $this->errores['imagen'] = 'Hubo un problema al subir la imagen';
                 }

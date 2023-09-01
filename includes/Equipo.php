@@ -619,7 +619,7 @@ class Equipo{
         //PORCENTAJE DE TIRO EFECTIVO: eFG% = (FG + 0.5 * 3P) / FGA
         $total_attempts = $equipo['TCA'] + $equipo['TCF'];
         if ($total_attempts > 0) {
-            $equipo['eFGP'] = (($equipo['T2A'] + $equipo['T3A'] + 0.5 * $equipo['T3A']) / $total_attempts) * 100;
+            $equipo['eFGP'] = number_format((($equipo['T2A'] + $equipo['T3A'] + 0.5 * $equipo['T3A']) / $total_attempts),2) * 100;
         } else {
             $equipo['eFGP'] = 0;
         }
@@ -674,6 +674,11 @@ class Equipo{
 
         //OER (OFFENSIVE EFFICIENCY RATING): 
         // La fórmula es: OER = PTS / POS
+        if($equipo['POS'] > 0){
+            $equipo['OER'] = number_format(($equipo['PPP'] / $equipo['POS']),2) * 100;
+        } else {
+            $equipo['OER'] = 0;
+        }
         if ($team['PJ'] > 0) {
             $equipo['OERP'] = number_format(($equipo['OER'] ?? 0) / ($team['PJ'] ?? 0), 2);
         } else {
@@ -1293,7 +1298,7 @@ class Equipo{
             </div>
             <div class='stat-container'>
                 <p class='stat-label'>POS/PJ</p>
-                <p class='stat-value'>{$equipoAvanzado['POSP']}%</p>
+                <p class='stat-value'>{$equipoAvanzado['POSP']}</p>
             </div>
             <div class='stat-container'>
                 <p class='stat-label'>OFR%</p>

@@ -819,7 +819,7 @@ class Partido{
                 $cuarto = "PTQ4";
                 break;
 
-            default:
+            case 5:
                 $cuarto = "PTQE";
             break;
         }
@@ -846,16 +846,18 @@ class Partido{
     
             self::guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante);
 
-        }else{
+        }
 
-            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntoslocal - PPP WHERE equipo = '$local'");
+        if($periodo === '2'){
+
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntoslocal - PTQ1 WHERE equipo = '$local'");
 
             if ($conn->query($query) === false) {
                 $result = false;
                 error_log("Error BD ({$conn->errno}): {$conn->error}");
             }
     
-            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntosvisitante - PPP WHERE equipo = '$visitante'");
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntosvisitante - PTQ1 WHERE equipo = '$visitante'");
     
             if ($conn->query($query) === false) {
                 $result = false;
@@ -863,8 +865,69 @@ class Partido{
             }
     
             self::guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante);
+
         }
 
+        if($periodo === '3'){
+
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntoslocal - PTQ1 - PTQ2 WHERE equipo = '$local'");
+
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntosvisitante - PTQ1 - PTQ2 WHERE equipo = '$visitante'");
+    
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            self::guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante);
+
+        }
+
+        if($periodo === '4'){
+
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntoslocal - PTQ1 - PTQ2 - PTQ3 WHERE equipo = '$local'");
+
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntosvisitante - PTQ1 - PTQ2 - PTQ3 WHERE equipo = '$visitante'");
+    
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            self::guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante);
+
+        }
+
+        if($periodo === '5'){
+
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntoslocal - PTQ1 - PTQ2 - PTQ3 - PTQ4 WHERE equipo = '$local'");
+
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            $query = sprintf("UPDATE tmp_partidoE SET $cuarto =  $puntosvisitante - PTQ1 - PTQ2 - PTQ3 - PTQ4 WHERE equipo = '$visitante'");
+    
+            if ($conn->query($query) === false) {
+                $result = false;
+                error_log("Error BD ({$conn->errno}): {$conn->error}");
+            }
+    
+            self::guardarpuntos($local,$visitante,$puntoslocal,$puntosvisitante);
+
+        }
+        
         return $result;
     }
     

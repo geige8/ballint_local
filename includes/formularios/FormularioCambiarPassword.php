@@ -40,10 +40,9 @@ class FormularioCambiarPassword extends Formulario
      }
      
  
-     protected function procesaFormulario(&$datos)
-     {
-         $this->errores = [];
-         $hoy = date('Y-m-d');
+     protected function procesaFormulario(&$datos){
+
+        $this->errores = [];
 
         $password = trim($datos['password'] ?? '');
         $password = filter_var($password, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -76,9 +75,7 @@ class FormularioCambiarPassword extends Formulario
                 }
             }
         }
-        
-        
+          
     }
 
-    
 }

@@ -3364,7 +3364,7 @@ function getNombreEquipo(equipo){
             var fall = '.' + nuevoString + 'F-Local';
             let  fallados = document.querySelector(fall);
 
-            elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
+            elemento.textContent = ((parseFloat(anotados.textContent) / (parseFloat(anotados.textContent) + parseFloat(fallados.textContent))) * 100).toFixed(2);
 
         }
         else{
@@ -3381,7 +3381,7 @@ function getNombreEquipo(equipo){
             let  fallados = document.querySelector(fall);
 
 
-            elemento.textContent = ( (parseInt(anotados.textContent) / (parseInt(anotados.textContent) + parseInt(fallados.textContent))).toFixed(2) ) * 100;
+            elemento.textContent = ((parseFloat(anotados.textContent) / (parseFloat(anotados.textContent) + parseFloat(fallados.textContent))) * 100).toFixed(2);
 
         }
     }

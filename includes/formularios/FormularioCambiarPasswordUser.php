@@ -45,8 +45,7 @@ class FormularioCambiarPasswordUser extends Formulario
  
      protected function procesaFormulario(&$datos)
      {
-         $this->errores = [];
-         $hoy = date('Y-m-d');
+        $this->errores = [];
 
         $usuariocambiar = trim($datos['usuariocambiar'] ?? '');
         $usuariocambiar = filter_var($usuariocambiar, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -85,9 +84,6 @@ class FormularioCambiarPasswordUser extends Formulario
                 }
             }
         }
-        
-        
-    }
-
-    
+          
+    } 
 }

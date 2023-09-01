@@ -1021,7 +1021,10 @@ class Jugador{
         $equiposdelUsuario = Equipo::getEquiposfromUserId($idUser);
 
         foreach($equiposdelUsuario as $equipo){
-            
+
+            $html .= " <h1> Ultimos Partidos del LF $equipo:</h1> ";        
+
+    
             //Para cada equipo al que pertenezca quiero mostrar los partidos.
             //Tengo que obtener el id de cada partido de ese equipo
             

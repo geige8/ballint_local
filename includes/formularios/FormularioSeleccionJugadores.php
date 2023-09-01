@@ -15,7 +15,6 @@ class FormularioSeleccionJugadores extends Formulario{
     
         $html = "";
     
-        // Obtenemos la lista de equipos desde la clase Equipo
 
         // Se generan los mensajes de error si existen.
         $htmlErroresGlobales = self::generaListaErroresGlobales($this->errores);
@@ -97,9 +96,6 @@ class FormularioSeleccionJugadores extends Formulario{
                     $html .= "</div>";
                 }
 
-
-                
-            
                 // Agregamos el campo oculto con el valor de $idEquipo
                 $html .= "<input type='hidden' name='idEquipo' value='" . $this->idEquipo . "'>";
             
@@ -133,10 +129,7 @@ class FormularioSeleccionJugadores extends Formulario{
         if (empty($hora)) {
             $this->errores['seleccion_hora'] = "Debes seleccionar una hora";
         }
-
-        // Obtenemos entrenador
-       // $entrenador = Equipo::getEntrenadorEquipo($this->idEquipo);
-        
+       
         // Comprobamos que se ha seleccionado un equipo
         $idEquipo = $datos['idEquipo'] ?? null;
        
@@ -182,25 +175,20 @@ class FormularioSeleccionJugadores extends Formulario{
 
         }
     
-        // Obtenemos el nombre del equipo rival
         $nombreRival = str_replace(' ', '', $datos['equipo_rival'] ?? null);
 
         if (empty($nombreRival)) {
             $this->errores['equipo_rival'] = "Debes introducir el nombre del equipo rival";
         }
     
-        // Si hay this->errores, los guardamos en el objeto
         if (count($this->errores) === 0) {
 
-            // Si todo está correcto, llamamos a la función para crear la tabla temporal
-            //$nombresJugadoresVisitantes = array_values($jugadoresVisitantes);
             $tablaTemporalCreada = Partido::crearTablaTemporal($idEquipo, $nombreRival, $jugadoresSeleccionados, $jugadoresVisitantes);
             $tablaTemporalCreada2 = Partido::crearTablaTemporalE($idEquipo, $nombreRival);
             $tablapartidosactualizada = Partido::insertarPartido($idEquipo, $nombreRival,$fecha,$hora);
 
             if ($tablaTemporalCreada &&  $tablaTemporalCreada2 && $tablapartidosactualizada) {
 
-            // Redirigimos al usuario a la página analizador.php con el idEquipo como parámetro GET
                 $url = $this->urlRedireccion . '?idEquipo=' . $idEquipo .'&idEquipoVisit=' . $nombreRival;
                 header("Location: $url");
                 exit();
