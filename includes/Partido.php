@@ -350,43 +350,43 @@ class Partido{
         return $result;
     }
 
-        //ELIMINAR LA ACCION DE Tabla tmp_partido CON LA ACCION
-        public static function removeactualizarTablaPartido($equipo,$jugador,$accion){
+    //ELIMINAR LA ACCION DE Tabla tmp_partido CON LA ACCION
+    public static function removeactualizarTablaPartido($equipo,$jugador,$accion){
 
-            $result = true;
-    
-            //Obtengo la conexión realizada
-               
-            $conn = Aplicacion::getInstance()->getConexionBd();
-    
-            $query = sprintf("UPDATE tmp_partido SET $accion = $accion - 1 WHERE equipo = '$equipo' AND numero = '$jugador'");
-    
-            if ($conn->query($query) === false) {
-                $result = false;
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-    
-            return $result;
+        $result = true;
+
+        //Obtengo la conexión realizada
+            
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partido SET $accion = $accion - 1 WHERE equipo = '$equipo' AND numero = '$jugador'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
+
+        return $result;
+    }
     
-        //ELIMINAR LA ACCION DE Tabla tmp_partido CON LA ACCION
-        public static function removeactualizarTablaPartidoE($equipo,$accion){
-    
-            $result = true;
-    
-            //Obtengo la conexión realizada
-                
-            $conn = Aplicacion::getInstance()->getConexionBd();
-    
-            $query = sprintf("UPDATE tmp_partidoe SET $accion = $accion - 1 WHERE equipo = '$equipo'");
-    
-            if ($conn->query($query) === false) {
-                $result = false;
-                error_log("Error BD ({$conn->errno}): {$conn->error}");
-            }
-    
-            return $result;
+    //ELIMINAR LA ACCION DE Tabla tmp_partido CON LA ACCION
+    public static function removeactualizarTablaPartidoE($equipo,$accion){
+
+        $result = true;
+
+        //Obtengo la conexión realizada
+            
+        $conn = Aplicacion::getInstance()->getConexionBd();
+
+        $query = sprintf("UPDATE tmp_partidoe SET $accion = $accion - 1 WHERE equipo = '$equipo'");
+
+        if ($conn->query($query) === false) {
+            $result = false;
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
+
+        return $result;
+    }
 
     //Actualizar el campo +/-
     public static function actualizarMSMS($puntos,$equipo){
@@ -1259,7 +1259,6 @@ class Partido{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//SIN CLASIFICAR
 
     public static function saveplayers($equipo,$ganador,$idPartido) {
 

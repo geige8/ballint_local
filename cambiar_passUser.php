@@ -5,10 +5,9 @@
     $rutaApp = RUTA_APP;
     $contenidoPrincipal = '';
 
-  //Instancio y llamo a la funcion correspondiente
-  $form = new es\ucm\fdi\FormularioCambiarPasswordUser();
-  $contenidoPrincipal .= $form->gestiona();
-
+    //Instancio y llamo a la funcion correspondiente
+    $form = new es\ucm\fdi\FormularioCambiarPasswordUser();
+    $contenidoPrincipal .= $form->gestiona();
 
     require __DIR__.'/includes/vistas/plantilla.php';
 ?>

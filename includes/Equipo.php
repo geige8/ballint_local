@@ -39,7 +39,6 @@ class Equipo{
 
         $conn = Aplicacion::getInstance()->getConexionBd();
     
-        // Preparar la consulta SQL
         $query = "DELETE FROM equipos WHERE id_equipo = '$equipoEliminar'";
 
         $rs = $conn->query($query);
@@ -76,7 +75,6 @@ class Equipo{
         }
 
         return $equipos;
-
     }
 
     //Obtener todos los datos de un equipo
@@ -1698,7 +1696,6 @@ class Equipo{
 
     public static function mostrarListadoEquipos($equipos){
 
-        
         $html = '';
         $html .= <<<EOS
         <div class="cajasEquipos">

@@ -127,7 +127,6 @@ class Jugador{
         // Minutos Promedio
         if ($usuario['PJ'] > 0) {
             $segundospromedio = ($usuario['MT'] ?? 0) / ($usuario['PJ'] ?? 0);
-            // En este caso: $segundospromedio = 9 / 5 = 1.8 segundos por partido
             $minutosjugados = floor($segundospromedio / 60);
 
             $segundosRestantes = $segundospromedio - ($minutosjugados * 60);

@@ -475,7 +475,6 @@ function getNombreEquipo(equipo){
                 overlay.parentNode.removeChild(overlay);
                 getParcialTO(function(parcial) {
                     if (parcial) {
-                    // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
                     mostrarImpactoLastTimeOut(parcial);
                     } else {
                     console.log("Error al obtener el parcial");
@@ -496,7 +495,6 @@ function getNombreEquipo(equipo){
                 overlay.parentNode.removeChild(overlay);
                 getParcialCambio(function(parcial) {
                     if (parcial) {
-                    // Por ejemplo, guardarlos en una variable global o realizar cálculos basados en los datos de los jugadores
                     mostrarImpactoLastChange(parcial);
                     } else {
                     console.log("Error al obtener el parcial");
@@ -1353,12 +1351,11 @@ function getNombreEquipo(equipo){
         let yPosition = 15;
 
         // Calcular la altura total del contenido para ajustar la posición en "y"
-        const lineHeight = 6; // Altura de una línea (ajústala según tu preferencia)
+        const lineHeight = 6; 
         const totalHeight = lines.length * lineHeight;
 
         // Verificar si el contenido se ajusta en una sola página o requiere varias páginas
 
-        // Configurar el tamaño de página (A4 en este caso)
         const pageWidth = 210; // Ancho de la página A4 en mm
         const pageHeight = 297; // Altura de la página A4 en mm
 
@@ -1733,7 +1730,6 @@ function getNombreEquipo(equipo){
         ventana.classList.add("ventana-graficos");
         document.body.appendChild(ventana);
         
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('h1');
         mensaje.textContent = `De qué jugador quieres eliminar una accion:`;
         ventana.appendChild(mensaje);
@@ -1800,10 +1796,6 @@ function getNombreEquipo(equipo){
             overlay.parentNode.removeChild(overlay);
         });
         
-
-
-
-
     }
 
     function mostrarVentanaEliminarAccion(jugador){
@@ -2263,7 +2255,6 @@ function getNombreEquipo(equipo){
             overlay.parentNode.removeChild(overlay);
         });
 
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('h1');
         mensaje.textContent = `La evaluación de ${jugador['nombrejugador']} es:`;
         ventana.appendChild(mensaje);
@@ -2314,9 +2305,6 @@ function getNombreEquipo(equipo){
         var contenido = document.createElement('div');
         contenido.classList.add('contenido');
 
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
-
-
         // Agregar el contenido a la ventana emergente
         for (var clave in evaluacion) {
             var mensaje = document.createElement('p');
@@ -2326,9 +2314,6 @@ function getNombreEquipo(equipo){
         }
      
         ventana.appendChild(contenido);
-
-
-
 
     }
 
@@ -2347,7 +2332,6 @@ function getNombreEquipo(equipo){
         var contenido = document.createElement('div');
         contenido.classList.add('contenido');
 
-        // Aquí utilizo las comillas inversas para poder interpolación de variables
         var mensaje = document.createElement('p');
         mensaje.textContent = `El parcial desde el último Tiempo Muerto es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
         contenido.appendChild(mensaje);
@@ -2383,7 +2367,6 @@ function getNombreEquipo(equipo){
     var contenido = document.createElement('div');
     contenido.classList.add('contenido');
 
-    // Aquí utilizo las comillas inversas para poder interpolación de variables
     var mensaje = document.createElement('p');
     mensaje.textContent = `El parcial desde el último Cambio es:\nLocal ${parcial[0]} - ${parcial[1]} Visitante`;
     contenido.appendChild(mensaje);

@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebarDer = document.getElementById("sidebarDer");
   const main = document.getElementById("Log");
 
-
-
-
   const toggleButton = document.getElementById("toggleSidebar");
 
   toggleButton.addEventListener("click", function () {
